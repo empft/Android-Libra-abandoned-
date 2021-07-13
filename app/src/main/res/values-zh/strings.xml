@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LibraAndroid</string>
+    <string name="g__edittext__password">密码</string>
+    <string name="g__btn__sign_in">登录</string>
+    <string name="g__edittext__username">用户名</string>
+    <string name="welcome">欢迎</string>
+    <string name="frag_login__text__invalid_username">不允许使用此用户名</string>
+    <string name="frag_login__text__invalid_password">密码需要至少8个字符</string>
+    <string name="frag_login__text__login_failed">登录失败</string>
+    <string name="g__btn__sign_up">注册</string>
+    <string name="frag_regform__text__invitation_email">你的机构电子邮件地址</string>
+    <string name="frag_regform__text__invitation_code">输入收到的邮件验证码</string>
+    <string name="frag_regform__btn__request_invitation_code">发送验证码</string>
+    <string name="g__edittext__email_address">电子邮件地址</string>
+    <string name="g__btn__next">下一步</string>
+    <string name="g__btn__done">完成</string>
+    <string name="frag_regform__text__recovery_email">请输入你的个人电子邮件</string>
+    <string name="g__edittext__display_name">对外显示名字</string>
+    <string name="frag_regform__text__name">"请输入用户名和对外显示名字，你需要选择不同的名字。 "</string>
+    <string name="frag_regform__text__loading">正在注册账号</string>
+</resources>

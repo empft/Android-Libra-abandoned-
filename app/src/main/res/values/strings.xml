@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">LibraAndroid</string>
+    <!-- Strings related to login -->
+    <string name="g__edittext__username">Username</string>
+    <string name="g__edittext__password">Password</string>
+    <string name="g__btn__sign_in">Sign In</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="frag_login__text__invalid_username">Not a valid username</string>
+    <string name="frag_login__text__invalid_password">Password must be at least 8 characters long</string>
+    <string name="frag_login__text__login_failed">"Login failed"</string>
+    <string name="g__btn__sign_up">Sign Up</string>
+
+    <string name="frag_regform__text__invitation_email">What\'s your institutional email address?</string>
+    <string name="frag_regform__text__invitation_code">Enter the received code:</string>
+    <string name="frag_regform__btn__request_invitation_code">Request Code</string>
+    <string name="g__edittext__email_address">Email Address</string>
+    <string name="g__btn__next">Next</string>
+    <string name="frag_regform__text__name">Choose a username and a display name. Username is used for signing in while display name is a publicly available identifier. They must not be the same.</string>
+    <string name="g__edittext__display_name">Display Name</string>
+    <string name="g__btn__done">Done</string>
+    <string name="frag_regform__text__recovery_email">Enter your personal email for account recovery:</string>
+    <string name="frag_regform__text__loading">Creating your account</string>
 </resources>

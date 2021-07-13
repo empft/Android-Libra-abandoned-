@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.register.form.RegFormEmailFragment" >
+
+    <TextView
+        android:id="@+id/text__regform__email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/form_horizontal_margin"
+        android:layout_marginTop="@dimen/form_vertical_margin"
+        android:layout_marginEnd="@dimen/form_horizontal_margin"
+        android:text="@string/frag_regform__text__recovery_email"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edittext__regform__email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/form_horizontal_margin"
+        android:layout_marginEnd="@dimen/form_horizontal_margin"
+        android:autofillHints="emailAddress"
+        android:ems="10"
+        android:hint="@string/g__edittext__email_address"
+        android:hintTextColor="#757575"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text__regform__email" />
+
+    <Button
+        android:id="@+id/btn__regform__done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/form_vertical_spacing"
+        android:layout_marginEnd="@dimen/form_horizontal_margin"
+        android:text="@string/g__btn__done"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext__regform__email" />
+</androidx.constraintlayout.widget.ConstraintLayout>

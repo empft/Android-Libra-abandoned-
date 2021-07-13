@@ -1,4 +1,4 @@
-package com.example.libraandroid.view.login
+package com.example.libraandroid.ui.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_registration_form"
+    app:startDestination="@id/regFormInvitationFragment">
+
+    <fragment
+        android:id="@+id/regFormInvitationFragment"
+        android:name="com.example.libraandroid.ui.register.form.RegFormInvitationFragment"
+        android:label="fragment_reg_form_invitation"
+        tools:layout="@layout/fragment_reg_form_invitation" >
+        <action
+            android:id="@+id/action_regFormInvitationFragment_to_regFormNameFragment"
+            app:destination="@id/regFormNameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/regFormNameFragment"
+        android:name="com.example.libraandroid.ui.register.form.RegFormNameFragment"
+        android:label="fragment_reg_form_name"
+        tools:layout="@layout/fragment_reg_form_name" >
+        <action
+            android:id="@+id/action_regFormNameFragment_to_regFormPasswordFragment"
+            app:destination="@id/regFormPasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/regFormPasswordFragment"
+        android:name="com.example.libraandroid.ui.register.form.RegFormPasswordFragment"
+        android:label="fragment_reg_form_password"
+        tools:layout="@layout/fragment_reg_form_password" >
+        <action
+            android:id="@+id/action_regFormPasswordFragment_to_regFormEmailFragment"
+            app:destination="@id/regFormEmailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/regFormEmailFragment"
+        android:name="com.example.libraandroid.ui.register.form.RegFormEmailFragment"
+        android:label="fragment_reg_form_email"
+        tools:layout="@layout/fragment_reg_form_email" >
+        <action
+            android:id="@+id/action_regFormEmailFragment_to_regFormLoadingFragment"
+            app:destination="@id/regFormLoadingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/regFormLoadingFragment"
+        android:name="com.example.libraandroid.ui.register.form.RegFormLoadingFragment"
+        android:label="fragment_reg_form_loading"
+        tools:layout="@layout/fragment_reg_form_loading" />
+</navigation>
