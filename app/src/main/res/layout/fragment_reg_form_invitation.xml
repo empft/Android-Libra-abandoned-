@@ -79,4 +79,17 @@
         android:text="@string/g__btn__next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edittext__regform__code" />
+
+    <TextView
+        android:id="@+id/text__regform__code_countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="00:00"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/btn__regform__request_code"
+        app:layout_constraintEnd_toStartOf="@+id/btn__regform__request_code"
+        app:layout_constraintTop_toTopOf="@+id/btn__regform__request_code"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

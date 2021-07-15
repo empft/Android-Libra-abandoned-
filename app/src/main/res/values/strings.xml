@@ -5,8 +5,8 @@
     <string name="g__edittext__password">Password</string>
     <string name="g__btn__sign_in">Sign In</string>
     <string name="welcome">"Welcome!"</string>
-    <string name="frag_login__text__invalid_username">Not a valid username</string>
-    <string name="frag_login__text__invalid_password">Password must be at least 8 characters long</string>
+    <string name="g__edittext__invalid_username">Not a valid username</string>
+    <string name="g__edittext__invalid_password">Password must be at least 8 characters long</string>
     <string name="frag_login__text__login_failed">"Login failed"</string>
     <string name="g__btn__sign_up">Sign Up</string>
 
@@ -20,4 +20,13 @@
     <string name="g__btn__done">Done</string>
     <string name="frag_regform__text__recovery_email">Enter your personal email for account recovery:</string>
     <string name="frag_regform__text__loading">Creating your account</string>
+    <string name="g__edittext__invalid_email">Email address is invalid</string>
+    <string name="frag_regform__edittext__user_same_as_display_name">Username cannot be the same as display name</string>
+    <string name="frag_regform__edittext__invalid_institutional_email">Institutional email address is invalid</string>
+    <string name="frag_regform__edittext__invalid_code">The code must have 6 digits</string>
+    <string name="frag_regform__edittext__display_same_as_user_name">Display name cannot be the same as username</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="frag_forgetlogin__btn__remind_username">Send username reminder</string>
+    <string name="frag_forgetlogin__btn__reset_password">Send password reset link</string>
 </resources>

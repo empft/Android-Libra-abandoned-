@@ -2,13 +2,13 @@
 <resources>
     <string name="app_name">LibraAndroid</string>
     <string name="g__btn__next">Seterusnya</string>
-    <string name="g__edittext__email_address">E-mel</string>
+    <string name="g__edittext__email_address">Alamat e-mel</string>
     <string name="g__edittext__username">Nama pengguna</string>
     <string name="g__edittext__password">Kata laluan</string>
     <string name="g__btn__sign_in">Log masuk</string>
     <string name="welcome">Selamat datang</string>
-    <string name="frag_login__text__invalid_username">Nama pengguna tidak sah</string>
-    <string name="frag_login__text__invalid_password">Panjang kata laluan sekurang-kurangnya 8 aksara</string>
+    <string name="g__edittext__invalid_username">Nama pengguna tidak sah</string>
+    <string name="g__edittext__invalid_password">Panjang kata laluan yang dipilih mestilah sekurang-kurangnya 8 aksara</string>
     <string name="frag_login__text__login_failed">Log masuk gagal</string>
     <string name="g__btn__sign_up">Daftar akaun baru</string>
     <string name="g__btn__done">Selesai</string>
@@ -18,5 +18,10 @@
     <string name="frag_regform__text__recovery_email">Sila masukkan e-mel peribadi anda</string>
     <string name="g__edittext__display_name">Nama paparan</string>
     <string name="frag_regform__text__name">Sila pilih nama pengguna dan nama paparan yang berbeza</string>
-    <string name="frag_regform__text__loading">Sedang mencipta akaun</string>
+    <string name="frag_regform__text__loading">Sedang membuat akaun</string>
+    <string name="g__edittext__invalid_email">Alamat e-mel tidak sah</string>
+    <string name="frag_regform__edittext__user_same_as_display_name">Tidak boleh memilih nama pengguna dan nama paparan yang sama</string>
+    <string name="frag_regform__edittext__display_same_as_user_name">Tidak boleh memilih nama paparan dan nama pengguna yang sama</string>
+    <string name="frag_regform__edittext__invalid_institutional_email">E-mel institusi tidak sah</string>
+    <string name="frag_regform__edittext__invalid_code">Kod mesti mempunyai 6 digit</string>
 </resources>

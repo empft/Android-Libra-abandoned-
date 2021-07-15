@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.forgetlogin.ForgetLoginFragment" >
+
+    <EditText
+        android:id="@+id/edittext__forget_login__email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/form_horizontal_margin"
+        android:layout_marginTop="@dimen/form_vertical_margin"
+        android:layout_marginEnd="@dimen/form_horizontal_margin"
+        android:ems="10"
+        android:hint="@string/g__edittext__email_address"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="emailAddress" />
+
+    <EditText
+        android:id="@+id/edittext__forget_login_username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/form_horizontal_margin"
+        android:layout_marginTop="@dimen/form_vertical_spacing"
+        android:layout_marginEnd="@dimen/form_horizontal_margin"
+        android:ems="10"
+        android:hint="@string/g__edittext__username"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext__forget_login__email"
+        android:autofillHints="username" />
+
+    <Button
+        android:id="@+id/btn__forget_login__remind_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/form_vertical_spacing"
+        android:enabled="false"
+        android:text="@string/frag_forgetlogin__btn__remind_username"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext__forget_login_username" />
+
+    <Button
+        android:id="@+id/btn__forget_login__reset_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/form_vertical_spacing"
+        android:enabled="false"
+        android:text="@string/frag_forgetlogin__btn__reset_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn__forget_login__remind_username" />
+</androidx.constraintlayout.widget.ConstraintLayout>

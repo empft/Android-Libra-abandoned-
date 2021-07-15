@@ -10,13 +10,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.fragment.app.viewModels
+import com.example.libraandroid.constant.Constant
 import com.example.libraandroid.databinding.FragmentLoginBinding
+import com.example.libraandroid.extension.setOnClickListener
 
 import com.google.android.material.snackbar.Snackbar
 
 class LoginFragment : Fragment() {
 
-    private lateinit var loginViewModel: LoginViewModel
+    private val loginViewModel: LoginViewModel by viewModels()
     private var _binding: FragmentLoginBinding? = null
 
     // This property is only valid between onCreateView and
@@ -35,8 +38,6 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
 
         val usernameEditText = binding.username
         val passwordEditText = binding.password
@@ -44,12 +45,7 @@ class LoginFragment : Fragment() {
         val registerButton = binding.register
         val loadingProgressBar = binding.loading
 
-        loginViewModel.loginFormState.observe(viewLifecycleOwner,
-            Observer { loginFormState ->
-                if (loginFormState == null) {
-                    return@Observer
-                }
-                loginButton.isEnabled = loginFormState.isDataValid
+        loginViewModel.loginFormState.observe(viewLifecycleOwner, { loginFormState ->
                 loginFormState.usernameError?.let {
                     usernameEditText.error = getString(it)
                 }
@@ -58,9 +54,7 @@ class LoginFragment : Fragment() {
                 }
             })
 
-        loginViewModel.loginResult.observe(viewLifecycleOwner,
-            Observer { loginResult ->
-                loginResult ?: return@Observer
+        loginViewModel.loginResult.observe(viewLifecycleOwner, { loginResult ->
                 loadingProgressBar.visibility = View.GONE
                 loginResult.onFailure {
                     showLoginFailed(it.message.orEmpty())
@@ -80,33 +74,31 @@ class LoginFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable) {
-                loginViewModel.loginDataChanged(
-                    usernameEditText.text.toString(),
-                    passwordEditText.text.toString()
-                )
+                loginButton.isEnabled = usernameEditText.text.isNotBlank() && passwordEditText.text.isNotBlank()
             }
         }
         usernameEditText.addTextChangedListener(afterTextChangedListener)
         passwordEditText.addTextChangedListener(afterTextChangedListener)
         passwordEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                loginViewModel.login(
-                    usernameEditText.text.toString(),
-                    passwordEditText.text.toString()
-                )
+                loginButton.performClick()
             }
             false
         }
 
         loginButton.setOnClickListener {
             loadingProgressBar.visibility = View.VISIBLE
+            loginButton.isEnabled = false
+
             loginViewModel.login(
                 usernameEditText.text.toString(),
                 passwordEditText.text.toString()
             )
         }
 
-        registerButton.setOnClickListener()
+        registerButton.setOnClickListener(Constant.DEBOUNCE_TIME) {
+
+        }
     }
 
     private fun showLoginFailed(errorString: String) {
