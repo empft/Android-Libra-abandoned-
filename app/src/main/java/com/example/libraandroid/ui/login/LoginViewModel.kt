@@ -1,52 +1,46 @@
 package com.example.libraandroid.ui.login
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.*
 import com.example.libraandroid.R
-import com.example.libraandroid.data.login.LoginRepository
+import com.example.libraandroid.service.network.ResponseException
+import com.example.libraandroid.service.session.AccountSessionLoginManager
+import com.example.libraandroid.ui.misc.DelayedCall
+import com.example.libraandroid.ui.misc.UiConstant
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.io.IOException
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel(
+    private val service: AccountSessionLoginManager
+): ViewModel() {
 
-    private val _loginForm = MutableLiveData<LoginFormState>()
-    val loginFormState: LiveData<LoginFormState> = _loginForm
+    private val _loginResult = MutableSharedFlow<LoginResult>()
+    val loginResult: SharedFlow<LoginResult> = _loginResult
 
-    private val _loginResult = MutableLiveData<Result<Unit>>()
-    val loginResult: LiveData<Result<Unit>> = _loginResult
-
+    private var call = DelayedCall(coroutineScope = viewModelScope)
     fun login(username: String, password: String) {
-        if (!localLoginCheck(username, password)) {
-            return
+        call.throttleFirst {
+            try {
+                service.login(username, password)
+                _loginResult.emit(LoginResult.Success)
+            } catch (e: ResponseException) {
+                _loginResult.emit(LoginResult.Failure(e.message ?: ""))
+            } catch (e: IOException) {
+                Timber.e(e)
+                _loginResult.emit(LoginResult.FailureId(R.string.g__text__connection_error))
+            }
         }
-
-        // can be launched in a separate asynchronous job
-        val result = loginRepository.login(username, password)
-
-        if (result is Result.Success) {
-            _loginResult.value = Result.success(Unit)
-        } else {
-            _loginResult.value = Result.failure(Exception())
-        }
     }
+}
 
-    private fun localLoginCheck(username: String, password: String): Boolean {
-        val nameValid = isUserNameValid(username)
-        val passwordValid = isPasswordValid(password)
-
-        val nameError = if (nameValid) null else R.string.g__edittext__invalid_username
-        val passwordError = if (passwordValid) null else R.string.g__edittext__invalid_password
-
-        _loginForm.value = LoginFormState(usernameError = nameError,passwordError = passwordError)
-        return nameValid && passwordValid
-    }
-
-    // A username validation check
-    private fun isUserNameValid(username: String): Boolean {
-        return username.isNotBlank()
-    }
-
-    // A password validation check
-    private fun isPasswordValid(password: String): Boolean {
-        return password.length > 8
+class LoginViewModelFactory(private val service: AccountSessionLoginManager): ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        @Suppress("UNCHECKED_CAST")
+        return LoginViewModel(service) as T
     }
 }

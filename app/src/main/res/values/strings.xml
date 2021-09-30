@@ -1,32 +1,40 @@
 <resources>
     <string name="app_name">LibraAndroid</string>
     <!-- Strings related to login -->
-    <string name="g__edittext__username">Username</string>
-    <string name="g__edittext__password">Password</string>
+    <string name="g__textfield__username">Username</string>
+    <string name="g__textfield__password">Password</string>
     <string name="g__btn__sign_in">Sign In</string>
     <string name="welcome">"Welcome!"</string>
-    <string name="g__edittext__invalid_username">Not a valid username</string>
-    <string name="g__edittext__invalid_password">Password must be at least 8 characters long</string>
+    <string name="g__textfield__invalid_username">Not a valid username</string>
+    <string name="g__textfield__invalid_password">Password must be at least 8 characters long</string>
     <string name="frag_login__text__login_failed">"Login failed"</string>
     <string name="g__btn__sign_up">Sign Up</string>
 
-    <string name="frag_regform__text__invitation_email">What\'s your institutional email address?</string>
-    <string name="frag_regform__text__invitation_code">Enter the received code:</string>
-    <string name="frag_regform__btn__request_invitation_code">Request Code</string>
-    <string name="g__edittext__email_address">Email Address</string>
+    <string name="scr_regform__text__invitation_email">What\'s your institutional email address?</string>
+    <string name="scr_regform__text__invitation_code">Enter the received code:</string>
+    <string name="scr_regform__btn__request_invitation_code">Request Code</string>
+    <string name="g__textfield__email_address">Email Address</string>
     <string name="g__btn__next">Next</string>
     <string name="frag_regform__text__name">Choose a username and a display name. Username is used for signing in while display name is a publicly available identifier. They must not be the same.</string>
-    <string name="g__edittext__display_name">Display Name</string>
+    <string name="g__textfield__display_name">Display Name</string>
     <string name="g__btn__done">Done</string>
     <string name="frag_regform__text__recovery_email">Enter your personal email for account recovery:</string>
     <string name="frag_regform__text__loading">Creating your account</string>
-    <string name="g__edittext__invalid_email">Email address is invalid</string>
-    <string name="frag_regform__edittext__user_same_as_display_name">Username cannot be the same as display name</string>
-    <string name="frag_regform__edittext__invalid_institutional_email">Institutional email address is invalid</string>
-    <string name="frag_regform__edittext__invalid_code">The code must have 6 digits</string>
-    <string name="frag_regform__edittext__display_same_as_user_name">Display name cannot be the same as username</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="frag_forgetlogin__btn__remind_username">Send username reminder</string>
-    <string name="frag_forgetlogin__btn__reset_password">Send password reset link</string>
+    <string name="g__textfield__invalid_email">Email address is invalid</string>
+    <string name="frag_regform__textfield__user_same_as_display_name">Username cannot be the same as display name</string>
+    <string name="frag_regform__textfield__invalid_institutional_email">Institutional email address is invalid</string>
+    <string name="frag_regform__textfield__invalid_code">The code must have 6 digits</string>
+    <string name="frag_regform__textfield__display_same_as_user_name">Display name cannot be the same as username</string>
+    <string name="scr_forget__btn__forget_username">Send username reminder</string>
+    <string name="scr_forget__btn__forget_password">Send password reset code</string>
+    <string name="scr_login__btn__forget_credentials">Forget credentials?</string>
+    <string name="g__btn__forget_username">Forget Username</string>
+    <string name="g__btn__forget_password">Forget Password</string>
+    <string name="g__btn__reset_password">Reset Password</string>
+    <string name="scr_forget__btn__reset_password">Reset your password</string>
+    <string name="scr_forget__textfield__recovery_token">Recovery Token</string>
+    <string name="scr_forget__textfield__new_password">New Password</string>
+    <string name="g__text__connection_error">Failed to connect to server</string>
+    <string name="g__text__unknown_server_error">Unknown server error</string>
+    <string name="g__textfield__code">Code</string>
 </resources>
