@@ -2,9 +2,9 @@ package com.example.libraandroid
 
 import com.example.libraandroid.service.session.SessionToken
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.encodeToJsonElement
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -22,16 +22,16 @@ data class SessionToken(
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, (2 + 2).toInt())
+        assertEquals(4, 2 + 2)
     }
 
     @Test
-    fun JsonList_isWorking() {
+    fun jsonList_isWorking() {
         val all = mutableListOf(SessionToken("myName", "secret"), SessionToken("another", "not so secret"))
 
         val temp = all.toList()
-        val encoded = Json.encodeToString(temp)
-        val test = Json.decodeFromString<MutableList<SessionToken>>(encoded)
+        val encoded = Json.encodeToJsonElement(temp)
+        val test = Json.decodeFromJsonElement<MutableList<SessionToken>>(encoded)
         assertEquals("Successful serialization and deserialization", test, all)
     }
 }

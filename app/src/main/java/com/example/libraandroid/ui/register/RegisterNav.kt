@@ -12,6 +12,7 @@ import com.example.libraandroid.ui.forgetlogin.ForgetLoginNavHost
 import com.example.libraandroid.ui.login.LoginNav
 import com.example.libraandroid.ui.login.LoginResult
 import com.example.libraandroid.ui.login.LoginScreen
+import com.example.libraandroid.ui.register.form.RegisterInvitationScreen
 import kotlinx.coroutines.flow.flow
 
 enum class RegisterNav {

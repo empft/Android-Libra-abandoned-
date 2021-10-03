@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.example.libraandroid.ui.LaunchViewModel
 import com.example.libraandroid.ui.forgetlogin.ForgetLoginNav
 import com.example.libraandroid.ui.forgetlogin.ForgetLoginNavHost
@@ -61,6 +62,10 @@ fun LoginNavHostInverted(
                     onLoginSuccess()
                 }
             )
+        }
+
+        navigation(startDestination = "", route = "") {
+
         }
 
         composable(LoginNav.Registration.name) {

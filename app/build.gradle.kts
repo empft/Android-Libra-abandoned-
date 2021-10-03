@@ -70,6 +70,8 @@ dependencies {
     implementation("androidx.compose.animation:animation:1.0.2")
     // Tooling support (Previews, etc.)
     implementation("androidx.compose.ui:ui-tooling:1.0.2")
+    // Icons
+    implementation("androidx.compose.material:material-icons-extended:1.0.2")
     // Integration with ViewModels
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-beta01")
     // UI Tests
@@ -128,6 +130,9 @@ dependencies {
 
     // Logging with Timber
     implementation("com.jakewharton.timber:timber:5.0.1")
+
+    // For murmurhash3
+    implementation("com.google.guava:guava:24.1-jre")
 
 
 }

@@ -7,7 +7,6 @@
     <string name="welcome">"Welcome!"</string>
     <string name="g__textfield__invalid_username">Not a valid username</string>
     <string name="g__textfield__invalid_password">Password must be at least 8 characters long</string>
-    <string name="frag_login__text__login_failed">"Login failed"</string>
     <string name="g__btn__sign_up">Sign Up</string>
 
     <string name="scr_regform__text__invitation_email">What\'s your institutional email address?</string>
@@ -15,16 +14,13 @@
     <string name="scr_regform__btn__request_invitation_code">Request Code</string>
     <string name="g__textfield__email_address">Email Address</string>
     <string name="g__btn__next">Next</string>
-    <string name="frag_regform__text__name">Choose a username and a display name. Username is used for signing in while display name is a publicly available identifier. They must not be the same.</string>
+    <string name="scr_regform__text__name">Choose a username and a display name. Username is used for signing in while display name is a publicly available identifier. They must not be the same.</string>
     <string name="g__textfield__display_name">Display Name</string>
     <string name="g__btn__done">Done</string>
-    <string name="frag_regform__text__recovery_email">Enter your personal email for account recovery:</string>
-    <string name="frag_regform__text__loading">Creating your account</string>
+    <string name="scr_regform__text__recovery_email">Enter your personal email for account recovery:</string>
     <string name="g__textfield__invalid_email">Email address is invalid</string>
-    <string name="frag_regform__textfield__user_same_as_display_name">Username cannot be the same as display name</string>
-    <string name="frag_regform__textfield__invalid_institutional_email">Institutional email address is invalid</string>
-    <string name="frag_regform__textfield__invalid_code">The code must have 6 digits</string>
-    <string name="frag_regform__textfield__display_same_as_user_name">Display name cannot be the same as username</string>
+    <string name="scr_regform__textfield__user_same_as_display_name">Username cannot be the same as display name</string>
+    <string name="scr_regform__textfield__display_same_as_user_name">Display name cannot be the same as username</string>
     <string name="scr_forget__btn__forget_username">Send username reminder</string>
     <string name="scr_forget__btn__forget_password">Send password reset code</string>
     <string name="scr_login__btn__forget_credentials">Forget credentials?</string>
@@ -37,4 +33,6 @@
     <string name="g__text__connection_error">Failed to connect to server</string>
     <string name="g__text__unknown_server_error">Unknown server error</string>
     <string name="g__textfield__code">Code</string>
+    <string name="g__icon__visibility">visibility</string>
+    <string name="scr_regform__text__password">Choose a secure password:</string>
 </resources>
