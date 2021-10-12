@@ -1,6 +1,7 @@
 package com.example.libraandroid.service.session
 
 import com.example.libraandroid.service.network.AccountManagementService
+import retrofit2.HttpException
 
 class AccountSessionLogoutManager(
     private val repo: AccountSessionRepository,
@@ -8,7 +9,11 @@ class AccountSessionLogoutManager(
 ) {
     suspend fun logout() {
         // TODO: error handling
-        network.logout()
-        repo.delete()
+        try {
+            network.logout()
+            repo.delete()
+        } catch (e: HttpException) {
+
+        }
     }
 }

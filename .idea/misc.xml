@@ -3,7 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Microsoft/Desktop/Libra-Android/app/src/main/res/drawable/ic_card.xml" value="0.13697916666666668" />
+        <entry key="..\:/Users/Microsoft/Desktop/Libra-Android/app/src/main/res/drawable/ic_chat.xml" value="0.2203125" />
         <entry key="..\:/Users/Microsoft/Desktop/Libra-Android/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2203125" />
+        <entry key="..\:/Users/Microsoft/Desktop/Libra-Android/app/src/main/res/drawable/ic_nearby.xml" value="0.2203125" />
+        <entry key="..\:/Users/Microsoft/Desktop/Libra-Android/app/src/main/res/drawable/ic_payment.xml" value="0.2203125" />
+        <entry key="..\:/Users/Microsoft/Desktop/Libra-Android/app/src/main/res/drawable/ic_qr.xml" value="0.13697916666666668" />
+        <entry key="..\:/Users/Microsoft/Desktop/Libra-Android/app/src/main/res/drawable/ic_setting.xml" value="0.2203125" />
+        <entry key="..\:/Users/Microsoft/Desktop/Libra-Android/app/src/main/res/drawable/ic_wallet.xml" value="0.2203125" />
         <entry key="..\:/Users/Microsoft/Desktop/Libra-Android/app/src/main/res/layout/activity_login.xml" value="0.19" />
         <entry key="..\:/Users/Microsoft/Desktop/Libra-Android/app/src/main/res/layout/activity_main.xml" value="0.15" />
         <entry key="..\:/Users/Microsoft/Desktop/Libra-Android/app/src/main/res/layout/edit_text_code.xml" value="0.1766304347826087" />

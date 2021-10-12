@@ -6,7 +6,7 @@
     <string name="g__btn__sign_in">Sign In</string>
     <string name="welcome">"Welcome!"</string>
     <string name="g__textfield__invalid_username">Not a valid username</string>
-    <string name="g__textfield__invalid_password">Password must be at least 8 characters long</string>
+    <string name="scr_regform__error__short_password">Password must be at least 8 characters long</string>
     <string name="g__btn__sign_up">Sign Up</string>
 
     <string name="scr_regform__text__invitation_email">What\'s your institutional email address?</string>
@@ -18,9 +18,9 @@
     <string name="g__textfield__display_name">Display Name</string>
     <string name="g__btn__done">Done</string>
     <string name="scr_regform__text__recovery_email">Enter your personal email for account recovery:</string>
-    <string name="g__textfield__invalid_email">Email address is invalid</string>
-    <string name="scr_regform__textfield__user_same_as_display_name">Username cannot be the same as display name</string>
-    <string name="scr_regform__textfield__display_same_as_user_name">Display name cannot be the same as username</string>
+    <string name="g__error__invalid_email">Email address is invalid</string>
+    <string name="scr_regform__error__user_same_as_display_name">Username cannot be the same as display name</string>
+    <string name="scr_regform__error__display_same_as_user_name">Display name cannot be the same as username</string>
     <string name="scr_forget__btn__forget_username">Send username reminder</string>
     <string name="scr_forget__btn__forget_password">Send password reset code</string>
     <string name="scr_login__btn__forget_credentials">Forget credentials?</string>
@@ -35,4 +35,18 @@
     <string name="g__textfield__code">Code</string>
     <string name="g__icon__visibility">visibility</string>
     <string name="scr_regform__text__password">Choose a secure password:</string>
+    <string name="g__icon__paste">paste</string>
+    <string name="scr_regform__error__common_password">This password is commonly used. Please choose a different password.</string>
+    <string name="scr_regform__text__loading">Creating your account</string>
+    <string name="scr_main__nav__payment">Payment</string>
+    <string name="scr_main__nav__chat">Chats</string>
+    <string name="scr_main__nav__setting">Settings</string>
+    <string name="scr_main__nav__nearby">Nearby</string>
+    <string name="scr_payhistory__image__avatar">avatar</string>
+    <string name="scr_balance__btn__add_convert_money">Add or Convert</string>
+    <string name="scr_balance__icon__expand_balance">Expand balance</string>
+    <string name="scr_pay__btn__qr">QR</string>
+    <string name="scr_pay__btn__direct_pay">Manual</string>
+    <string name="scr_pay__btn__nfc">NFC</string>
+    <string name="scr_pay__text__balance">Balance</string>
 </resources>

@@ -1,7 +1,9 @@
 package com.example.libraandroid.ui.register.form
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -31,9 +34,15 @@ fun RegisterEmailScreen(
 ) {
     val doneEnabled = emailState.value.isNotEmpty()
     val focusManager = LocalFocusManager.current
-    Column(modifier = modifier,
+    Column(modifier = modifier
+        .fillMaxHeight()
+        .pointerInput(Unit) {
+            detectTapGestures(onTap = {
+                focusManager.clearFocus()
+            })
+        },
         verticalArrangement = Arrangement.spacedBy(
-            dimensionResource(R.dimen.form_vertical_spacing)
+            dimensionResource(R.dimen.g__form__vertical_spacing)
         )
     ) {
 

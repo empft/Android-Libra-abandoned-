@@ -11,8 +11,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import com.example.libraandroid.R
 import com.example.libraandroid.ui.theme.VanillaTheme
 
@@ -52,7 +50,7 @@ private fun ForgetChoiceButton(text: String, onClick: () -> Unit) {
             Text(
                 text = text,
                 modifier = Modifier
-                    .padding(vertical = dimensionResource(R.dimen.list_vertical_padding)),
+                    .padding(vertical = dimensionResource(R.dimen.g__list__vertical_padding)),
                 style = MaterialTheme.typography.body1
             )
             Icon(

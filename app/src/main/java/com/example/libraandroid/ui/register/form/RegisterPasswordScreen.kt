@@ -1,39 +1,56 @@
 package com.example.libraandroid.ui.register.form
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.libraandroid.R
 import com.example.libraandroid.ui.TextFieldError
+import com.example.libraandroid.ui.register.PasswordResult
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterPasswordScreen(
     passwordState: MutableState<String>,
+    passwordResult: Flow<PasswordResult>,
     onClick: (password: String) -> Unit,
+    onPasswordSuccess: () -> Unit,
     modifier: Modifier = Modifier,
     passwordError: String? = null
 ) {
-    val nextEnabled = passwordState.value.isNotEmpty()
+    val (isLoading, setLoading) = remember { mutableStateOf(false) }
+
+    val nextEnabled = passwordState.value.isNotEmpty() && !isLoading
     val focusManager = LocalFocusManager.current
-    Column(modifier = modifier,
+
+    val coroutineScope = rememberCoroutineScope()
+
+    Column(modifier = modifier
+        .fillMaxHeight()
+        .pointerInput(Unit) {
+            detectTapGestures(onTap = {
+                focusManager.clearFocus()
+            })
+        },
         verticalArrangement = Arrangement.spacedBy(
-            dimensionResource(R.dimen.form_vertical_spacing)
+            dimensionResource(R.dimen.g__form__vertical_spacing)
         )
     ) {
 
@@ -66,15 +83,37 @@ fun RegisterPasswordScreen(
             TextFieldError(message = passwordError)
         }
 
-        OutlinedButton(onClick = {
-            onClick(
-                passwordState.value
-            )
-        }, modifier = Modifier.align(
-            Alignment.End
-        ), enabled = nextEnabled
+        coroutineScope.launch {
+            passwordResult.collect {
+                when(it) {
+                    PasswordResult.Loading -> setLoading(true)
+                    PasswordResult.Success -> {
+                        onPasswordSuccess()
+                    }
+                    PasswordResult.Empty -> setLoading(false)
+                }
+            }
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text(stringResource(R.string.g__btn__next))
+            if (isLoading) {
+                CircularProgressIndicator()
+            }
+
+            Spacer(Modifier.width(8.dp))
+
+            OutlinedButton(onClick = {
+                onClick(
+                    passwordState.value
+                )
+            }, enabled = nextEnabled
+            ) {
+                Text(stringResource(R.string.g__btn__next))
+            }
         }
     }
 }
@@ -84,6 +123,12 @@ fun RegisterPasswordScreen(
 fun PreviewRegisterPasswordScreen() {
     RegisterPasswordScreen(
         remember { mutableStateOf("") },
-        onClick = {}
+        flow {
+            emit(PasswordResult.Loading)
+            kotlinx.coroutines.delay(10000L)
+            emit(PasswordResult.Empty)
+        },
+        onClick = {},
+        onPasswordSuccess = {}
     )
 }

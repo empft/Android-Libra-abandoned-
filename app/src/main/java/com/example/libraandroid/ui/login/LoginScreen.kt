@@ -12,16 +12,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.libraandroid.ui.theme.VanillaTheme
 import com.example.libraandroid.R
-import com.example.libraandroid.service.network.StatelessClient
-import com.example.libraandroid.service.session.AccountSessionLoginManager
-import com.example.libraandroid.service.session.AccountSessionRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -50,7 +42,7 @@ fun LoginScreen(
                 focusManager.clearFocus()
             })
         }.padding(
-        horizontal = dimensionResource(R.dimen.form_horizontal_margin)
+        horizontal = dimensionResource(R.dimen.g__form__horizontal_margin)
     ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -82,7 +74,6 @@ fun LoginScreen(
         coroutineScope.launch {
             loginState.collect {
                 when(it) {
-                    LoginResult.Empty -> {}
                     is LoginResult.Failure -> {
                         scaffoldState.snackbarHostState.showSnackbar(
                             message = it.message

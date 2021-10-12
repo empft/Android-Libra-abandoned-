@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,11 +23,14 @@ enum class ForgetLoginNav {
 @Composable
 fun ForgetLoginNavHost(
     usernameState: MutableState<String>,
+    onForgetUsername: (email: String) -> Unit,
+    onForgetPassword: (email: String, username: String) -> Unit,
+    onResetPassword: (token: String, password: String) -> Unit,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
     val formModifier = Modifier.padding(
-        horizontal = dimensionResource(R.dimen.form_horizontal_margin)
+        horizontal = dimensionResource(R.dimen.g__form__horizontal_margin)
     )
 
     val emailState = remember { mutableStateOf("") }
@@ -55,34 +57,25 @@ fun ForgetLoginNavHost(
         composable(ForgetLoginNav.ForgetUsername.name) {
             ForgetUsernameScreen(
                 emailState = emailState,
-                modifier = formModifier) {
-
-            }
+                modifier = formModifier,
+                onClick = onForgetUsername
+            )
         }
 
         composable(ForgetLoginNav.ForgetPassword.name) {
             ForgetPasswordScreen(
                 emailState = emailState,
                 usernameState = usernameState,
-                modifier = formModifier) { email, username ->
-
-            }
+                modifier = formModifier,
+                onClick = onForgetPassword
+            )
         }
 
         composable(ForgetLoginNav.ResetPassword.name) {
-            ResetPasswordScreen(modifier = formModifier) { token, password ->
-
-            }
+            ResetPasswordScreen(
+                modifier = formModifier,
+                onClick = onResetPassword
+            )
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewForgetLoginNavHost() {
-    val usernameState = remember { mutableStateOf("") }
-    ForgetLoginNavHost(
-        navController = rememberNavController(),
-        usernameState = usernameState
-    )
 }

@@ -1,9 +1,14 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="form_horizontal_margin">24dp</dimen>
-    <dimen name="form_vertical_margin">24dp</dimen>
-    <dimen name="form_vertical_spacing">10dp</dimen>
-    <dimen name="form_vertical_spacing_large">30dp</dimen>
+    <dimen name="g__form__horizontal_margin">24dp</dimen>
+    <dimen name="g__form__vertical_margin">24dp</dimen>
+    <dimen name="g__form__vertical_spacing">10dp</dimen>
+    <dimen name="g__form__vertical_spacing_large">30dp</dimen>
 
-    <dimen name="list_vertical_padding">3dp</dimen>
+    <dimen name="g__textbtn__icon">18dp</dimen>
+    <dimen name="g__textbtn__icon_text_spacing">8dp</dimen>
+
+    <dimen name="scr_pay__surface__top_right_icon">24dp</dimen>
+
+    <dimen name="g__list__vertical_padding">3dp</dimen>
 </resources>

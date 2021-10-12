@@ -1,6 +1,5 @@
 package com.example.libraandroid.ui.login
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -66,7 +64,7 @@ fun LoginForm(
             },
             modifier = Modifier.fillMaxWidth(),
             label = { Text(stringResource(R.string.g__textfield__password)) },
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, keyboardType = KeyboardType.Password),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = {
                 if (buttonEnabled) {
                     focusManager.clearFocus()
@@ -74,7 +72,7 @@ fun LoginForm(
                 }
             })
         )
-        Spacer(Modifier.size(dimensionResource(R.dimen.form_vertical_spacing)))
+        Spacer(Modifier.size(dimensionResource(R.dimen.g__form__vertical_spacing)))
         OutlinedButton(
             onClick = {
                 focusManager.clearFocus()

@@ -1,5 +1,6 @@
 package com.example.libraandroid.ui.register.form
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -10,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -29,9 +31,15 @@ fun RegisterNamesScreen(
 ) {
     val nextEnabled = usernameState.value.isNotEmpty() && displayNameState.value.isNotEmpty()
     val focusManager = LocalFocusManager.current
-    Column(modifier = modifier,
+    Column(modifier = modifier
+        .fillMaxHeight()
+        .pointerInput(Unit) {
+            detectTapGestures(onTap = {
+                focusManager.clearFocus()
+            })
+        },
         verticalArrangement = Arrangement.spacedBy(
-            dimensionResource(R.dimen.form_vertical_spacing)
+            dimensionResource(R.dimen.g__form__vertical_spacing)
         )
     ) {
         Column {

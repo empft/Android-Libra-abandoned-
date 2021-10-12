@@ -4,8 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -13,7 +12,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.viewbinding.BuildConfig
 import com.example.libraandroid.service.session.AccountSessionRepository
 import com.example.libraandroid.ui.login.LoginNavHost
-import com.example.libraandroid.ui.login.LoginScreen
 import com.example.libraandroid.ui.theme.VanillaTheme
 import timber.log.Timber
 
@@ -21,28 +19,32 @@ class LaunchActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val launchViewModel: LaunchViewModel by viewModels()
+
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
 
         setContent {
-            val session = AccountSessionRepository(LocalContext.current)
-            val scaffoldState = rememberScaffoldState()
-            val launchViewModel: LaunchViewModel by viewModel()
-
             VanillaTheme {
-                Scaffold(scaffoldState = scaffoldState) {
-                    LaunchedEffect(true) {
-                        if (session.exist()) {
-                            launchViewModel.login()
-                        } else {
-                            launchViewModel.logout()
-                        }
+                val session = AccountSessionRepository(LocalContext.current)
+
+                LaunchedEffect(true) {
+                    if (session.exist()) {
+                        launchViewModel.login()
+                    } else {
+                        launchViewModel.logout()
                     }
+                }
+                Surface {
                     LaunchScreen(
                         showLoggedIn = launchViewModel.isLoggedIn.value,
                         splashScreen = {},
-                        loginScreen = { LoginNavHost() },
+                        loginScreen = { LoginNavHost(
+                            onEnterSuccess = {
+                                launchViewModel.login()
+                            }
+                        )},
                         mainScreen = {}
                     )
                 }
@@ -65,35 +67,32 @@ fun LaunchScreen(
     }
 }
 
-@Preview
 @Composable
-fun PreviewNotLoggedInLaunchScreen() {
+private fun LaunchScreenForPreview(showLoggedIn: LaunchState) {
     LaunchScreen(
         showLoggedIn = LaunchState.LoggedOut,
         splashScreen = {},
-        loginScreen = { LoginNavHost() },
+        loginScreen = { LoginNavHost(
+            onEnterSuccess = {}
+        ) },
         mainScreen = {}
     )
+}
+
+@Preview
+@Composable
+fun PreviewNotLoggedInLaunchScreen() {
+    LaunchScreenForPreview(showLoggedIn = LaunchState.LoggedOut)
 }
 
 @Preview
 @Composable
 fun PreviewLoggedInScreen() {
-    LaunchScreen(
-        showLoggedIn = LaunchState.LoggedIn,
-        splashScreen = {},
-        loginScreen = { LoginNavHost() },
-        mainScreen = {}
-    )
+    LaunchScreenForPreview(showLoggedIn = LaunchState.LoggedIn)
 }
 
 @Preview
 @Composable
 fun PreviewLoadingScreen() {
-    LaunchScreen(
-        showLoggedIn = LaunchState.Loading,
-        splashScreen = {},
-        loginScreen = { LoginNavHost() },
-        mainScreen = {}
-    )
+    LaunchScreenForPreview(showLoggedIn = LaunchState.Loading)
 }

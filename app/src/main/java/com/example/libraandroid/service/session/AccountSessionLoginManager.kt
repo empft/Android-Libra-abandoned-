@@ -15,17 +15,15 @@ class AccountSessionLoginManager(
     private val network: AccountLoginService,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
+    /**
+     * Send a network request to login and save the session cookie
+     *
+     * @throws ResponseException if http code is not successful
+     */
     suspend fun login(username: String, password: String) {
         val response = network.login(username, password)
         if (response.isSuccessful) {
-            val rawCookie = response.headers().values("Set-Cookie").firstOrNull {
-                it.startsWith(NetworkConstant.ACCOUNT_SESSION_COOKIE + "=")
-            }
-
-            rawCookie?.let {
-                val token = SessionToken(name = username, token = HttpCookie.parse(it).first().value)
-                repo.set(token)
-            } ?: throw Exception("Session cookie not found")
+            AccountSessionUtil.saveSessionFromResponse(username, response, repo)
         } else {
             response.errorBody()?.let {
                 val text = it.charStream().readText()
