@@ -48,4 +48,5 @@
     <string name="scr_pay__btn__nfc">NFC</string>
     <string name="scr_pay__text__balance">余额</string>
     <string name="scr_pay__btn__direct_pay">手动</string>
+    <string name="scr_pay__text__history">交易</string>
 </resources>

@@ -61,58 +61,58 @@ dependencies {
     // Jetpack Compose
 
     // Compiler
-    implementation("androidx.compose.compiler:compiler:1.1.0-alpha04")
+    implementation("androidx.compose.compiler:compiler:1.1.0-alpha05")
     // Integration with activities
     implementation("androidx.activity:activity-compose:1.3.1")
     // Compose Material Design
-    implementation("androidx.compose.material:material:1.0.2")
+    implementation("androidx.compose.material:material:1.0.3")
     // Animations
-    implementation("androidx.compose.animation:animation:1.0.2")
+    implementation("androidx.compose.animation:animation:1.0.3")
     // Tooling support (Previews, etc.)
-    implementation("androidx.compose.ui:ui-tooling:1.0.2")
+    implementation("androidx.compose.ui:ui-tooling:1.0.3")
     // Icons
-    implementation("androidx.compose.material:material-icons-extended:1.0.2")
+    implementation("androidx.compose.material:material-icons-extended:1.0.3")
     // Integration with ViewModels
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-rc01")
     // UI Tests
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.2")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.3")
 
     // Navigation
 
-    implementation("androidx.navigation:navigation-fragment-ktx:2.4.0-alpha09")
-    implementation("androidx.navigation:navigation-ui-ktx:2.4.0-alpha09")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.4.0-alpha10")
+    implementation("androidx.navigation:navigation-ui-ktx:2.4.0-alpha10")
 
     // Feature module Support
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:2.4.0-alpha09")
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:2.4.0-alpha10")
 
     // Testing Navigation
-    androidTestImplementation("androidx.navigation:navigation-testing:2.4.0-alpha09")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.4.0-alpha10")
 
     // Navigation Jetpack Compose Integration
-    implementation("androidx.navigation:navigation-compose:2.4.0-alpha09")
+    implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
 
     // Lifecycle
 
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0-rc01")
     // LiveData
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-rc01")
     // Lifecycles only (without ViewModel or LiveData)
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-rc01")
 
     // Saved state module for ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.0-rc01")
 
     // alternately - if using Java8, use the following instead of lifecycle-compiler
-    implementation("androidx.lifecycle:lifecycle-common-java8:2.4.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-common-java8:2.4.0-rc01")
 
     // optional - helpers for implementing LifecycleOwner in a Service
-    implementation("androidx.lifecycle:lifecycle-service:2.4.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-service:2.4.0-rc01")
 
     // optional - ProcessLifecycleOwner provides a lifecycle for the whole application process
-    implementation("androidx.lifecycle:lifecycle-process:2.4.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-process:2.4.0-rc01")
     // optional - ReactiveStreams support for LiveData
-    implementation("androidx.lifecycle:lifecycle-reactivestreams-ktx:2.4.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-reactivestreams-ktx:2.4.0-rc01")
 
     // optional - Test helpers for LiveData
     testImplementation("androidx.arch.core:core-testing:2.1.0")

@@ -49,4 +49,5 @@
     <string name="scr_pay__btn__direct_pay">Manual</string>
     <string name="scr_pay__btn__nfc">NFC</string>
     <string name="scr_pay__text__balance">Balance</string>
+    <string name="scr_pay__text__history">Transactions</string>
 </resources>

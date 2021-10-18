@@ -48,4 +48,5 @@
     <string name="scr_pay__btn__direct_pay">Manual</string>
     <string name="scr_pay__text__balance">Baki</string>
     <string name="scr_balance__icon__expand_balance">Mengembang skrin baki</string>
+    <string name="scr_pay__text__history">Urus niaga</string>
 </resources>
