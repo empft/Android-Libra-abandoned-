@@ -49,4 +49,10 @@
     <string name="scr_pay__text__balance">Baki</string>
     <string name="scr_balance__icon__expand_balance">Mengembang skrin baki</string>
     <string name="scr_pay__text__history">Urus niaga</string>
+    <string name="scr_payhistory__text__transfer">Pindahan</string>
+    <string name="scr_payhistory__text__self">sendiri</string>
+    <string name="scr_payhistory__text__date">Tarikh</string>
+    <string name="scr_payhistory__text__fees">Yuran</string>
+    <string name="scr_payhistory__text__gas_fees">Gas</string>
+    <string name="scr_payhistory__text__gateway_fee">Tol</string>
 </resources>

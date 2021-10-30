@@ -50,4 +50,11 @@
     <string name="scr_pay__btn__nfc">NFC</string>
     <string name="scr_pay__text__balance">Balance</string>
     <string name="scr_pay__text__history">Transactions</string>
+    <string name="scr_payhistory__text__transfer">Transfers</string>
+    <string name="scr_payhistory__text__self">self</string>
+    <string name="scr_payhistory__text__date">Date</string>
+    <string name="scr_payhistory__text__fees">Fees</string>
+    <string name="scr_payhistory__text__gas_fees">Gas</string>
+    <string name="scr_payhistory__text__gateway_fee">Gateway</string>
+    <string name="scr_payhistory__text__json" translatable="false">Json</string>
 </resources>

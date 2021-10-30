@@ -1,8 +1,8 @@
 package com.example.libraandroid.service.session
 
 import android.content.Context
-import com.example.libraandroid.service.sharedpref.EncryptedSharedPrefConst
-import com.example.libraandroid.service.sharedpref.getEncryptedSharedPreference
+import com.example.libraandroid.sharedpref.EncryptedSharedPrefConst
+import com.example.libraandroid.sharedpref.getEncryptedSharedPreference
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.encodeToJsonElement

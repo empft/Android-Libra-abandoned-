@@ -6,25 +6,35 @@ sealed interface Transaction {
     data class Celo(
         val blockHash: String,
         val blockNumber: ULong,
-        // currency
-        val contractAddress: String,
         val cumulativeGasUsed: BigInteger,
-        val from: String,
         val gas: ULong,
         val gasPrice: BigInteger,
         val gasUsed: ULong,
         val hash: String,
         val input: String,
-        val logIndex: Int,
+
         val nonce: ULong,
         val timestamp: String,
-        val to: String,
-        val tokenDecimal: Int,
-        val tokenName: String,
-        val tokenSymbol: String,
-        val transactionIndex: Int,
-        val value: BigInteger
-    ): Transaction
+
+        val tokenTransfer: List<Transfer>,
+
+        val gatewayFee: BigInteger,
+        val gatewayRecipient: String,
+        val gatewayCurrencyAddress: String
+    ): Transaction {
+        data class Transfer(
+            val transactionIndex: Int,
+            val logIndex: Int,
+            val from: String,
+            val to: String,
+            // currency
+            val contractAddress: String,
+            val tokenDecimal: Int,
+            val tokenName: String,
+            val tokenSymbol: String,
+            val value: BigInteger,
+        )
+    }
 
     data class Diem(
         val bytes: String,
