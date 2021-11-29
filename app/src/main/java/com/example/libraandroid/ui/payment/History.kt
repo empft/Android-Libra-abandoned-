@@ -1,28 +1,39 @@
 package com.example.libraandroid.ui.payment
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.colorspace.ColorModel
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import com.example.libraandroid.R
+import com.example.libraandroid.ui.currency.CurrencyConstant
+import com.example.libraandroid.ui.currency.formatAmount
+import com.example.libraandroid.ui.displayname.DisplayName
+import com.example.libraandroid.ui.transactionhistory.AddressWithId
+import com.example.libraandroid.ui.transactionhistory.Transaction
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import kotlin.math.absoluteValue
 
 @Composable
 fun PaymentHistoryRow(
@@ -69,11 +80,8 @@ fun PaymentHistoryRow(
                 Column(modifier = Modifier
                     .weight(1f)
                 ) {
-                    Text(
-                        title,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style =  MaterialTheme.typography.subtitle1
+                    DisplayName(
+                        name = title
                     )
                     subtitle?.let {
                         Text(
@@ -106,7 +114,7 @@ fun PreviewPaymentHistoryRow() {
     PaymentHistoryRow({
             Image(
                 painter = painterResource(R.drawable.ic_launcher_foreground),
-                contentDescription = stringResource(R.string.scr_payhistory__image__avatar)
+                contentDescription = null
             )
         },
         "The Dessert Shop",
@@ -115,27 +123,146 @@ fun PreviewPaymentHistoryRow() {
     )
 }
 
+private fun getRandomColors(address: String): List<Color> {
+    val colourList = mutableListOf(
+        Color.Blue,
+        Color.Cyan,
+        Color.DarkGray,
+        Color.Gray,
+        Color.Green,
+        Color.LightGray,
+        Color.Magenta,
+        Color.Red
+    ).map {
+        it.copy(alpha = 0.6f)
+    }
+    val first = address.hashCode().absoluteValue % colourList.count()
+    val second = address.length % colourList.count()
+    return listOf(colourList[first], colourList[second])
+}
+
 @Composable
 fun PaymentHistory(
+    transactions: List<Transaction>,
+    currentWallet: String,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(modifier) {
-        item {
-            PaymentHistoryRow({
-                Image(
-                    painter = painterResource(R.drawable.ic_launcher_background),
-                    contentDescription = null,
-                )
-            },
-                "Title",
-                "-$20.00",
-                subtitle = "test",
-                showDivider = true,
-                modifier = Modifier.clickable {
+    LazyColumn(
+        modifier = modifier.fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        transactions.groupBy {
+            fun instantToDate(timestamp: Instant): LocalDate {
+                return timestamp.atZone(
+                    ZoneId.systemDefault()
+                ).toLocalDate()
+            }
 
+            when(it) {
+                is Transaction.Celo -> {
+                    instantToDate(it.timestamp)
                 }
-            )
+                is Transaction.Diem -> {
+                    instantToDate(it.timestamp)
+                }
+            }
+        }.forEach { (date, grouped) ->
+            itemsIndexed(grouped) { index, tx ->
+                val formatter = DateTimeFormatter.ofLocalizedDate(
+                    FormatStyle.LONG
+                )
+                if (index == 0) {
+                    PaymentHistoryDateRow(date.format(formatter))
+                }
+                when(tx) {
+                    is Transaction.Celo -> {
+                        val fTransfer = tx.tokenTransfer.firstOrNull()
+
+                        fTransfer?.let {
+                            val target = fTransfer.target(currentWallet)
+
+                            PaymentHistoryRow(
+                                image = {
+                                    if (target != null) {
+                                        val picUrl = target.profilePic
+                                        if (picUrl != null) {
+                                            Image(
+                                                painter = rememberImagePainter(picUrl),
+                                                contentDescription = null
+                                            )
+                                        } else {
+                                            Box(
+                                                modifier =
+                                                Modifier
+                                                    .background(
+                                                        Brush.sweepGradient(
+                                                            getRandomColors(target.address)
+                                                        )
+                                                    )
+                                                    .fillMaxSize()
+                                            )
+                                        }
+                                    } else {
+                                        Image(painter = painterResource(
+                                            R.drawable.ic_question_mark
+                                        ), contentDescription = null)
+                                    }
+                                },
+                                title = target?.name ?: stringResource(
+                                    R.string.scr_payhistory__text__unknown_transaction_target
+                                ),
+                                amount = formatAmount(
+                                    value = fTransfer.value,
+                                    decimalPlaces = fTransfer.tokenDecimal
+                                ),
+                                showDivider = true
+                            )
+                        }
+                    }
+                    is Transaction.Diem -> {
+                        val target = tx.target(currentWallet)
+
+                        PaymentHistoryRow(
+                            image = {
+                                if (target != null) {
+                                    val picUrl = target.profilePic
+                                    if (picUrl != null) {
+                                        Image(
+                                            painter = rememberImagePainter(picUrl),
+                                            contentDescription = null
+                                        )
+                                    } else {
+                                        Box(
+                                            modifier =
+                                            Modifier
+                                                .background(
+                                                    Brush.sweepGradient(
+                                                        getRandomColors(target.address)
+                                                    )
+                                                )
+                                                .fillMaxSize()
+                                        )
+                                    }
+                                } else {
+                                    Image(painter = painterResource(
+                                        R.drawable.ic_question_mark
+                                    ), contentDescription = null)
+                                }
+                            },
+                            title = target?.name ?: stringResource(
+                                R.string.scr_payhistory__text__unknown_transaction_target
+                            ),
+                            amount = formatAmount(
+                                value = tx.amount,
+                                decimalPlaces = CurrencyConstant.DIEM_DECIMAL
+                            ),
+                            showDivider = true
+                        )
+                    }
+                }
+            }
         }
+
     }
 }
 
@@ -149,10 +276,16 @@ fun PreviewPaymentHistory() {
     LazyColumn {
         items(5) {
             PaymentHistoryRow({
-                    Image(
-                        painter = painterResource(R.drawable.ic_launcher_background),
-                        contentDescription = stringResource(R.string.scr_payhistory__image__avatar)
-                    )
+                Box(
+                    modifier =
+                    Modifier
+                        .background(
+                            Brush.sweepGradient(
+                                getRandomColors("ter4efw4s")
+                            )
+                        )
+                        .fillMaxSize()
+                )
                 },
                 "Title",
                 "-$20.00",
@@ -166,22 +299,23 @@ fun PreviewPaymentHistory() {
     }
 }
 
-@ExperimentalMaterialApi
 @Composable
-fun Test() {
-    ListItem(
-        trailing = {
-            Text("#$$000")
-        },
-        text = {
-            Text(text = "A verklfksefeajfnknajkcanckAckcnacnackdaca")
-        }
+fun PaymentHistoryDateRow(
+    date: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        date,
+        modifier = modifier,
+        maxLines = 1,
+        style = MaterialTheme.typography.subtitle1
     )
 }
 
-@ExperimentalMaterialApi
 @Preview
 @Composable
-fun PreviewTest() {
-    Test()
+fun PreviewPaymentHistoryDateRow() {
+    PaymentHistoryDateRow(
+        LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
+    )
 }

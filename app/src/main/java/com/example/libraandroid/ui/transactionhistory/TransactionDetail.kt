@@ -1,11 +1,11 @@
 package com.example.libraandroid.ui.transactionhistory
 
-import android.icu.text.DecimalFormat
-import android.icu.text.DecimalFormatSymbols
-import android.icu.util.ULocale
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,12 +16,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.libraandroid.R
+import com.example.libraandroid.ui.currency.CurrencyConstant
+import com.example.libraandroid.ui.currency.formatAmount
+import com.example.libraandroid.ui.theme.negativeColor
+import com.example.libraandroid.ui.theme.positiveColor
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
-import java.math.BigDecimal
 import java.math.BigInteger
-import java.math.MathContext
-import java.math.RoundingMode
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -62,7 +64,8 @@ private fun TransactionDetailRow(
     ) {
         Box(
             Modifier
-                .align(Alignment.CenterVertically),
+                .align(Alignment.CenterVertically)
+                .fillMaxWidth(0.3f),
             contentAlignment = Alignment.CenterStart
         ) { styledLeading() }
 
@@ -165,32 +168,20 @@ fun PreviewTransactionDetailGroup() {
     )
 }
 
+@Composable
+fun formatTimestamp(timestamp: Instant): String {
+    val config = LocalContext.current.resources.configuration
+    val formatter = DateTimeFormatter
+        .ofLocalizedDateTime(FormatStyle.MEDIUM)
+        .withLocale(config.locales.get(0))
+        .withZone(ZoneId.systemDefault())
+    return formatter.format(timestamp)
+}
+
 private fun printJsonCelo(tx: Transaction.Celo): String {
     //TODO: Convert to pretty print, ie: change it to encodeToString after experimental ends
     val format = Json { prettyPrint = true }
     return format.encodeToJsonElement(RawCelo.from(tx)).toString()
-}
-
-@Composable
-private fun formatAmount(
-    value: BigInteger,
-    tokenDecimal: Int,
-): String {
-    val number = value
-        .toBigDecimal(mathContext = MathContext(value.toString().length))
-        .divide(BigDecimal.TEN.pow(tokenDecimal),tokenDecimal,RoundingMode.UNNECESSARY)
-        .stripTrailingZeros()
-
-    val scale = number.scale()
-
-    val pattern: String = if (scale <= 0) {
-        "#,###"
-    } else {
-        "#,###." + "#".repeat(scale)
-    }
-
-    val locale = LocalContext.current.resources.configuration.locales[0]
-    return DecimalFormat(pattern, DecimalFormatSymbols(locale)).format(number)
 }
 
 @Composable
@@ -202,7 +193,9 @@ private fun CeloTransactionDetail(
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier
+        modifier = modifier.verticalScroll(
+            rememberScrollState()
+        )
     ) {
         TransactionDetailGroup(title = {
            Text(stringResource(
@@ -210,56 +203,43 @@ private fun CeloTransactionDetail(
            ))
         }) {
             Column {
-                transaction.tokenTransfer.forEach {
+                transaction.tokenTransfer.forEachIndexed { index, it ->
                     val isFrom = it.from.address == currentWallet
                     val isTo = it.to.address == currentWallet
 
-
                     if (isFrom || isTo) {
+                        var sign = ""
+                        val target: String
+                        val color: Color
+
                         if (isFrom && !isTo) {
-                            TransactionDetailRow(
-                                leading = {
-                                    Text(it.to.name ?: it.to.address)
-                                },
-                                trailing = {
-                                    Text(
-                                        it.tokenSymbol +
-                                                formatAmount(it.value, it.tokenDecimal)
-                                    )
-                                }
-                            )
-
+                            target = it.to.name ?: it.to.address
+                            color = negativeColor()
                         } else if (!isFrom && isTo) {
-                            TransactionDetailRow(
-                                leading = {
-                                    Text(it.from.name ?: it.from.address)
-                                },
-                                trailing = {
-                                    Text(
-                                        "+" + it.tokenSymbol +
-                                                formatAmount(it.value, it.tokenDecimal)
-                                    )
-                                }
-                            )
-
+                            target = it.from.name ?: it.from.address
+                            sign = "+"
+                            color = positiveColor()
                         } else {
-
-                            TransactionDetailRow(
-                                leading = {
-                                    Text(stringResource(
-                                        R.string.scr_payhistory__text__self
-                                    ))
-                                },
-                                trailing = {
-                                    Text(
-                                        "=" + it.tokenSymbol +
-                                                formatAmount(it.value, it.tokenDecimal),
-                                        color = Color.LightGray
-                                    )
-                                }
-                            )
+                            target = it.from.name ?: it.from.address
+                            sign = "="
+                            color = Color.Unspecified
                         }
-                        Divider()
+
+                        TransactionDetailRow(
+                            leading = {
+                                Text(target)
+                            },
+                            trailing = {
+                                Text(
+                                    formatAmount(it.value, it.tokenDecimal, it.tokenSymbol, sign),
+                                    color = color
+                                )
+                            }
+                        )
+
+                        if (index != transaction.tokenTransfer.lastIndex) {
+                            Divider()
+                        }
                     }
                 }
             }
@@ -273,12 +253,7 @@ private fun CeloTransactionDetail(
                     ))
                 },
                 trailing = {
-                    val config = LocalContext.current.resources.configuration
-                    val formatter = DateTimeFormatter
-                        .ofLocalizedDateTime(FormatStyle.MEDIUM)
-                        .withLocale(config.locales.get(0))
-                        .withZone(ZoneId.systemDefault())
-                    Text(formatter.format(transaction.timestamp))
+                    Text(formatTimestamp(transaction.timestamp))
                 }
             )
         }
@@ -297,7 +272,7 @@ private fun CeloTransactionDetail(
                     }, trailing = {
                         Text(formatAmount(
                             transaction.gasPrice * BigInteger(transaction.gasUsed.toString()
-                            ), transaction.gasDecimal
+                            ), transaction.gasDecimal, transaction.gasCurrencySymbol
                         ))
                     }
                 )
@@ -311,7 +286,8 @@ private fun CeloTransactionDetail(
                             ))
                         }, trailing = {
                             Text(formatAmount(
-                                transaction.gatewayFee, transaction.gatewayCurrencyDecimal
+                                transaction.gatewayFee, transaction.gatewayCurrencyDecimal,
+                                transaction.gatewayCurrencySymbol
                             ))
                         }
                     )
@@ -332,9 +308,138 @@ private fun CeloTransactionDetail(
     }
 }
 
-@Composable
-private fun DiemTransactionDetail() {
+private fun printJsonDiem(tx: Transaction.Diem): String {
+    //TODO: Convert to pretty print, ie: change it to encodeToString after experimental ends
+    val format = Json { prettyPrint = true }
+    return format.encodeToJsonElement(RawDiem.from(tx)).toString()
+}
 
+@Composable
+private fun DiemTransactionDetail(
+    transaction: Transaction.Diem,
+    currentWallet: String,
+    modifier: Modifier = Modifier,
+    showRawJson: Boolean = false
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier.verticalScroll(
+            rememberScrollState()
+        )
+    ) {
+        TransactionDetailGroup(title = {
+            Text(stringResource(R.string.scr_payhistory__text__summary))
+        }) {
+            Column {
+                TransactionDetailRow(
+                    leading = {
+                        Text(
+                            stringResource(R.string.scr_payhistory__text__date)
+                        )
+                    },
+                    trailing = {
+                        Text(formatTimestamp(transaction.timestamp))
+                    }
+                )
+                Divider()
+                TransactionDetailRow(
+                    leading = {
+                        Text(
+                            stringResource(R.string.scr_payhistory__text__from)
+                        )
+                    },
+                    trailing = {
+                        val sender = transaction.sender
+                        Text(sender.name ?: sender.address)
+                    }
+                )
+                Divider()
+                TransactionDetailRow(
+                    leading = {
+                        Text(
+                            stringResource(R.string.scr_payhistory__text__to)
+                        )
+                    },
+                    trailing = {
+                        val recipient = transaction.receiver
+                        Text(recipient.name ?: recipient.address)
+                    }
+                )
+                Divider()
+                TransactionDetailRow(
+                    leading = {
+                        Text(
+                            stringResource(R.string.scr_payhistory__text__amount)
+                        )
+                    },
+                    trailing = {
+                        val isFrom = transaction.sender.address == currentWallet
+                        val isTo = transaction.receiver.address == currentWallet
+
+                        if (isFrom || isTo) {
+                            var sign = ""
+                            val color: Color
+
+                            if (isFrom && !isTo) {
+                                color = negativeColor()
+                            } else if (!isFrom && isTo) {
+                                sign = "+"
+                                color = positiveColor()
+                            } else {
+                                sign = "="
+                                color = Color.Unspecified
+                            }
+
+                            Text(formatAmount(
+                                value = transaction.amount,
+                                decimalPlaces = CurrencyConstant.DIEM_DECIMAL,
+                                transaction.currency,
+                                sign
+                            ), color = color)
+                        }
+                    }
+                )
+            }
+        }
+
+        TransactionDetailGroup(title = {
+            Text(
+                stringResource(
+                    R.string.scr_payhistory__text__fees
+                )
+            )
+        }) {
+            Column {
+                TransactionDetailRow(
+                    leading = {
+                        Text(
+                            stringResource(R.string.scr_payhistory__text__gas_fees)
+                        )
+                    },
+                    trailing = {
+                        Text(formatAmount(
+                                value = transaction.gasUsed * transaction.gasUnitPrice,
+                                decimalPlaces = CurrencyConstant.DIEM_DECIMAL,
+                                transaction.gasCurrency
+                            )
+                        )
+                    }
+                )
+            }
+        }
+
+        if (showRawJson) {
+            TransactionDetailGroup(title = {
+                Text(stringResource(R.string.scr_payhistory__text__json))
+            }) {
+                Text(printJsonDiem(transaction), modifier = Modifier
+                    .padding(all = 8.dp)
+                    .fillMaxWidth()
+                )
+            }
+        }
+
+    }
 }
 
 @Preview(
@@ -358,14 +463,15 @@ fun PreviewCeloTransactionDetail() {
             gasPrice = BigInteger.TEN,
             gasUsed = 500UL,
             gasDecimal = 18,
+            gasCurrencySymbol = "CELO",
             gatewayCurrencySymbol = "CELO",
             gatewayCurrencyDecimal = 18,
             tokenTransfer = listOf(
                 Transaction.Celo.Transfer(
                     transactionIndex = 0,
                     logIndex = 0,
-                    from = AddressWithId(0, "from", "from"),
-                    to = AddressWithId(1, "to", "to"),
+                    from = AddressWithId(0, "from", null,"from"),
+                    to = AddressWithId(1, "to", null,"from"),
                     value = BigInteger.TEN,
                     contractAddress = "contractAddress",
                     tokenDecimal = 18,
@@ -375,8 +481,8 @@ fun PreviewCeloTransactionDetail() {
                 Transaction.Celo.Transfer(
                     transactionIndex = 0,
                     logIndex = 0,
-                    from = AddressWithId(1, "to", "to"),
-                    to = AddressWithId(0, "from", "from"),
+                    from = AddressWithId(1, "to", null,"to"),
+                    to = AddressWithId(0, "from", null,"from"),
                     value = BigInteger("134255225253253123155155351515515351531535"),
                     contractAddress = "contractAddress",
                     tokenDecimal = 18,
@@ -395,7 +501,34 @@ fun PreviewCeloTransactionDetail() {
 )
 @Composable
 fun PreviewDiemTransactionDetail() {
-    DiemTransactionDetail()
+    DiemTransactionDetail(
+        transaction = Transaction.Diem(
+            version = 143242UL,
+            vmStatus = Transaction.Diem.VmStatus(
+                type = "P2P"
+            ),
+            timestamp = Instant.now(),
+            sender = AddressWithId(
+                address = "senderAddress"
+            ),
+            receiver = AddressWithId(
+                address = "myaddress"
+            ),
+            publicKey = "e4f5a62d",
+            sequenceNumber = 1000UL,
+            chainId = 2U,
+            maxGasAmount = 100UL,
+            gasUnitPrice = 1000UL,
+            gasUsed = 50UL,
+            gasCurrency = "XDX",
+            expirationTimestamp = Instant.now().plusMillis(100000L),
+            amount = 2000000UL,
+            currency = "XUS",
+            metadata = "metadata"
+        ),
+        currentWallet = "myaddress",
+        showRawJson = true
+    )
 }
 
 @Composable
@@ -433,14 +566,15 @@ fun PreviewTransactionDetail() {
         gasPrice = BigInteger.TEN,
         gasUsed = 500UL,
         gasDecimal = 18,
+        gasCurrencySymbol = "CELO",
         gatewayCurrencySymbol = "CELO",
         gatewayCurrencyDecimal = 18,
         tokenTransfer = listOf(
             Transaction.Celo.Transfer(
                 transactionIndex = 0,
                 logIndex = 0,
-                from = AddressWithId(0, "from", "from"),
-                to = AddressWithId(1, "to", "to"),
+                from = AddressWithId(0, "from", null,"from"),
+                to = AddressWithId(1, "to", null,"to"),
                 value = BigInteger.TEN,
                 contractAddress = "contractAddress",
                 tokenDecimal = 18,

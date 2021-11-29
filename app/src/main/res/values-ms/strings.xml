@@ -41,7 +41,6 @@
     <string name="scr_main__nav__chat">Bual</string>
     <string name="scr_main__nav__setting">Tetapan</string>
     <string name="scr_main__nav__nearby">Dekat</string>
-    <string name="scr_payhistory__image__avatar">avatar</string>
     <string name="scr_balance__btn__add_convert_money">Tambah atau Tukar</string>
     <string name="scr_pay__btn__qr">QR</string>
     <string name="scr_pay__btn__nfc">NFC</string>
@@ -50,9 +49,15 @@
     <string name="scr_balance__icon__expand_balance">Mengembang skrin baki</string>
     <string name="scr_pay__text__history">Urus niaga</string>
     <string name="scr_payhistory__text__transfer">Pindahan</string>
-    <string name="scr_payhistory__text__self">sendiri</string>
     <string name="scr_payhistory__text__date">Tarikh</string>
     <string name="scr_payhistory__text__fees">Yuran</string>
     <string name="scr_payhistory__text__gas_fees">Gas</string>
     <string name="scr_payhistory__text__gateway_fee">Tol</string>
+    <string name="scr_payhistory__text__summary">Ringkasan</string>
+    <string name="scr_payhistory__text__amount">Jumlah</string>
+    <string name="scr_payhistory__text__to">Kepada</string>
+    <string name="scr_payhistory__text__from">Daripada</string>
+    <string name="scr_payhistory__text__unknown_transaction_target">Tidak diketahui</string>
+    <string name="g__text__suspicious_name">curiga</string>
+    <string name="g__text__verified_name">sah</string>
 </resources>

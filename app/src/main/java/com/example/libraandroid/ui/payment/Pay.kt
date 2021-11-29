@@ -73,11 +73,12 @@ fun PreviewPayButton() {
 fun Pay(
     onClickQr: () -> Unit,
     onClickDirect: () -> Unit,
-    onClickNfc: () -> Unit
+    onClickNfc: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.fillMaxWidth()
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier.fillMaxWidth()
     ) {
         PayButton(
             onClick = onClickQr,

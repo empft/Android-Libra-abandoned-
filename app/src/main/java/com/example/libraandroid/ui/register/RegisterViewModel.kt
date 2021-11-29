@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.libraandroid.R
 import com.example.libraandroid.service.network.AccountRegistrationService
 import com.example.libraandroid.service.network.NamedError
-import com.example.libraandroid.time.formatMillis
+import com.example.libraandroid.ui.time.formatMillis
 import com.example.libraandroid.ui.misc.DelayedCall
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

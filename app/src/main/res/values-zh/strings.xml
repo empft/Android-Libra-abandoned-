@@ -41,7 +41,6 @@
     <string name="scr_main__nav__chat">交谈</string>
     <string name="scr_main__nav__setting">设置</string>
     <string name="scr_main__nav__nearby">附近</string>
-    <string name="scr_payhistory__image__avatar">头像</string>
     <string name="scr_balance__btn__add_convert_money">添加或转换</string>
     <string name="scr_balance__icon__expand_balance">扩张余额</string>
     <string name="scr_pay__btn__qr">QR</string>
@@ -50,9 +49,15 @@
     <string name="scr_pay__btn__direct_pay">手动</string>
     <string name="scr_pay__text__history">交易</string>
     <string name="scr_payhistory__text__transfer">转移</string>
-    <string name="scr_payhistory__text__self">自己</string>
     <string name="scr_payhistory__text__date">日期</string>
     <string name="scr_payhistory__text__fees">费用</string>
     <string name="scr_payhistory__text__gas_fees">汽油</string>
     <string name="scr_payhistory__text__gateway_fee">通行</string>
+    <string name="scr_payhistory__text__summary">概括</string>
+    <string name="scr_payhistory__text__from">来自</string>
+    <string name="scr_payhistory__text__to">致</string>
+    <string name="scr_payhistory__text__amount">数量</string>
+    <string name="scr_payhistory__text__unknown_transaction_target">未知</string>
+    <string name="g__text__suspicious_name">可疑</string>
+    <string name="g__text__verified_name">认证</string>
 </resources>

@@ -23,93 +23,10 @@ data class RecipientNote(
 data class AddressWithId(
     val id: Long? = null,
     val name: String? = null,
+    //url of user profile image
+    val profilePic: String? = null,
     val address: String
 )
-
-sealed interface Transaction {
-    data class Celo(
-        val blockHash: String,
-        val blockNumber: ULong,
-        val cumulativeGasUsed: BigInteger,
-        val hash: String,
-        val input: String,
-        val nonce: ULong,
-
-        val timestamp: Instant,
-
-        val gatewayFee: BigInteger,
-        val feeRecipient: String,
-        val gatewayCurrency: String,
-        val gatewayCurrencyDecimal: Int,
-        val gatewayCurrencySymbol: String,
-
-        val gas: ULong,
-        val gasPrice: BigInteger,
-        val gasUsed: ULong,
-        val gasDecimal: Int,
-
-        val tokenTransfer: List<Transfer>,
-
-        val senderNote: SenderNote? = null,
-        val recipientNote: RecipientNote? = null
-    ): Transaction {
-        data class Transfer(
-            val transactionIndex: Int,
-            val logIndex: Int,
-            val from: AddressWithId,
-            val to: AddressWithId,
-            val value: BigInteger,
-
-            // token/currency address
-            val contractAddress: String,
-            val tokenDecimal: Int,
-            val tokenName: String,
-            val tokenSymbol: String,
-        )
-    }
-
-    data class Diem(
-        val version: ULong,
-
-        val vmStatus: VmStatus,
-
-        val timestamp: ULong,
-        val sender: String,
-        val receiver: String,
-        val publicKey: String,
-        val sequenceNumber: ULong,
-        val chainId: UInt,
-        val maxGasAmount: ULong,
-        val gasUnitPrice: ULong,
-        val gasUsed: ULong,
-        val gasCurrency: String,
-        val expirationTimestamp: ULong,
-
-        val amount: ULong,
-        val currency: String,
-        val metadata: String,
-
-        val senderNote: SenderNote? = null,
-        val recipientNote: RecipientNote? = null
-    ): Transaction {
-
-        data class VmStatus(
-            val type: String,
-            val location: String? = null,
-            val abortCode: ULong? = null,
-            val functionIndex: UInt? = null,
-            val codeOffset: UInt? = null,
-            val explanation: Explanation? = null
-        ) {
-            data class Explanation(
-                val category: String,
-                val categoryDescription: String,
-                val reason: String,
-                val reasonDescription: String
-            )
-        }
-    }
-}
 
 @Serializable
 data class RawCelo(
@@ -156,7 +73,7 @@ data class RawCelo(
                 hash = tx.hash,
                 input = tx.input,
                 nonce = tx.nonce,
-                timestamp = tx.timestamp.epochSecond,
+                timestamp = tx.timestamp.toEpochMilli(),
                 gatewayFee = tx.gatewayFee.toString(),
                 feeRecipient = tx.feeRecipient,
                 gatewayCurrency = tx.gatewayCurrency,
@@ -177,6 +94,229 @@ data class RawCelo(
                     )
                 }
             )
+        }
+    }
+}
+
+@Serializable
+data class RawDiem(
+    val version: ULong,
+
+    val vmStatus: RawVmStatus,
+
+    val timestamp: Long,
+    val sender: String,
+    val receiver: String,
+    val publicKey: String,
+    val sequenceNumber: ULong,
+    val chainId: UInt,
+    val maxGasAmount: ULong,
+    val gasUnitPrice: ULong,
+    val gasUsed: ULong,
+    val gasCurrency: String,
+    val expirationTimestamp: Long,
+
+    val amount: ULong,
+    val currency: String,
+    val metadata: String,
+
+    ) {
+    @Serializable
+    data class RawVmStatus(
+        val type: String,
+        val location: String? = null,
+        val abortCode: ULong? = null,
+        val functionIndex: UInt? = null,
+        val codeOffset: UInt? = null,
+        val explanation: RawExplanation? = null
+    ) {
+        companion object {
+            fun from(vm: Transaction.Diem.VmStatus): RawVmStatus {
+                val explanation = if (vm.explanation != null) {
+                    RawExplanation.from(vm.explanation)
+                } else null
+
+                return RawVmStatus(
+                    type = vm.type,
+                    location = vm.location,
+                    abortCode = vm.abortCode,
+                    functionIndex = vm.functionIndex,
+                    codeOffset = vm.codeOffset,
+                    explanation = explanation
+                )
+            }
+        }
+
+        @Serializable
+        data class RawExplanation(
+            val category: String,
+            val categoryDescription: String,
+            val reason: String,
+            val reasonDescription: String
+        ) {
+            companion object {
+                fun from(ex: Transaction.Diem.VmStatus.Explanation): RawExplanation {
+                    return RawExplanation(
+                        category = ex.category,
+                        categoryDescription = ex.categoryDescription,
+                        reason = ex.reason,
+                        reasonDescription = ex.reasonDescription
+                    )
+                }
+            }
+        }
+    }
+
+    companion object {
+        fun from(tx: Transaction.Diem): RawDiem {
+            return RawDiem(
+                version = tx.version,
+                vmStatus = RawVmStatus.from(tx.vmStatus),
+                timestamp = tx.timestamp.toEpochMilli(),
+                sender = tx.sender.address,
+                receiver = tx.receiver.address,
+                publicKey = tx.publicKey,
+                sequenceNumber = tx.sequenceNumber,
+                chainId = tx.chainId,
+                maxGasAmount = tx.maxGasAmount,
+                gasUnitPrice = tx.gasUnitPrice,
+                gasUsed = tx.gasUsed,
+                gasCurrency = tx.gasCurrency,
+                expirationTimestamp = tx.expirationTimestamp.toEpochMilli(),
+                amount = tx.amount,
+                currency = tx.currency,
+                metadata = tx.metadata
+            )
+        }
+    }
+}
+
+sealed interface Transaction {
+    data class Celo(
+        val blockHash: String,
+        val blockNumber: ULong,
+        val cumulativeGasUsed: BigInteger,
+        val hash: String,
+        val input: String,
+        val nonce: ULong,
+
+        val timestamp: Instant,
+
+        val gatewayFee: BigInteger,
+        val feeRecipient: String,
+        val gatewayCurrency: String,
+        val gatewayCurrencyDecimal: Int,
+        val gatewayCurrencySymbol: String,
+
+        val gas: ULong,
+        val gasPrice: BigInteger,
+        val gasUsed: ULong,
+        val gasDecimal: Int,
+        val gasCurrencySymbol: String,
+
+        val tokenTransfer: List<Transfer>,
+
+        val senderNote: SenderNote? = null,
+        val recipientNote: RecipientNote? = null
+    ): Transaction {
+        data class Transfer(
+            val transactionIndex: Int,
+            val logIndex: Int,
+            val from: AddressWithId,
+            val to: AddressWithId,
+            val value: BigInteger,
+
+            // token/currency address
+            val contractAddress: String,
+            val tokenDecimal: Int,
+            val tokenName: String,
+            val tokenSymbol: String,
+        ) {
+            fun target(selfAddress: String): AddressWithId? {
+                return when(direction(selfAddress)) {
+                    TransactionDirection.Neither -> null
+                    TransactionDirection.Recipient -> this.from
+                    TransactionDirection.Self -> this.from
+                    TransactionDirection.Sender -> this.to
+                }
+            }
+
+            fun direction(selfAddress: String): TransactionDirection {
+                val isSender = this.from.address == selfAddress
+                val isRecipient = this.to.address == selfAddress
+                return transferDirection(isSender, isRecipient)
+            }
+        }
+    }
+
+    data class Diem(
+        val version: ULong,
+
+        val vmStatus: VmStatus,
+
+        val timestamp: Instant,
+        val sender: AddressWithId,
+        val receiver: AddressWithId,
+        val publicKey: String,
+        val sequenceNumber: ULong,
+        val chainId: UInt,
+        val maxGasAmount: ULong,
+        val gasUnitPrice: ULong,
+        val gasUsed: ULong,
+        val gasCurrency: String,
+        val expirationTimestamp: Instant,
+
+        val amount: ULong,
+        val currency: String,
+        val metadata: String,
+
+        val senderNote: SenderNote? = null,
+        val recipientNote: RecipientNote? = null
+    ): Transaction {
+
+        data class VmStatus(
+            val type: String,
+            val location: String? = null,
+            val abortCode: ULong? = null,
+            val functionIndex: UInt? = null,
+            val codeOffset: UInt? = null,
+            val explanation: Explanation? = null
+        ) {
+            data class Explanation(
+                val category: String,
+                val categoryDescription: String,
+                val reason: String,
+                val reasonDescription: String
+            )
+        }
+
+        fun target(selfAddress: String): AddressWithId? {
+            return when(direction(selfAddress)) {
+                TransactionDirection.Neither -> null
+                TransactionDirection.Recipient -> this.sender
+                TransactionDirection.Self -> this.receiver
+                TransactionDirection.Sender -> this.receiver
+            }
+        }
+
+        fun direction(selfAddress: String): TransactionDirection {
+            val isSender = this.sender.address == selfAddress
+            val isRecipient = this.receiver.address == selfAddress
+            return transferDirection(isSender, isRecipient)
+        }
+    }
+
+    companion object {
+        private fun transferDirection(isSender: Boolean, isRecipient: Boolean): TransactionDirection {
+            return if (isSender && !isRecipient) {
+                TransactionDirection.Sender
+            } else if (!isSender && isRecipient) {
+                TransactionDirection.Recipient
+            } else if (isSender && isRecipient) {
+                TransactionDirection.Self
+            } else {
+                TransactionDirection.Neither
+            }
         }
     }
 }

@@ -42,7 +42,6 @@
     <string name="scr_main__nav__chat">Chats</string>
     <string name="scr_main__nav__setting">Settings</string>
     <string name="scr_main__nav__nearby">Nearby</string>
-    <string name="scr_payhistory__image__avatar">avatar</string>
     <string name="scr_balance__btn__add_convert_money">Add or Convert</string>
     <string name="scr_balance__icon__expand_balance">Expand balance</string>
     <string name="scr_pay__btn__qr">QR</string>
@@ -51,10 +50,16 @@
     <string name="scr_pay__text__balance">Balance</string>
     <string name="scr_pay__text__history">Transactions</string>
     <string name="scr_payhistory__text__transfer">Transfers</string>
-    <string name="scr_payhistory__text__self">self</string>
     <string name="scr_payhistory__text__date">Date</string>
     <string name="scr_payhistory__text__fees">Fees</string>
     <string name="scr_payhistory__text__gas_fees">Gas</string>
     <string name="scr_payhistory__text__gateway_fee">Gateway</string>
     <string name="scr_payhistory__text__json" translatable="false">Json</string>
+    <string name="scr_payhistory__text__summary">Summary</string>
+    <string name="scr_payhistory__text__from">From</string>
+    <string name="scr_payhistory__text__to">To</string>
+    <string name="scr_payhistory__text__amount">Amount</string>
+    <string name="scr_payhistory__text__unknown_transaction_target">Unknown</string>
+    <string name="g__text__suspicious_name">sus</string>
+    <string name="g__text__verified_name">verified</string>
 </resources>

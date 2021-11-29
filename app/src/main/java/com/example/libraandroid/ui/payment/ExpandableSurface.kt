@@ -29,7 +29,7 @@ fun ExpandableSurface(
     val surfaceStartPadding = 16.dp
     val surfaceEndPadding = 16.dp
     val surfaceTopPadding = 12.dp
-    val surfaceBottomPadding = 8.dp
+    val surfaceBottomPadding = 12.dp
 
     val verticalSpace = 8.dp
 

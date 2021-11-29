@@ -1,8 +1,6 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("androidx.navigation.safeargs.kotlin")
-    id("kotlin-android")
     kotlin("plugin.serialization") version "1.5.31"
 }
 
@@ -49,47 +47,47 @@ dependencies {
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.annotation:annotation:1.2.0")
+    implementation("androidx.annotation:annotation:1.3.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
     // Jetpack Compose
 
     // Compiler
-    implementation("androidx.compose.compiler:compiler:1.1.0-beta01")
+    implementation("androidx.compose.compiler:compiler:1.1.0-beta02")
     // Integration with activities
     implementation("androidx.activity:activity-compose:1.4.0")
     // Compose Material Design
-    implementation("androidx.compose.material:material:1.0.4")
+    implementation("androidx.compose.material:material:1.0.5")
     // Animations
-    implementation("androidx.compose.animation:animation:1.0.4")
+    implementation("androidx.compose.animation:animation:1.0.5")
     // Tooling support (Previews, etc.)
-    implementation("androidx.compose.ui:ui-tooling:1.0.4")
+    implementation("androidx.compose.ui:ui-tooling:1.0.5")
     // Icons
-    implementation("androidx.compose.material:material-icons-extended:1.0.4")
+    implementation("androidx.compose.material:material-icons-extended:1.0.5")
     // Integration with ViewModels
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
     // UI Tests
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.4")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.5")
 
     // Navigation
 
-    implementation("androidx.navigation:navigation-fragment-ktx:2.4.0-beta01")
-    implementation("androidx.navigation:navigation-ui-ktx:2.4.0-beta01")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.4.0-beta02")
+    implementation("androidx.navigation:navigation-ui-ktx:2.4.0-beta02")
 
     // Feature module Support
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:2.4.0-beta01")
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:2.4.0-beta02")
 
     // Testing Navigation
-    androidTestImplementation("androidx.navigation:navigation-testing:2.4.0-beta01")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.4.0-beta02")
 
     // Navigation Jetpack Compose Integration
-    implementation("androidx.navigation:navigation-compose:2.4.0-beta01")
+    implementation("androidx.navigation:navigation-compose:2.4.0-beta02")
 
     // Lifecycle
 
@@ -122,7 +120,7 @@ dependencies {
     implementation("androidx.security:security-crypto:1.0.0")
 
     // Json
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
 
 
     // Logging with Timber
@@ -134,6 +132,9 @@ dependencies {
 
     // preferences datastore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // Coil Image
+    implementation("io.coil-kt:coil-compose:1.4.0")
 
 
 
