@@ -62,4 +62,5 @@
     <string name="scr_payhistory__text__unknown_transaction_target">Unknown</string>
     <string name="g__text__suspicious_name">sus</string>
     <string name="g__text__verified_name">verified</string>
+    <string name="scr_payhistory__text__no_history">No Transaction History</string>
 </resources>

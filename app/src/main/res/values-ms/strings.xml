@@ -60,4 +60,5 @@
     <string name="scr_payhistory__text__unknown_transaction_target">Tidak diketahui</string>
     <string name="g__text__suspicious_name">curiga</string>
     <string name="g__text__verified_name">sah</string>
+    <string name="scr_payhistory__text__no_history">Tiada Sejarah Transaksi</string>
 </resources>

@@ -13,11 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.libraandroid.R
+import com.example.libraandroid.ui.currency.CeloTransferAmount
 import com.example.libraandroid.ui.currency.CurrencyConstant
+import com.example.libraandroid.ui.currency.DiemTransferAmount
 import com.example.libraandroid.ui.currency.formatAmount
+import com.example.libraandroid.ui.displayname.DisplayName
 import com.example.libraandroid.ui.theme.negativeColor
 import com.example.libraandroid.ui.theme.positiveColor
 import kotlinx.serialization.encodeToString
@@ -203,36 +207,20 @@ private fun CeloTransactionDetail(
            ))
         }) {
             Column {
-                transaction.tokenTransfer.forEachIndexed { index, it ->
-                    val isFrom = it.from.address == currentWallet
-                    val isTo = it.to.address == currentWallet
-
-                    if (isFrom || isTo) {
-                        var sign = ""
-                        val target: String
-                        val color: Color
-
-                        if (isFrom && !isTo) {
-                            target = it.to.name ?: it.to.address
-                            color = negativeColor()
-                        } else if (!isFrom && isTo) {
-                            target = it.from.name ?: it.from.address
-                            sign = "+"
-                            color = positiveColor()
-                        } else {
-                            target = it.from.name ?: it.from.address
-                            sign = "="
-                            color = Color.Unspecified
-                        }
-
+                transaction.tokenTransfer.forEachIndexed { index, transfer ->
+                    transfer.target(currentWallet)?.let {
                         TransactionDetailRow(
                             leading = {
-                                Text(target)
+                                Text(
+                                    text = it.name ?: it.address,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis
+                                )
                             },
                             trailing = {
-                                Text(
-                                    formatAmount(it.value, it.tokenDecimal, it.tokenSymbol, sign),
-                                    color = color
+                                CeloTransferAmount(
+                                    transaction = transfer,
+                                    selfAddress = currentWallet
                                 )
                             }
                         )
@@ -350,7 +338,11 @@ private fun DiemTransactionDetail(
                     },
                     trailing = {
                         val sender = transaction.sender
-                        Text(sender.name ?: sender.address)
+                        Text(
+                            text = sender.name ?: sender.address,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
                 )
                 Divider()
@@ -362,7 +354,11 @@ private fun DiemTransactionDetail(
                     },
                     trailing = {
                         val recipient = transaction.receiver
-                        Text(recipient.name ?: recipient.address)
+                        Text(
+                            text = recipient.name ?: recipient.address,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
                 )
                 Divider()
@@ -373,29 +369,11 @@ private fun DiemTransactionDetail(
                         )
                     },
                     trailing = {
-                        val isFrom = transaction.sender.address == currentWallet
-                        val isTo = transaction.receiver.address == currentWallet
-
-                        if (isFrom || isTo) {
-                            var sign = ""
-                            val color: Color
-
-                            if (isFrom && !isTo) {
-                                color = negativeColor()
-                            } else if (!isFrom && isTo) {
-                                sign = "+"
-                                color = positiveColor()
-                            } else {
-                                sign = "="
-                                color = Color.Unspecified
-                            }
-
-                            Text(formatAmount(
-                                value = transaction.amount,
-                                decimalPlaces = CurrencyConstant.DIEM_DECIMAL,
-                                transaction.currency,
-                                sign
-                            ), color = color)
+                        transaction.target(currentWallet)?.let {
+                            DiemTransferAmount(
+                                transaction = transaction,
+                                selfAddress = currentWallet
+                            )
                         }
                     }
                 )
@@ -534,14 +512,27 @@ fun PreviewDiemTransactionDetail() {
 @Composable
 fun TransactionDetail(
     transaction: Transaction,
-    modifier: Modifier = Modifier
+    // Wallet address of current user
+    currentWallet: String,
+    modifier: Modifier = Modifier,
+    showRawJson: Boolean = false
 ) {
     when(transaction) {
         is Transaction.Celo -> {
-            Text("Celo")
+            CeloTransactionDetail(
+                transaction = transaction,
+                currentWallet = currentWallet,
+                modifier = modifier,
+                showRawJson = showRawJson
+            )
         }
         is Transaction.Diem -> {
-            Text("Diem")
+            DiemTransactionDetail(
+                transaction = transaction,
+                currentWallet = currentWallet,
+                modifier = modifier,
+                showRawJson = showRawJson
+            )
         }
     }
 }
@@ -581,5 +572,7 @@ fun PreviewTransactionDetail() {
                 tokenName = "CELO",
                 tokenSymbol = "C$"
         ))
-    ))
+    ),
+        currentWallet = "from"
+    )
 }

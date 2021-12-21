@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.libraandroid.R
 
-//TODO: Add defense against homograph attack?
 @Composable
 fun DisplayName(
     name: String,
@@ -35,7 +34,6 @@ fun DisplayName(
     overflow: TextOverflow = TextOverflow.Ellipsis,
     style: TextStyle = TextStyle.Default,
     maxLines: Int = 1,
-    isSuspicious: Boolean = false,
     isVerified: Boolean = false
 ) {
     Row(
@@ -44,30 +42,11 @@ fun DisplayName(
         horizontalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Text(
-            buildAnnotatedString {
-                name.forEach {
-                    append(it)
-                }
-            },
+            name,
             maxLines = maxLines,
             overflow = overflow,
             style = style
         )
-
-        if (isSuspicious) {
-            Surface(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically),
-                color = Color.LightGray,
-                shape = RoundedCornerShape(4.dp),
-            ) {
-                Text(
-                    stringResource(R.string.g__text__suspicious_name),
-                    style = MaterialTheme.typography.caption,
-                    modifier = Modifier.padding(horizontal = 2.dp)
-                )
-            }
-        }
 
         if (isVerified) {
             Icon(
@@ -83,7 +62,6 @@ fun DisplayName(
 fun PreviewDisplayName() {
     DisplayName(
         name = "X Æ A-12",
-        isSuspicious = true,
         isVerified = true,
     )
 }

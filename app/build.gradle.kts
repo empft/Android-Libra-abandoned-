@@ -32,7 +32,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.1.0-alpha04"
+        kotlinCompilerExtensionVersion = "1.0.5"
     }
     buildFeatures {
         viewBinding = true
@@ -43,9 +43,9 @@ android {
 
 dependencies {
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.31")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
     implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation("androidx.appcompat:appcompat:1.4.0")
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.annotation:annotation:1.3.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
@@ -58,8 +58,8 @@ dependencies {
 
     // Jetpack Compose
 
-    // Compiler
-    implementation("androidx.compose.compiler:compiler:1.1.0-beta02")
+    implementation("androidx.compose.ui:ui:1.0.5")
+    implementation("androidx.compose.foundation:foundation:1.0.5")
     // Integration with activities
     implementation("androidx.activity:activity-compose:1.4.0")
     // Compose Material Design
@@ -68,6 +68,7 @@ dependencies {
     implementation("androidx.compose.animation:animation:1.0.5")
     // Tooling support (Previews, etc.)
     implementation("androidx.compose.ui:ui-tooling:1.0.5")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.0.5")
     // Icons
     implementation("androidx.compose.material:material-icons-extended:1.0.5")
     // Integration with ViewModels
@@ -75,19 +76,8 @@ dependencies {
     // UI Tests
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.5")
 
-    // Navigation
-
-    implementation("androidx.navigation:navigation-fragment-ktx:2.4.0-beta02")
-    implementation("androidx.navigation:navigation-ui-ktx:2.4.0-beta02")
-
-    // Feature module Support
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:2.4.0-beta02")
-
-    // Testing Navigation
-    androidTestImplementation("androidx.navigation:navigation-testing:2.4.0-beta02")
-
     // Navigation Jetpack Compose Integration
-    implementation("androidx.navigation:navigation-compose:2.4.0-beta02")
+    implementation("androidx.navigation:navigation-compose:2.4.0-rc01")
 
     // Lifecycle
 
