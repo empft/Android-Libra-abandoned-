@@ -1,8 +1,7 @@
-package com.example.libraandroid.ui.payment
+package com.example.libraandroid.ui.transactionhistory
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -25,12 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.libraandroid.R
-import com.example.libraandroid.ui.currency.CurrencyConstant
 import com.example.libraandroid.ui.currency.formatAmount
-import com.example.libraandroid.ui.transactionhistory.AddressWithId
-import com.example.libraandroid.ui.transactionhistory.Transaction
-import com.example.libraandroid.ui.transactionhistory.TransactionViewer
-import com.example.libraandroid.ui.wallet.Wallet
 import java.math.BigInteger
 import java.time.Instant
 import java.time.LocalDate
@@ -40,7 +34,7 @@ import java.time.format.FormatStyle
 import kotlin.math.absoluteValue
 
 @Composable
-fun PaymentHistoryRow(
+fun TransactionHistoryRow(
     image: @Composable () -> Unit,
     title: String,
     amount: String,
@@ -120,8 +114,8 @@ fun PaymentHistoryRow(
 
 @Preview
 @Composable
-fun PreviewPaymentHistoryRow() {
-    PaymentHistoryRow({
+fun PreviewTransactionHistoryRow() {
+    TransactionHistoryRow({
             Image(
                 painter = painterResource(R.drawable.ic_launcher_foreground),
                 contentDescription = null
@@ -158,10 +152,10 @@ private data class TransferAmountData(
 )
 
 @Composable
-private fun SimplePaymentRow(target: AddressWithId?, transfer: TransferAmountData) {
+private fun SimpleTransactionRow(target: AddressWithId?, transfer: TransferAmountData) {
     val numberOfDigitsShown = 4
 
-    PaymentHistoryRow(
+    TransactionHistoryRow(
         image = {
             if (target != null) {
                 val picUrl = target.profilePic
@@ -202,7 +196,7 @@ private fun SimplePaymentRow(target: AddressWithId?, transfer: TransferAmountDat
 }
 
 @Composable
-fun PaymentHistory(
+fun TransactionHistory(
     transactions: List<Transaction>,
     modifier: Modifier = Modifier
 ) {
@@ -232,7 +226,7 @@ fun PaymentHistory(
                         FormatStyle.LONG
                     )
                     if (index == 0) {
-                        PaymentHistoryDateRow(date.format(formatter))
+                        TransactionHistoryDateRow(date.format(formatter))
                     }
 
                     when(tx) {
@@ -257,7 +251,7 @@ fun PaymentHistory(
                                     }
                                 }
 
-                                SimplePaymentRow(target = target, transfer = transferAmount)
+                                SimpleTransactionRow(target = target, transfer = transferAmount)
                             }
                         }
                         is Transaction.Diem -> {
@@ -277,7 +271,7 @@ fun PaymentHistory(
                                     tx.receiver
                                 }
                             }
-                            SimplePaymentRow(target = target, transfer = transferAmount)
+                            SimpleTransactionRow(target = target, transfer = transferAmount)
                         }
                     }
                 }
@@ -300,7 +294,7 @@ fun PaymentHistory(
     showSystemUi = true
 )
 @Composable
-fun PreviewPaymentHistory() {
+fun PreviewTransactionHistory() {
     val diem = Transaction.Diem(
         version = 143242UL,
         vmStatus = Transaction.Diem.VmStatus(
@@ -382,23 +376,23 @@ fun PreviewPaymentHistory() {
         celo
     )
 
-    PaymentHistory(transactions = rList)
+    TransactionHistory(transactions = rList)
 }
 
 @Preview(
     showSystemUi = true
 )
 @Composable
-fun PreviewEmptyPaymentHistory() {
+fun PreviewEmptyTransactionHistory() {
     val emptyList = listOf<Transaction>()
 
-    PaymentHistory(
+    TransactionHistory(
         transactions = emptyList
     )
 }
 
 @Composable
-fun PaymentHistoryDateRow(
+fun TransactionHistoryDateRow(
     date: String,
     modifier: Modifier = Modifier
 ) {
@@ -412,8 +406,8 @@ fun PaymentHistoryDateRow(
 
 @Preview
 @Composable
-fun PreviewPaymentHistoryDateRow() {
-    PaymentHistoryDateRow(
+fun PreviewTransactionHistoryDateRow() {
+    TransactionHistoryDateRow(
         LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
     )
 }
