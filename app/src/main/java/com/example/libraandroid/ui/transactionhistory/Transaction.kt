@@ -1,5 +1,7 @@
 package com.example.libraandroid.ui.transactionhistory
 
+import com.example.libraandroid.ui.currency.CurrencyConstant
+import com.example.libraandroid.ui.currency.TransferAmount
 import kotlinx.serialization.Serializable
 import java.math.BigInteger
 import java.time.Instant
@@ -231,21 +233,12 @@ sealed interface Transaction {
             val tokenDecimal: Int,
             val tokenName: String,
             val tokenSymbol: String,
-        ) {
-            fun target(selfAddress: String): AddressWithId? {
-                return when(direction(selfAddress)) {
-                    TransactionDirection.Neither -> null
-                    TransactionDirection.Recipient -> this.from
-                    TransactionDirection.Self -> this.from
-                    TransactionDirection.Sender -> this.to
-                }
-            }
-
-            fun direction(selfAddress: String): TransactionDirection {
-                val isSender = this.from.address == selfAddress
-                val isRecipient = this.to.address == selfAddress
-                return transferDirection(isSender, isRecipient)
-            }
+            val viewer: TransactionViewer
+        ): TransferAmount {
+            override fun amount(): BigInteger = value
+            override fun decimalPlaces(): Int = tokenDecimal
+            override fun currency(): String = tokenSymbol
+            override fun viewer(): TransactionViewer = viewer
         }
     }
 
@@ -271,8 +264,9 @@ sealed interface Transaction {
         val metadata: String,
 
         val senderNote: SenderNote? = null,
-        val recipientNote: RecipientNote? = null
-    ): Transaction {
+        val recipientNote: RecipientNote? = null,
+        val viewer: TransactionViewer
+    ): Transaction, TransferAmount {
 
         data class VmStatus(
             val type: String,
@@ -290,33 +284,9 @@ sealed interface Transaction {
             )
         }
 
-        fun target(selfAddress: String): AddressWithId? {
-            return when(direction(selfAddress)) {
-                TransactionDirection.Neither -> null
-                TransactionDirection.Recipient -> this.sender
-                TransactionDirection.Self -> this.receiver
-                TransactionDirection.Sender -> this.receiver
-            }
-        }
-
-        fun direction(selfAddress: String): TransactionDirection {
-            val isSender = this.sender.address == selfAddress
-            val isRecipient = this.receiver.address == selfAddress
-            return transferDirection(isSender, isRecipient)
-        }
-    }
-
-    companion object {
-        private fun transferDirection(isSender: Boolean, isRecipient: Boolean): TransactionDirection {
-            return if (isSender && !isRecipient) {
-                TransactionDirection.Sender
-            } else if (!isSender && isRecipient) {
-                TransactionDirection.Recipient
-            } else if (isSender && isRecipient) {
-                TransactionDirection.Self
-            } else {
-                TransactionDirection.Neither
-            }
-        }
+        override fun amount(): BigInteger = BigInteger(amount.toString())
+        override fun decimalPlaces(): Int = CurrencyConstant.DIEM_DECIMAL
+        override fun currency(): String = currency
+        override fun viewer(): TransactionViewer = viewer
     }
 }

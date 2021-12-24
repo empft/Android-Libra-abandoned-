@@ -29,6 +29,8 @@ import com.example.libraandroid.ui.currency.CurrencyConstant
 import com.example.libraandroid.ui.currency.formatAmount
 import com.example.libraandroid.ui.transactionhistory.AddressWithId
 import com.example.libraandroid.ui.transactionhistory.Transaction
+import com.example.libraandroid.ui.transactionhistory.TransactionViewer
+import com.example.libraandroid.ui.wallet.Wallet
 import java.math.BigInteger
 import java.time.Instant
 import java.time.LocalDate
@@ -149,14 +151,61 @@ private fun getRandomColors(address: String): List<Color> {
     return listOf(colourList[first], colourList[second])
 }
 
+private data class TransferAmountData(
+    val amount: BigInteger,
+    val decimalPlaces: Int,
+    val currency: String
+)
+
+@Composable
+private fun SimplePaymentRow(target: AddressWithId?, transfer: TransferAmountData) {
+    val numberOfDigitsShown = 4
+
+    PaymentHistoryRow(
+        image = {
+            if (target != null) {
+                val picUrl = target.profilePic
+                if (picUrl != null) {
+                    Image(
+                        painter = rememberImagePainter(picUrl),
+                        contentDescription = null
+                    )
+                } else {
+                    Box(
+                        modifier =
+                        Modifier
+                            .background(
+                                Brush.sweepGradient(
+                                    getRandomColors(target.address)
+                                )
+                            )
+                            .fillMaxSize()
+                    )
+                }
+            } else {
+                Image(painter = painterResource(
+                    R.drawable.ic_question_mark
+                ), contentDescription = null)
+            }
+        },
+        title = target?.name ?: target?.address ?: stringResource(
+            R.string.scr_payhistory__text__unknown_transaction_target
+        ),
+        amount = formatAmount(
+            value = transfer.amount,
+            decimalPlaces = transfer.decimalPlaces,
+            currencyCode = transfer.currency,
+            numberOfDigits = numberOfDigitsShown
+        ),
+        showDivider = true
+    )
+}
+
 @Composable
 fun PaymentHistory(
     transactions: List<Transaction>,
-    currentWallet: String,
     modifier: Modifier = Modifier
 ) {
-    val numberOfDigitsShown = 4
-
     if (transactions.isNotEmpty()) {
         LazyColumn(
             modifier = modifier.fillMaxHeight(),
@@ -185,94 +234,50 @@ fun PaymentHistory(
                     if (index == 0) {
                         PaymentHistoryDateRow(date.format(formatter))
                     }
+
                     when(tx) {
                         is Transaction.Celo -> {
                             val fTransfer = tx.tokenTransfer.firstOrNull()
 
-                            fTransfer?.let {
-                                val target = fTransfer.target(currentWallet)
-
-                                PaymentHistoryRow(
-                                    image = {
-                                        if (target != null) {
-                                            val picUrl = target.profilePic
-                                            if (picUrl != null) {
-                                                Image(
-                                                    painter = rememberImagePainter(picUrl),
-                                                    contentDescription = null
-                                                )
-                                            } else {
-                                                Box(
-                                                    modifier =
-                                                    Modifier
-                                                        .background(
-                                                            Brush.sweepGradient(
-                                                                getRandomColors(target.address)
-                                                            )
-                                                        )
-                                                        .fillMaxSize()
-                                                )
-                                            }
-                                        } else {
-                                            Image(painter = painterResource(
-                                                R.drawable.ic_question_mark
-                                            ), contentDescription = null)
-                                        }
-                                    },
-                                    title = target?.name ?: target?.address ?: stringResource(
-                                        R.string.scr_payhistory__text__unknown_transaction_target
-                                    ),
-                                    amount = formatAmount(
-                                        value = fTransfer.value,
-                                        decimalPlaces = fTransfer.tokenDecimal,
-                                        currencyCode = fTransfer.tokenSymbol,
-                                        numberOfDigits = numberOfDigitsShown
-                                    ),
-                                    showDivider = true
+                            if (fTransfer != null) {
+                                val transferAmount = TransferAmountData(
+                                    amount = fTransfer.amount(),
+                                    decimalPlaces = fTransfer.decimalPlaces(),
+                                    currency = fTransfer.currency()
                                 )
+                                val target = when(fTransfer.viewer) {
+                                    TransactionViewer.Anonymous -> {
+                                        null
+                                    }
+                                    TransactionViewer.Recipient -> {
+                                        fTransfer.from
+                                    }
+                                    TransactionViewer.Sender, TransactionViewer.Self -> {
+                                        fTransfer.to
+                                    }
+                                }
+
+                                SimplePaymentRow(target = target, transfer = transferAmount)
                             }
                         }
                         is Transaction.Diem -> {
-                            val target = tx.target(currentWallet)
-
-                            PaymentHistoryRow(
-                                image = {
-                                    if (target != null) {
-                                        val picUrl = target.profilePic
-                                        if (picUrl != null) {
-                                            Image(
-                                                painter = rememberImagePainter(picUrl),
-                                                contentDescription = null
-                                            )
-                                        } else {
-                                            Box(
-                                                modifier =
-                                                Modifier
-                                                    .background(
-                                                        Brush.sweepGradient(
-                                                            getRandomColors(target.address)
-                                                        )
-                                                    )
-                                                    .fillMaxSize()
-                                            )
-                                        }
-                                    } else {
-                                        Image(painter = painterResource(
-                                            R.drawable.ic_question_mark
-                                        ), contentDescription = null)
-                                    }
-                                },
-                                title = target?.name ?: target?.address ?: stringResource(
-                                    R.string.scr_payhistory__text__unknown_transaction_target
-                                ),
-                                amount = formatAmount(
-                                    value = tx.amount,
-                                    decimalPlaces = CurrencyConstant.DIEM_DECIMAL,
-                                    currencyCode = tx.currency,
-                                    numberOfDigits = numberOfDigitsShown
-                                ),
-                                showDivider = true
+                            val transferAmount = TransferAmountData(
+                                amount = tx.amount(),
+                                decimalPlaces = tx.decimalPlaces(),
+                                currency = tx.currency()
                             )
+                            val target = when(tx.viewer) {
+                                TransactionViewer.Anonymous -> {
+                                    null
+                                }
+                                TransactionViewer.Recipient -> {
+                                    tx.sender
+                                }
+                                TransactionViewer.Sender, TransactionViewer.Self -> {
+                                    tx.receiver
+                                }
+                            }
+                            SimplePaymentRow(target = target, transfer = transferAmount)
                         }
                     }
                 }
@@ -281,7 +286,7 @@ fun PaymentHistory(
     } else {
         Box(modifier = modifier.fillMaxSize()) {
             Text(
-                stringResource(id = R.string.scr_payhistory__text__no_history,),
+                stringResource(id = R.string.scr_payhistory__text__no_history),
                 style = MaterialTheme.typography.h5,
                 modifier = modifier
                     .rotate(-45f)
@@ -318,7 +323,8 @@ fun PreviewPaymentHistory() {
         expirationTimestamp = Instant.now().plusMillis(100000L),
         amount = 232000000UL,
         currency = "XUS",
-        metadata = "metadata"
+        metadata = "metadata",
+        viewer = TransactionViewer.Recipient
     )
     val celo = Transaction.Celo(
         blockHash = "blockhash",
@@ -348,7 +354,8 @@ fun PreviewPaymentHistory() {
                 contractAddress = "contractAddress",
                 tokenDecimal = 18,
                 tokenName = "CELO",
-                tokenSymbol = "C$"
+                tokenSymbol = "C$",
+                viewer = TransactionViewer.Anonymous
             ),
             Transaction.Celo.Transfer(
                 transactionIndex = 0,
@@ -359,7 +366,8 @@ fun PreviewPaymentHistory() {
                 contractAddress = "contractAddress",
                 tokenDecimal = 18,
                 tokenName = "CELO",
-                tokenSymbol = "C$"
+                tokenSymbol = "C$",
+                viewer = TransactionViewer.Recipient
             )
         )
     )
@@ -374,7 +382,7 @@ fun PreviewPaymentHistory() {
         celo
     )
 
-    PaymentHistory(transactions = rList, currentWallet = "senderAddress")
+    PaymentHistory(transactions = rList)
 }
 
 @Preview(
@@ -385,7 +393,7 @@ fun PreviewEmptyPaymentHistory() {
     val emptyList = listOf<Transaction>()
 
     PaymentHistory(
-        transactions = emptyList, currentWallet = ""
+        transactions = emptyList
     )
 }
 
