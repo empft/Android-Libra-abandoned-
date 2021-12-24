@@ -1,0 +1,39 @@
+package com.example.libraandroid.ui.payment
+
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.libraandroid.R
+import com.example.libraandroid.ui.transactionhistory.Transaction
+import com.example.libraandroid.ui.transactionhistory.TransactionHistory
+
+@Composable
+fun PaymentTransactionHistory(
+    transactions: List<Transaction>,
+    onExpand: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ExpandableSurface(
+        title = stringResource(
+        R.string.scr_pay__text__history
+    ), onExpand = onExpand, modifier = modifier) {
+        TransactionHistory(
+            transactions = transactions
+        )
+    }
+}
+
+@Preview(
+    showSystemUi = true
+)
+@Composable
+fun PreviewPaymentTransactionHistory() {
+    PaymentTransactionHistory(
+        transactions = listOf(),
+        {}
+    )
+}

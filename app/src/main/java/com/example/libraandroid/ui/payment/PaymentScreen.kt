@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.example.libraandroid.R
 import com.example.libraandroid.ui.currency.formatAmount
 import com.example.libraandroid.ui.transactionhistory.Transaction
+import com.example.libraandroid.ui.transactionhistory.TransactionHistory
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -27,7 +28,12 @@ fun PaymentScreen(
         verticalArrangement = Arrangement.spacedBy(verticalSpace)
     ) {
         Balance(
-            listOf("$20.00", "30$30", "c$100"),{}, {},
+            listOf("$20.00", "30$30", "c$100")
+            , onClickConvert = {
+
+            }, onExpand =  {
+
+            },
             modifier = Modifier.padding(
                 start = 16.dp,
                 end = 16.dp,
@@ -43,18 +49,15 @@ fun PaymentScreen(
                 .padding(horizontal = 16.dp)
         )
 
-        ExpandableSurface(title =
-            stringResource(R.string.scr_pay__text__history
-        ), onExpand = { /*TODO*/
-
-        }, modifier = Modifier
-            .padding(
-            start = 16.dp,
-            end = 16.dp,
-            bottom = 16.dp
-        )) {
-
-        }
+        PaymentTransactionHistory(
+            transactions = transactions, onExpand = {
+                
+            }, modifier = Modifier.padding(
+                start = 16.dp,
+                end = 16.dp,
+                bottom = 16.dp
+            )
+        )
     }
 }
 
