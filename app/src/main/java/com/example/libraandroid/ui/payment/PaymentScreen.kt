@@ -1,23 +1,11 @@
 package com.example.libraandroid.ui.payment
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.libraandroid.R
-import com.example.libraandroid.ui.currency.formatAmount
 import com.example.libraandroid.ui.transactionhistory.Transaction
-import com.example.libraandroid.ui.transactionhistory.TransactionHistory
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 @Composable
 fun PaymentScreen(
@@ -27,11 +15,11 @@ fun PaymentScreen(
     Column(
         verticalArrangement = Arrangement.spacedBy(verticalSpace)
     ) {
-        Balance(
+        PaymentBalance(
             listOf("$20.00", "30$30", "c$100")
             , onClickConvert = {
 
-            }, onExpand =  {
+            }, onNavigate =  {
 
             },
             modifier = Modifier.padding(
@@ -50,7 +38,7 @@ fun PaymentScreen(
         )
 
         PaymentTransactionHistory(
-            transactions = transactions, onExpand = {
+            transactions = transactions, onNavigate = {
                 
             }, modifier = Modifier.padding(
                 start = 16.dp,
