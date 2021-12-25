@@ -1,8 +1,6 @@
 package com.example.libraandroid.ui.payment
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,15 +12,15 @@ import androidx.compose.ui.unit.dp
 import com.example.libraandroid.R
 
 @Composable
-fun Balance(
+fun PaymentBalance(
     amounts: List<String>,
     onClickConvert: () -> Unit,
-    onExpand: () -> Unit,
+    onNavigate: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ExpandableSurface(title = stringResource(
         R.string.scr_pay__text__balance
-    ), onExpand = onExpand, modifier = modifier) {
+    ), onExpand = onNavigate, modifier = modifier) {
         amounts.forEach {
             Text(
                 text = it,
@@ -60,7 +58,7 @@ fun Balance(
 )
 @Composable
 fun PreviewBalance() {
-    Balance(
+    PaymentBalance(
         listOf("$20.00", "30$30", "c$100"),
         {}, {}
     )
