@@ -10,13 +10,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.libraandroid.R
+import com.example.libraandroid.ui.account.AppAccount
 import com.example.libraandroid.ui.currency.*
+import com.example.libraandroid.ui.wallet.Chain
+import com.example.libraandroid.ui.wallet.Wallet
+import com.example.libraandroid.ui.wallet.WalletContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import java.math.BigInteger
@@ -215,7 +218,7 @@ private fun CeloTransactionDetail(
                         TransactionDetailRow(
                             leading = {
                                 Text(
-                                    text = target.name ?: target.address,
+                                    text = target.walletContext?.name ?: target.address,
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )
@@ -237,7 +240,7 @@ private fun CeloTransactionDetail(
                                 },
                                 trailing = {
                                     Text(
-                                        text = transfer.from.name ?: transfer.from.address,
+                                        text = transfer.from.walletContext?.name ?: transfer.from.address,
                                         maxLines = 2,
                                         overflow = TextOverflow.Ellipsis
                                     )
@@ -252,7 +255,7 @@ private fun CeloTransactionDetail(
                                 },
                                 trailing = {
                                     Text(
-                                        text = transfer.to.name ?: transfer.to.address,
+                                        text = transfer.to.walletContext?.name ?: transfer.to.address,
                                         maxLines = 2,
                                         overflow = TextOverflow.Ellipsis
                                     )
@@ -387,7 +390,7 @@ private fun DiemTransactionDetail(
                     trailing = {
                         val sender = transaction.sender
                         Text(
-                            text = sender.name ?: sender.address,
+                            text = sender.walletContext?.name ?: sender.address,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -403,7 +406,7 @@ private fun DiemTransactionDetail(
                     trailing = {
                         val recipient = transaction.receiver
                         Text(
-                            text = recipient.name ?: recipient.address,
+                            text = recipient.walletContext?.name ?: recipient.address,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -493,8 +496,30 @@ fun PreviewCeloTransactionDetail() {
                 Transaction.Celo.Transfer(
                     transactionIndex = 0,
                     logIndex = 0,
-                    from = AddressWithId(0, "from", null,"from"),
-                    to = AddressWithId(1, "to", null,"from"),
+                    from = Wallet.Celo(
+                        address = "senderAddress",
+                        chain = Chain.Celo(
+                            id = 0
+                        ),
+                        WalletContext(
+                            appAccount = AppAccount(
+                                id = 0,
+                                name = "from"
+                            )
+                        )
+                    ),
+                    to = Wallet.Celo(
+                        address = "receiverAddress",
+                        chain = Chain.Celo(
+                            id = 0
+                        ),
+                        WalletContext(
+                            appAccount = AppAccount(
+                                id = 0,
+                                name = "to"
+                            )
+                        )
+                    ),
                     value = BigInteger.TEN,
                     contractAddress = "contractAddress",
                     tokenDecimal = 18,
@@ -505,8 +530,30 @@ fun PreviewCeloTransactionDetail() {
                 Transaction.Celo.Transfer(
                     transactionIndex = 0,
                     logIndex = 0,
-                    from = AddressWithId(1, "to", null,"to"),
-                    to = AddressWithId(0, "from", null,"from"),
+                    from = Wallet.Celo(
+                        address = "senderAddress2",
+                        chain = Chain.Celo(
+                            id = 0
+                        ),
+                        WalletContext(
+                            appAccount = AppAccount(
+                                id = 0,
+                                name = "from2"
+                            )
+                        )
+                    ),
+                    to = Wallet.Celo(
+                        address = "receiverAddress2",
+                        chain = Chain.Celo(
+                            id = 0
+                        ),
+                        WalletContext(
+                            appAccount = AppAccount(
+                                id = 0,
+                                name = "to2"
+                            )
+                        )
+                    ),
                     value = BigInteger("134255225253253123155155351515515351531535"),
                     contractAddress = "contractAddress",
                     tokenDecimal = 18,
@@ -532,11 +579,17 @@ fun PreviewDiemTransactionDetail() {
                 type = "P2P"
             ),
             timestamp = Instant.now(),
-            sender = AddressWithId(
-                address = "senderAddress"
+            sender = Wallet.Diem(
+                address = "senderAddress",
+                chain = Chain.Diem(
+                    id = 0
+                )
             ),
-            receiver = AddressWithId(
-                address = "myaddress"
+            receiver = Wallet.Diem(
+                address = "myAddress",
+                chain = Chain.Diem(
+                    id = 0
+                )
             ),
             publicKey = "e4f5a62d",
             sequenceNumber = 1000UL,
@@ -606,8 +659,30 @@ fun PreviewTransactionDetail() {
             Transaction.Celo.Transfer(
                 transactionIndex = 0,
                 logIndex = 0,
-                from = AddressWithId(0, "from", null,"from"),
-                to = AddressWithId(1, "to", null,"to"),
+                from = Wallet.Celo(
+                    address = "from",
+                    chain = Chain.Celo(
+                        id = 0
+                    ),
+                    WalletContext(
+                        appAccount = AppAccount(
+                            id = 0,
+                            name = "from"
+                        )
+                    )
+                ),
+                to = Wallet.Celo(
+                        address = "to",
+                chain = Chain.Celo(
+                    id = 0
+                ),
+                WalletContext(
+                    appAccount = AppAccount(
+                        id = 0,
+                        name = "to"
+                    )
+                )
+            ),
                 value = BigInteger.TEN,
                 contractAddress = "contractAddress",
                 tokenDecimal = 18,

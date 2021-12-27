@@ -24,7 +24,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.libraandroid.R
+import com.example.libraandroid.ui.account.AppAccount
 import com.example.libraandroid.ui.currency.formatAmount
+import com.example.libraandroid.ui.wallet.Chain
+import com.example.libraandroid.ui.wallet.Wallet
+import com.example.libraandroid.ui.wallet.WalletContext
+import com.example.libraandroid.ui.wallet.WalletWithAccount
 import java.math.BigInteger
 import java.time.Instant
 import java.time.LocalDate
@@ -152,13 +157,13 @@ private data class TransferAmountData(
 )
 
 @Composable
-private fun SimpleTransactionRow(target: AddressWithId?, transfer: TransferAmountData) {
+private fun SimpleTransactionRow(target: WalletWithAccount?, transfer: TransferAmountData) {
     val numberOfDigitsShown = 4
 
     TransactionHistoryRow(
         image = {
-            if (target != null) {
-                val picUrl = target.profilePic
+            if (target!= null) {
+                val picUrl = target.account()!!.profilePic
                 if (picUrl != null) {
                     Image(
                         painter = rememberImagePainter(picUrl),
@@ -170,7 +175,7 @@ private fun SimpleTransactionRow(target: AddressWithId?, transfer: TransferAmoun
                         Modifier
                             .background(
                                 Brush.sweepGradient(
-                                    getRandomColors(target.address)
+                                    getRandomColors(target.address())
                                 )
                             )
                             .fillMaxSize()
@@ -182,7 +187,7 @@ private fun SimpleTransactionRow(target: AddressWithId?, transfer: TransferAmoun
                 ), contentDescription = null)
             }
         },
-        title = target?.name ?: target?.address ?: stringResource(
+        title = target?.account()?.name ?: target?.address() ?: stringResource(
             R.string.scr_payhistory__text__unknown_transaction_target
         ),
         amount = formatAmount(
@@ -301,11 +306,17 @@ fun PreviewTransactionHistory() {
             type = "P2P"
         ),
         timestamp = Instant.now(),
-        sender = AddressWithId(
-            address = "senderAddress"
+        sender = Wallet.Diem(
+            address = "senderAddress",
+            chain = Chain.Diem(
+                id = 0
+            )
         ),
-        receiver = AddressWithId(
-            address = "myaddress"
+        receiver = Wallet.Diem(
+            address = "myaddress",
+            chain = Chain.Diem(
+                id = 0
+            )
         ),
         publicKey = "e4f5a62d",
         sequenceNumber = 1000UL,
@@ -342,8 +353,30 @@ fun PreviewTransactionHistory() {
             Transaction.Celo.Transfer(
                 transactionIndex = 0,
                 logIndex = 0,
-                from = AddressWithId(0, "from", null,"senderAddress"),
-                to = AddressWithId(1, "to", null,"from"),
+                from = Wallet.Celo(
+                    address = "senderAddress",
+                    chain = Chain.Celo(
+                        id = 0
+                    ),
+                    WalletContext(
+                        appAccount = AppAccount(
+                            id = 0,
+                            name = "from"
+                        )
+                    )
+                ),
+                to = Wallet.Celo(
+                    address = "receiverAddress",
+                    chain = Chain.Celo(
+                        id = 0
+                    ),
+                    WalletContext(
+                        appAccount = AppAccount(
+                            id = 0,
+                            name = "to"
+                        )
+                    )
+                ),
                 value = BigInteger.TEN,
                 contractAddress = "contractAddress",
                 tokenDecimal = 18,
@@ -354,8 +387,30 @@ fun PreviewTransactionHistory() {
             Transaction.Celo.Transfer(
                 transactionIndex = 0,
                 logIndex = 0,
-                from = AddressWithId(1, "to", null,"to"),
-                to = AddressWithId(0, "from", null,"from"),
+                from = Wallet.Celo(
+                    address = "receiverAddress",
+                    chain = Chain.Celo(
+                        id = 0
+                    ),
+                    WalletContext(
+                        appAccount = AppAccount(
+                            id = 0,
+                            name = "to"
+                        )
+                    )
+                ),
+                to = Wallet.Celo(
+                    address = "receiverAddress",
+                    chain = Chain.Celo(
+                        id = 0
+                    ),
+                    WalletContext(
+                        appAccount = AppAccount(
+                            id = 0,
+                            name = "to"
+                        )
+                    )
+                ),
                 value = BigInteger("134255225253253123155155351515515351531535"),
                 contractAddress = "contractAddress",
                 tokenDecimal = 18,
@@ -368,9 +423,12 @@ fun PreviewTransactionHistory() {
     val rList = listOf(
         diem,
         diem.copy(
-            receiver = AddressWithId(
-            address = "senderAddress"
-        ),
+            receiver = Wallet.Diem(
+                address = "senderAddress",
+                chain = Chain.Diem(
+                    id = 0
+                )
+            ),
             amount = 12342UL
         ),
         celo

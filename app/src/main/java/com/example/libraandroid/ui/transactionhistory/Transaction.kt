@@ -2,6 +2,7 @@ package com.example.libraandroid.ui.transactionhistory
 
 import com.example.libraandroid.ui.currency.CurrencyConstant
 import com.example.libraandroid.ui.currency.TransferAmount
+import com.example.libraandroid.ui.wallet.Wallet
 import kotlinx.serialization.Serializable
 import java.math.BigInteger
 import java.time.Instant
@@ -20,14 +21,6 @@ data class SenderNote(
 
 data class RecipientNote(
     val id: Long
-)
-
-data class AddressWithId(
-    val id: Long? = null,
-    val name: String? = null,
-    //url of user profile image
-    val profilePic: String? = null,
-    val address: String
 )
 
 @Serializable
@@ -224,8 +217,8 @@ sealed interface Transaction {
         data class Transfer(
             val transactionIndex: Int,
             val logIndex: Int,
-            val from: AddressWithId,
-            val to: AddressWithId,
+            val from: Wallet.Celo,
+            val to: Wallet.Celo,
             val value: BigInteger,
 
             // token/currency address
@@ -248,8 +241,8 @@ sealed interface Transaction {
         val vmStatus: VmStatus,
 
         val timestamp: Instant,
-        val sender: AddressWithId,
-        val receiver: AddressWithId,
+        val sender: Wallet.Diem,
+        val receiver: Wallet.Diem,
         val publicKey: String,
         val sequenceNumber: ULong,
         val chainId: UInt,
