@@ -501,7 +501,7 @@ fun PreviewCeloTransactionDetail() {
                         chain = Chain.Celo(
                             id = 0
                         ),
-                        WalletContext(
+                        walletContext = WalletContext(
                             appAccount = AppAccount(
                                 id = 0,
                                 name = "from"
@@ -513,7 +513,7 @@ fun PreviewCeloTransactionDetail() {
                         chain = Chain.Celo(
                             id = 0
                         ),
-                        WalletContext(
+                        walletContext = WalletContext(
                             appAccount = AppAccount(
                                 id = 0,
                                 name = "to"
@@ -535,7 +535,7 @@ fun PreviewCeloTransactionDetail() {
                         chain = Chain.Celo(
                             id = 0
                         ),
-                        WalletContext(
+                        walletContext = WalletContext(
                             appAccount = AppAccount(
                                 id = 0,
                                 name = "from2"
@@ -547,7 +547,7 @@ fun PreviewCeloTransactionDetail() {
                         chain = Chain.Celo(
                             id = 0
                         ),
-                        WalletContext(
+                        walletContext = WalletContext(
                             appAccount = AppAccount(
                                 id = 0,
                                 name = "to2"
@@ -664,7 +664,7 @@ fun PreviewTransactionDetail() {
                     chain = Chain.Celo(
                         id = 0
                     ),
-                    WalletContext(
+                    walletContext = WalletContext(
                         appAccount = AppAccount(
                             id = 0,
                             name = "from"
@@ -676,12 +676,12 @@ fun PreviewTransactionDetail() {
                 chain = Chain.Celo(
                     id = 0
                 ),
-                WalletContext(
-                    appAccount = AppAccount(
-                        id = 0,
-                        name = "to"
+                    walletContext = WalletContext(
+                        appAccount = AppAccount(
+                            id = 0,
+                            name = "to"
+                        )
                     )
-                )
             ),
                 value = BigInteger.TEN,
                 contractAddress = "contractAddress",

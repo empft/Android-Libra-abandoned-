@@ -4,22 +4,19 @@ import com.example.libraandroid.ui.account.AppAccount
 
 sealed interface Wallet {
     data class Celo(
-        val address: String,
-        val chain: Chain,
-        val walletContext: WalletContext? = null
-    ): Wallet, WalletWithAccount {
-        override fun address() = address
-        override fun account() = walletContext?.appAccount
-    }
+        val chain: Chain.Celo,
+        override val address: String,
+        override val walletContext: WalletContext? = null,
+    ): Wallet
 
     data class Diem(
-        val address: String,
-        val chain: Chain,
-        val walletContext: WalletContext? = null
-    ): Wallet, WalletWithAccount {
-        override fun address() = address
-        override fun account() = walletContext?.appAccount
-    }
+        val chain: Chain.Diem,
+        override val address: String,
+        override val walletContext: WalletContext? = null,
+    ): Wallet
+
+    val address: String
+    val walletContext: WalletContext?
 }
 
 data class WalletContext(
@@ -27,10 +24,5 @@ data class WalletContext(
     val name: String? = null,
     val appAccount: AppAccount? = null
 )
-
-interface WalletWithAccount {
-    fun address(): String
-    fun account(): AppAccount?
-}
 
 

@@ -29,7 +29,6 @@ import com.example.libraandroid.ui.currency.formatAmount
 import com.example.libraandroid.ui.wallet.Chain
 import com.example.libraandroid.ui.wallet.Wallet
 import com.example.libraandroid.ui.wallet.WalletContext
-import com.example.libraandroid.ui.wallet.WalletWithAccount
 import java.math.BigInteger
 import java.time.Instant
 import java.time.LocalDate
@@ -157,13 +156,13 @@ private data class TransferAmountData(
 )
 
 @Composable
-private fun SimpleTransactionRow(target: WalletWithAccount?, transfer: TransferAmountData) {
+private fun SimpleTransactionRow(target: Wallet?, transfer: TransferAmountData) {
     val numberOfDigitsShown = 4
 
     TransactionHistoryRow(
         image = {
             if (target!= null) {
-                val picUrl = target.account()!!.profilePic
+                val picUrl = target.walletContext?.appAccount?.profilePic
                 if (picUrl != null) {
                     Image(
                         painter = rememberImagePainter(picUrl),
@@ -175,7 +174,7 @@ private fun SimpleTransactionRow(target: WalletWithAccount?, transfer: TransferA
                         Modifier
                             .background(
                                 Brush.sweepGradient(
-                                    getRandomColors(target.address())
+                                    getRandomColors(target.address)
                                 )
                             )
                             .fillMaxSize()
@@ -187,7 +186,7 @@ private fun SimpleTransactionRow(target: WalletWithAccount?, transfer: TransferA
                 ), contentDescription = null)
             }
         },
-        title = target?.account()?.name ?: target?.address() ?: stringResource(
+        title = target?.walletContext?.appAccount?.name ?: target?.address ?: stringResource(
             R.string.scr_payhistory__text__unknown_transaction_target
         ),
         amount = formatAmount(
@@ -358,7 +357,7 @@ fun PreviewTransactionHistory() {
                     chain = Chain.Celo(
                         id = 0
                     ),
-                    WalletContext(
+                    walletContext = WalletContext(
                         appAccount = AppAccount(
                             id = 0,
                             name = "from"
@@ -370,7 +369,7 @@ fun PreviewTransactionHistory() {
                     chain = Chain.Celo(
                         id = 0
                     ),
-                    WalletContext(
+                    walletContext = WalletContext(
                         appAccount = AppAccount(
                             id = 0,
                             name = "to"
@@ -392,7 +391,7 @@ fun PreviewTransactionHistory() {
                     chain = Chain.Celo(
                         id = 0
                     ),
-                    WalletContext(
+                    walletContext = WalletContext(
                         appAccount = AppAccount(
                             id = 0,
                             name = "to"
@@ -404,7 +403,7 @@ fun PreviewTransactionHistory() {
                     chain = Chain.Celo(
                         id = 0
                     ),
-                    WalletContext(
+                    walletContext = WalletContext(
                         appAccount = AppAccount(
                             id = 0,
                             name = "to"
