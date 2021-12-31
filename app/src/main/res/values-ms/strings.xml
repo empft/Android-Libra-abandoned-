@@ -61,4 +61,6 @@
     <string name="g__text__suspicious_name">curiga</string>
     <string name="g__text__verified_name">sah</string>
     <string name="scr_payhistory__text__no_history">Tiada Sejarah Transaksi</string>
+    <string name="scr_balance__text__unnamed_wallet">Dompet Tanpa Nama</string>
+    <string name="scr_balance__text__chain_alt_name">Rantai %1$d</string>
 </resources>

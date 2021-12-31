@@ -61,4 +61,6 @@
     <string name="g__text__suspicious_name">可疑</string>
     <string name="g__text__verified_name">认证</string>
     <string name="scr_payhistory__text__no_history">没有交易记录</string>
+    <string name="scr_balance__text__unnamed_wallet">未命名的钱包</string>
+    <string name="scr_balance__text__chain_alt_name">链 %1$d</string>
 </resources>
