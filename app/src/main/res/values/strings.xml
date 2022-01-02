@@ -64,5 +64,7 @@
     <string name="g__text__verified_name">verified</string>
     <string name="scr_payhistory__text__no_history">No Transaction History</string>
     <string name="scr_balance__text__unnamed_wallet">Unnamed Wallet</string>
-    <string name="scr_balance__text__chain_alt_name">Chain %1$d</string>
+    <string name="scr_balance__text__chain_alt_name">%1$s Chain %2$d</string>
+    <string name="g__text__celo" translatable="false">Celo</string>
+    <string name="g__text__diem" translatable="false">Diem</string>
 </resources>

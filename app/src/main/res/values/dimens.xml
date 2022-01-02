@@ -11,4 +11,7 @@
     <dimen name="scr_pay__surface__top_right_icon">24dp</dimen>
 
     <dimen name="g__list__vertical_padding">3dp</dimen>
+
+    <dimen name="scr_balance__list__vertical_padding">8dp</dimen>
+    <dimen name="scr_balance__list__horizontal_padding">16dp</dimen>
 </resources>

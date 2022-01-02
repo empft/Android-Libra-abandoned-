@@ -1,18 +1,28 @@
 package com.example.libraandroid.ui.balance
 
+import com.example.libraandroid.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun BalanceByWalletNameRow(walletName: String, chainName: String, address: String) {
-    Column {
+    val textStyleSmall = MaterialTheme.typography.caption
+
+    Column(
+        modifier = Modifier
+            .padding(
+                vertical = dimensionResource(id = R.dimen.scr_balance__list__vertical_padding),
+                horizontal = dimensionResource(id = R.dimen.scr_balance__list__horizontal_padding)
+            )
+    ) {
         Text(text = walletName, style = MaterialTheme.typography.h5)
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -20,7 +30,7 @@ fun BalanceByWalletNameRow(walletName: String, chainName: String, address: Strin
             Text(
                 text = chainName,
                 maxLines = 1,
-                style = MaterialTheme.typography.caption,
+                style = textStyleSmall,
                 modifier = Modifier.weight(2f, false)
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -28,7 +38,7 @@ fun BalanceByWalletNameRow(walletName: String, chainName: String, address: Strin
                 text = address,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.caption,
+                style = textStyleSmall,
                 modifier = Modifier.weight(1f, false)
             )
         }
@@ -37,18 +47,26 @@ fun BalanceByWalletNameRow(walletName: String, chainName: String, address: Strin
 
 @Composable
 fun BalanceByWalletRow(currency: String, amount: String) {
+    val textStyle = MaterialTheme.typography.body1
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = dimensionResource(id = R.dimen.scr_balance__list__vertical_padding),
+                horizontal = dimensionResource(id = R.dimen.scr_balance__list__horizontal_padding)
+    ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = currency,
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.fillMaxWidth(0.3f)
+            style = textStyle,
+            modifier = Modifier.fillMaxWidth(
+                BalanceUi.ListStartFraction
+            )
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = amount, style = MaterialTheme.typography.h6)
+        Text(text = amount, style = textStyle)
     }
 }
 

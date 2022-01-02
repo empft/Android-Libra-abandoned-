@@ -6,14 +6,14 @@ import java.math.BigInteger
 
 sealed interface Balance {
     data class Diem(
-        val amount: ULong,
+        override val amount: BigInteger,
         override val decimalPlaces: Int = CurrencyConstant.DIEM_DECIMAL,
         override val currency: String,
         override val wallet: Wallet.Diem
     ): Balance
 
     data class Celo(
-        val amount: BigInteger,
+        override val amount: BigInteger,
         override val decimalPlaces: Int,
         override val currency: String,
         override val wallet: Wallet.Celo
@@ -22,4 +22,5 @@ sealed interface Balance {
     val wallet: Wallet
     val currency: String
     val decimalPlaces: Int
+    val amount: BigInteger
 }
