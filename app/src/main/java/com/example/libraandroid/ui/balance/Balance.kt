@@ -7,7 +7,7 @@ import java.math.BigInteger
 sealed interface Balance {
     data class Diem(
         override val amount: BigInteger,
-        override val decimalPlaces: Int = CurrencyConstant.DIEM_DECIMAL,
+        override val decimalPlaces: Int = CurrencyConstant.DiemDecimal,
         override val currency: String,
         override val wallet: Wallet.Diem
     ): Balance

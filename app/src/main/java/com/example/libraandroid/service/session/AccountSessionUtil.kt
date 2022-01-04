@@ -7,7 +7,7 @@ import java.net.HttpCookie
 object AccountSessionUtil {
     fun saveSessionFromResponse(name: String, response: Response<*>, repo: AccountSessionRepository) {
         val rawCookie = response.headers().values("Set-Cookie").firstOrNull {
-            it.startsWith(NetworkConstant.ACCOUNT_SESSION_COOKIE + "=")
+            it.startsWith(NetworkConstant.AccountSessionCookie + "=")
         }
 
         rawCookie?.let {

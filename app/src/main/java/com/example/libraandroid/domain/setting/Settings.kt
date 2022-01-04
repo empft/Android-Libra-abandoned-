@@ -8,22 +8,20 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.libraandroid.datastore.PrefDataStoreConst
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PrefDataStoreConst.SETTINGS)
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PrefDataStoreConst.Settings)
 
 class Settings(
     private val context: Context
 ) {
     enum class Field {
-        RAW_TRANSACTION
+        RawTransaction
     }
 
     inner class Developer() {
         fun showRawTransaction(): Flow<Boolean> {
-            val key = booleanPreferencesKey(Field.RAW_TRANSACTION.toString())
+            val key = booleanPreferencesKey(Field.RawTransaction.toString())
 
             return context.dataStore.data.map {
                 it[key] ?: false
@@ -31,7 +29,7 @@ class Settings(
         }
 
         suspend fun showRawTransaction(value: Boolean) {
-            val key = booleanPreferencesKey(Field.RAW_TRANSACTION.toString())
+            val key = booleanPreferencesKey(Field.RawTransaction.toString())
 
             context.dataStore.edit {
                 it[key] = value

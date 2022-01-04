@@ -445,7 +445,7 @@ private fun DiemTransactionDetail(
                     trailing = {
                         Text(formatAmount(
                                 value = transaction.gasUsed * transaction.gasUnitPrice,
-                                decimalPlaces = CurrencyConstant.DIEM_DECIMAL,
+                                decimalPlaces = CurrencyConstant.DiemDecimal,
                                 transaction.gasCurrency
                             )
                         )

@@ -11,7 +11,7 @@ class AccountSessionRepository(context: Context): SessionRepository<SessionToken
     private val encryptedSharedPref = getEncryptedSharedPreference(context)
 
     private fun getIndex(): Int? {
-        val index = encryptedSharedPref.getString(EncryptedSharedPrefConst.ACTIVE_ACCOUNT_SESSION_INDEX, null)
+        val index = encryptedSharedPref.getString(EncryptedSharedPrefConst.ActiveAccountSessionIndex, null)
         index?.let {
             return it.toInt()
         }
@@ -21,12 +21,12 @@ class AccountSessionRepository(context: Context): SessionRepository<SessionToken
     private fun setIndex(index: Int?) {
         if (index != null) {
             with(encryptedSharedPref.edit()) {
-                putString(EncryptedSharedPrefConst.ACTIVE_ACCOUNT_SESSION_INDEX, index.toString())
+                putString(EncryptedSharedPrefConst.ActiveAccountSessionIndex, index.toString())
                 apply()
             }
         } else {
             with(encryptedSharedPref.edit()) {
-                remove(EncryptedSharedPrefConst.ACTIVE_ACCOUNT_SESSION_INDEX)
+                remove(EncryptedSharedPrefConst.ActiveAccountSessionIndex)
                 apply()
             }
         }
@@ -69,7 +69,7 @@ class AccountSessionRepository(context: Context): SessionRepository<SessionToken
     }
 
     override fun getAll(): Pair<MutableList<SessionToken>?, Int?> {
-        val all = encryptedSharedPref.getString(EncryptedSharedPrefConst.ACCOUNT_SESSION, null)
+        val all = encryptedSharedPref.getString(EncryptedSharedPrefConst.AccountSession, null)
         val index = getIndex()
 
         all?.let {
@@ -86,7 +86,7 @@ class AccountSessionRepository(context: Context): SessionRepository<SessionToken
 
         this.setIndex(index)
         with(encryptedSharedPref.edit()) {
-            putString(EncryptedSharedPrefConst.ACCOUNT_SESSION, Json.encodeToJsonElement(values).toString())
+            putString(EncryptedSharedPrefConst.AccountSession, Json.encodeToJsonElement(values).toString())
             apply()
         }
     }

@@ -5,7 +5,7 @@ import retrofit2.Retrofit
 object StatelessClient {
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl(NetworkConstant.API_BASE_URL)
+            .baseUrl(NetworkConstant.ApiBaseUrl)
             .build()
     }
 

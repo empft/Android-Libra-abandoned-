@@ -62,7 +62,7 @@ fun BalanceByWalletRow(currency: String, amount: String) {
             text = currency,
             style = textStyle,
             modifier = Modifier.fillMaxWidth(
-                BalanceUi.ListStartFraction
+                BalanceConst.ListStartFraction
             )
         )
         Spacer(modifier = Modifier.width(8.dp))

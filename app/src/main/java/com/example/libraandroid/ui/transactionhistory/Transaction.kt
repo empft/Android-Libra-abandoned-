@@ -278,7 +278,7 @@ sealed interface Transaction {
         }
 
         override fun amount(): BigInteger = BigInteger(amount.toString())
-        override fun decimalPlaces(): Int = CurrencyConstant.DIEM_DECIMAL
+        override fun decimalPlaces(): Int = CurrencyConstant.DiemDecimal
         override fun currency(): String = currency
         override fun viewer(): TransactionViewer = viewer
     }

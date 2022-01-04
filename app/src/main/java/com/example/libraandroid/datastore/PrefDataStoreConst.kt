@@ -1,5 +1,7 @@
 package com.example.libraandroid.datastore
 
 object PrefDataStoreConst {
-    const val SETTINGS = "SETTINGS"
+    const val Settings = "Settings"
+
+    const val BalanceUi = "BalanceUi"
 }
