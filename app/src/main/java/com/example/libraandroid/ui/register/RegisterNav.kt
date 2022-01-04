@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -31,15 +32,14 @@ enum class RegisterNav {
 @Composable
 fun RegisterNavHost(
     onRegisterSuccess: () -> Unit,
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    navController: NavHostController = rememberNavController(),
-) {
-    val registerViewModel: RegisterViewModel = viewModel(
+    registerViewModel: RegisterViewModel = viewModel(
         factory = RegisterViewModelFactory(
             StatelessClient.registrationService
         )
-    )
-
+    ),
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    navController: NavHostController = rememberNavController(),
+) {
     val formModifier = Modifier.padding(
         horizontal = dimensionResource(R.dimen.g__form__horizontal_margin)
     )
@@ -142,15 +142,14 @@ fun RegisterNavHost(
 @Composable
 fun RegisterInvitationNavHost(
     onRegisterSuccess: () -> Unit,
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    navController: NavHostController = rememberNavController(),
-) {
-    val registerViewModel: RegisterViewModel = viewModel(
+    registerViewModel: RegisterViewModel = viewModel(
         factory = RegisterViewModelFactory(
             StatelessClient.registrationService
         )
-    )
-
+    ),
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    navController: NavHostController = rememberNavController(),
+) {
     val coroutineScope = rememberCoroutineScope()
 
     val formModifier = Modifier.padding(
