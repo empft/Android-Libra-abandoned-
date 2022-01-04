@@ -15,6 +15,7 @@ import com.example.libraandroid.service.session.AccountSessionRepository
 import com.example.libraandroid.ui.forgetlogin.ForgetLoginNavHost
 import com.example.libraandroid.ui.forgetlogin.ForgetLoginViewModel
 import com.example.libraandroid.ui.register.RegisterInvitationNavHost
+import com.example.libraandroid.ui.register.RegisterViewModelFactory
 
 enum class LoginNav {
     ForgetLogin,
@@ -60,7 +61,12 @@ fun LoginNavHost(
 
         composable(LoginNav.Registration.name) {
             RegisterInvitationNavHost(
-                onRegisterSuccess = onEnterSuccess
+                onRegisterSuccess = onEnterSuccess,
+                registerViewModel = viewModel(
+                    factory = RegisterViewModelFactory(
+                        StatelessClient.registrationService
+                    )
+                )
             )
 
             // May switch to this in the future

@@ -32,11 +32,7 @@ enum class RegisterNav {
 @Composable
 fun RegisterNavHost(
     onRegisterSuccess: () -> Unit,
-    registerViewModel: RegisterViewModel = viewModel(
-        factory = RegisterViewModelFactory(
-            StatelessClient.registrationService
-        )
-    ),
+    registerViewModel: RegisterViewModel,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     navController: NavHostController = rememberNavController(),
 ) {
@@ -142,11 +138,7 @@ fun RegisterNavHost(
 @Composable
 fun RegisterInvitationNavHost(
     onRegisterSuccess: () -> Unit,
-    registerViewModel: RegisterViewModel = viewModel(
-        factory = RegisterViewModelFactory(
-            StatelessClient.registrationService
-        )
-    ),
+    registerViewModel: RegisterViewModel,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     navController: NavHostController = rememberNavController(),
 ) {
@@ -284,6 +276,11 @@ fun PreviewRegisterNavHost() {
     val navController = rememberNavController()
     RegisterNavHost(
         {},
+        registerViewModel = viewModel(
+            factory = RegisterViewModelFactory(
+                StatelessClient.registrationService
+            )
+        ),
         navController = navController
     )
 }
