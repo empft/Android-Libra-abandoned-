@@ -67,5 +67,8 @@
     <string name="g__text__celo" translatable="false">Celo</string>
     <string name="g__text__diem" translatable="false">Diem</string>
     <string name="scr_balance__text__top_bar_title">Balance</string>
-    <string name="scr_balance__icon__sort_and_filter">Sort and Filter</string>
+    <string name="scr_balance__text__sort_and_filter">Sort and Filter</string>
+    <string name="scr_balance__text__sort_by_title">Sort by</string>
+    <string name="scr_balance__text__view_mode_currency">Currency</string>
+    <string name="scr_balance__text__view_mode_wallet">Wallet</string>
 </resources>

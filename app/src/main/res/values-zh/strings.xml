@@ -63,5 +63,8 @@
     <string name="scr_balance__text__unnamed_wallet">未命名的钱包</string>
     <string name="scr_balance__text__chain_alt_name">%1$s链 %2$d</string>
     <string name="scr_balance__text__top_bar_title">余额</string>
-    <string name="scr_balance__icon__sort_and_filter">排序和过滤</string>
+    <string name="scr_balance__text__sort_and_filter">排序和过滤</string>
+    <string name="scr_balance__text__sort_by_title">排序方式</string>
+    <string name="scr_balance__text__view_mode_wallet">钱包</string>
+    <string name="scr_balance__text__view_mode_currency">货币</string>
 </resources>
