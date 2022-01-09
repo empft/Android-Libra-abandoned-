@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,7 +17,8 @@ import com.example.libraandroid.ui.filtersort.FilterSortRow
 
 @Composable
 fun BalanceSortAndFilterScreen(
-    balanceViewModeState: MutableState<BalanceViewMode>,
+    balanceViewMode: BalanceViewMode,
+    onChangeBalanceViewMode: (BalanceViewMode) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(topBar = {
@@ -33,7 +31,7 @@ fun BalanceSortAndFilterScreen(
             modifier = Modifier.padding(top = 4.dp)
         ) {
             FilterSortRow(title = { Text(stringResource(R.string.scr_balance__text__sort_by_title)) }) {
-                OutlineButtonToggleGroup(selected = balanceViewModeState.component1(), onClick = balanceViewModeState.component2()) {
+                OutlineButtonToggleGroup(selected = balanceViewMode, onClick = onChangeBalanceViewMode) {
                     when(it) {
                         BalanceViewMode.Currency -> {
                             Text(stringResource(R.string.scr_balance__text__view_mode_currency))
@@ -55,5 +53,5 @@ fun PreviewBalanceSortAndFilterScreen() {
         mutableStateOf(BalanceViewMode.Currency)
     }
 
-    BalanceSortAndFilterScreen(viewMode)
+    BalanceSortAndFilterScreen(viewMode.value, viewMode.component2())
 }

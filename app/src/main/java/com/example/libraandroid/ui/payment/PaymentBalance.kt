@@ -14,13 +14,13 @@ import com.example.libraandroid.R
 @Composable
 fun PaymentBalance(
     amounts: List<String>,
-    onClickConvert: () -> Unit,
-    onNavigate: () -> Unit,
+    onClickAddConvert: () -> Unit,
+    onExpand: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ExpandableSurface(title = stringResource(
         R.string.scr_pay__text__balance
-    ), onExpand = onNavigate, modifier = modifier) {
+    ), onExpand = onExpand, modifier = modifier) {
         amounts.forEach {
             Text(
                 text = it,
@@ -28,7 +28,7 @@ fun PaymentBalance(
             )
         }
 
-        TextButton(onClick = onClickConvert,
+        TextButton(onClick = onClickAddConvert,
             contentPadding = PaddingValues(start = 0.dp)
         ) {
             Icon(
