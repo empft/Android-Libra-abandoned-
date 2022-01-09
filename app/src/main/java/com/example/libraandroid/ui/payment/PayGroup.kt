@@ -7,7 +7,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -71,7 +70,7 @@ fun PreviewPayButton() {
 }
 
 @Composable
-fun Pay(
+fun PayGroup(
     onQr: () -> Unit,
     onDirect: () -> Unit,
     onNfc: () -> Unit,
@@ -104,7 +103,7 @@ fun Pay(
 )
 @Composable
 fun PreviewPay() {
-    Pay(
+    PayGroup(
         {}, {}, {}
     )
 }
