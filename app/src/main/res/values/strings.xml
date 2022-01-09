@@ -71,4 +71,5 @@
     <string name="scr_balance__text__sort_by_title">Sort by</string>
     <string name="scr_balance__text__view_mode_currency">Currency</string>
     <string name="scr_balance__text__view_mode_wallet">Wallet</string>
+    <string name="scr_payment__text__wallet_manager">Wallet</string>
 </resources>

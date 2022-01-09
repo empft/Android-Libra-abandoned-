@@ -67,4 +67,5 @@
     <string name="scr_balance__text__sort_by_title">排序方式</string>
     <string name="scr_balance__text__view_mode_wallet">钱包</string>
     <string name="scr_balance__text__view_mode_currency">货币</string>
+    <string name="scr_payment__text__wallet_manager">钱包管理</string>
 </resources>
