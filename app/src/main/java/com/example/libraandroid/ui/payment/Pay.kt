@@ -7,8 +7,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,7 +35,8 @@ fun PayButton(
                     MaterialTheme.colors.primary,
                     MaterialTheme.colors.secondary,
                 )
-            ))
+            )),
+        modifier = modifier
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
@@ -71,9 +72,9 @@ fun PreviewPayButton() {
 
 @Composable
 fun Pay(
-    onClickQr: () -> Unit,
-    onClickDirect: () -> Unit,
-    onClickNfc: () -> Unit,
+    onQr: () -> Unit,
+    onDirect: () -> Unit,
+    onNfc: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -81,17 +82,17 @@ fun Pay(
         modifier = modifier.fillMaxWidth()
     ) {
         PayButton(
-            onClick = onClickQr,
+            onClick = onQr,
             text = stringResource(R.string.scr_pay__btn__qr),
             icon = painterResource(R.drawable.ic_qr)
         )
         PayButton(
-            onClick = onClickDirect,
+            onClick = onDirect,
             text = stringResource(R.string.scr_pay__btn__direct_pay),
             icon = painterResource(R.drawable.ic_direct_arrow)
         )
         PayButton(
-            onClick = onClickNfc,
+            onClick = onNfc,
             text = stringResource(R.string.scr_pay__btn__nfc),
             icon = painterResource(R.drawable.ic_nfc)
         )

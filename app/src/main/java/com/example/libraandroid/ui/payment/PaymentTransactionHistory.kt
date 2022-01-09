@@ -11,13 +11,13 @@ import com.example.libraandroid.ui.transactionhistory.TransactionHistory
 @Composable
 fun PaymentTransactionHistory(
     transactions: List<Transaction>,
-    onNavigate: () -> Unit,
+    onExpand: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ExpandableSurface(
         title = stringResource(
         R.string.scr_pay__text__history
-    ), onExpand = onNavigate, modifier = modifier) {
+    ), onExpand = onExpand, modifier = modifier) {
         TransactionHistory(
             transactions = transactions
         )

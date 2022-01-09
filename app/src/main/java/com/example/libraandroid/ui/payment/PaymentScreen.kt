@@ -1,27 +1,36 @@
 package com.example.libraandroid.ui.payment
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.libraandroid.R
 import com.example.libraandroid.ui.transactionhistory.Transaction
 
 @Composable
 fun PaymentScreen(
-    transactions: List<Transaction>
+    transactions: List<Transaction>,
+    onAddConvert: () -> Unit,
+    onExpandBalance: () -> Unit,
+    onPayQr: () -> Unit,
+    onPayManual: () -> Unit,
+    onPayNfc: () -> Unit,
+    onExpandTransaction: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val verticalSpace = 20.dp
+
     Column(
-        verticalArrangement = Arrangement.spacedBy(verticalSpace)
+        verticalArrangement = Arrangement.spacedBy(verticalSpace),
+        modifier = modifier
     ) {
         PaymentBalance(
             listOf("$20.00", "30$30", "c$100")
-            , onClickConvert = {
-
-            }, onNavigate =  {
-
-            },
+            , onClickAddConvert = onAddConvert, onExpand = onExpandBalance,
             modifier = Modifier.padding(
                 start = 16.dp,
                 end = 16.dp,
@@ -30,17 +39,15 @@ fun PaymentScreen(
         )
 
         Pay(
-            onClickQr = {},
-            onClickDirect = {},
-            onClickNfc = {},
+            onQr = onPayQr,
+            onDirect = onPayManual,
+            onNfc = onPayNfc,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
         )
 
         PaymentTransactionHistory(
-            transactions = transactions, onNavigate = {
-                
-            }, modifier = Modifier.padding(
+            transactions = transactions, onExpand = onExpandTransaction, modifier = Modifier.padding(
                 start = 16.dp,
                 end = 16.dp,
                 bottom = 16.dp
@@ -49,12 +56,16 @@ fun PaymentScreen(
     }
 }
 
-@Preview(
-    showSystemUi = true
-)
+@Preview
 @Composable
 fun PreviewPaymentScreen() {
     PaymentScreen(
-        transactions = listOf()
+        transactions = listOf(),
+        onAddConvert = {},
+        onExpandBalance = {},
+        onExpandTransaction = {},
+        onPayManual = {},
+        onPayNfc = {},
+        onPayQr = {}
     )
 }
