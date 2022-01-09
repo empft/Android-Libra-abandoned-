@@ -9,9 +9,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import androidx.viewbinding.BuildConfig
 import com.example.libraandroid.service.session.AccountSessionRepository
-import com.example.libraandroid.ui.login.LoginNavHost
+import com.example.libraandroid.ui.login.loginNavGraph
 import com.example.libraandroid.ui.theme.VanillaTheme
 import timber.log.Timber
 
@@ -40,16 +42,31 @@ class LaunchActivity: ComponentActivity() {
                     LaunchScreen(
                         showLoggedIn = launchViewModel.isLoggedIn.value,
                         splashScreen = {},
-                        loginScreen = { LoginNavHost(
-                            onEnterSuccess = {
+                        loginScreen = {
+                            LoginNavHost {
                                 launchViewModel.login()
                             }
-                        )},
+                        },
                         mainScreen = {}
                     )
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun LoginNavHost(
+    onEnterSuccess: () -> Unit
+) {
+    val navController = rememberNavController()
+    val route = "Start"
+    NavHost(navController = navController, startDestination = route) {
+        loginNavGraph(
+            route,
+            navController,
+            onEnterSuccess
+        )
     }
 }
 
@@ -70,11 +87,13 @@ fun LaunchScreen(
 @Composable
 private fun LaunchScreenForPreview(showLoggedIn: LaunchState) {
     LaunchScreen(
-        showLoggedIn = LaunchState.LoggedOut,
+        showLoggedIn = showLoggedIn,
         splashScreen = {},
-        loginScreen = { LoginNavHost(
-            onEnterSuccess = {}
-        ) },
+        loginScreen = {
+            LoginNavHost {
+
+            }
+        },
         mainScreen = {}
     )
 }

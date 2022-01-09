@@ -1,17 +1,20 @@
 package com.example.libraandroid.ui.forgetlogin
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.example.libraandroid.R
+import com.example.libraandroid.ui.navigation.rememberBackStackEntry
+import com.example.libraandroid.ui.navigation.rememberParentEntry
 
 enum class ForgetLoginNav {
     ForgetChoice,
@@ -20,26 +23,21 @@ enum class ForgetLoginNav {
     ResetPassword
 }
 
-@Composable
-fun ForgetLoginNavHost(
-    usernameState: MutableState<String>,
-    onForgetUsername: (email: String) -> Unit,
-    onForgetPassword: (email: String, username: String) -> Unit,
-    onResetPassword: (token: String, password: String) -> Unit,
-    modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+fun NavGraphBuilder.forgetLoginNavGraph(
+    route: String,
+    navController: NavHostController,
+    usernameState: MutableState<String>
 ) {
-    val formModifier = Modifier.padding(
-        horizontal = dimensionResource(R.dimen.g__form__horizontal_margin)
-    )
+    val emailState = mutableStateOf("")
 
-    val emailState = remember { mutableStateOf("") }
+    @Composable
+    fun formModifier(): Modifier {
+        return Modifier.padding(
+            horizontal = dimensionResource(R.dimen.g__form__horizontal_margin)
+        )
+    }
 
-    NavHost(
-        navController = navController,
-        startDestination = ForgetLoginNav.ForgetChoice.name,
-        modifier = modifier
-    ) {
+    navigation(startDestination = ForgetLoginNav.ForgetChoice.name, route = route) {
         composable(ForgetLoginNav.ForgetChoice.name) {
             ForgetChoiceScreen(
                 onClickForgetUsername = {
@@ -55,27 +53,53 @@ fun ForgetLoginNavHost(
         }
 
         composable(ForgetLoginNav.ForgetUsername.name) {
+            val forgetLoginViewModel = viewModel<ForgetLoginViewModel>(
+                it.rememberParentEntry(navController = navController)
+            )
+
             ForgetUsernameScreen(
                 emailState = emailState,
-                modifier = formModifier,
-                onClick = onForgetUsername
+                modifier = formModifier(),
+                onClick = forgetLoginViewModel::sendUsernameReminder
             )
         }
 
         composable(ForgetLoginNav.ForgetPassword.name) {
+            val forgetLoginViewModel = viewModel<ForgetLoginViewModel>(
+                it.rememberParentEntry(navController = navController)
+            )
+
             ForgetPasswordScreen(
                 emailState = emailState,
                 usernameState = usernameState,
-                modifier = formModifier,
-                onClick = onForgetPassword
+                modifier = formModifier(),
+                onClick = forgetLoginViewModel::sendPasswordResetCode
             )
         }
 
         composable(ForgetLoginNav.ResetPassword.name) {
+            val forgetLoginViewModel = viewModel<ForgetLoginViewModel>(
+                it.rememberParentEntry(navController = navController)
+            )
+
             ResetPasswordScreen(
-                modifier = formModifier,
-                onClick = onResetPassword
+                modifier = formModifier(),
+                onClick = forgetLoginViewModel::resetPassword
             )
         }
     }
 }
+
+@Preview
+@Composable
+fun PreviewForgetLoginNav() {
+    val navController = rememberNavController()
+
+    NavHost(
+        navController = navController,
+        startDestination = "start"
+    ) {
+        forgetLoginNavGraph("start", navController, mutableStateOf(""))
+    }
+}
+

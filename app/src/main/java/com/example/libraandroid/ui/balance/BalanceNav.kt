@@ -1,40 +1,71 @@
 package com.example.libraandroid.ui.balance
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import android.content.Context
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
+import com.example.libraandroid.ui.navigation.rememberParentEntry
+import kotlinx.coroutines.launch
 
 enum class BalanceNav {
     Filters,
     Balance
 }
 
-@Composable
-fun BalanceNavHost(
-    balances: List<Balance>,
-    balanceViewModeState: MutableState<BalanceViewMode>,
-    modifier: Modifier = Modifier
+fun NavGraphBuilder.balanceNav(
+    route: String,
+    navController: NavHostController
 ) {
-    val navController: NavHostController = rememberNavController()
+    @Composable
+    fun balanceViewModel(
+        viewModelStoreOwner: ViewModelStoreOwner
+    ): BalanceViewModel {
+        return viewModel(
+            viewModelStoreOwner = viewModelStoreOwner,
+            factory = BalanceViewModelFactory(
+                settings = BalanceSettings(LocalContext.current)
+            )
+        )
+    }
 
-    NavHost(navController = navController, startDestination = BalanceNav.Balance.name, modifier = modifier) {
+    navigation(startDestination = BalanceNav.Balance.name, route = route) {
         composable(BalanceNav.Balance.name) {
+            val balanceViewModel = balanceViewModel(it.rememberParentEntry(
+                navController
+            ))
+
             BalanceScreen(
-                balances = balances,
+                balances = balanceViewModel.balances,
                 onSortAndFilter = {
                     navController.navigate(BalanceNav.Filters.name)
                 },
-                balanceViewMode = balanceViewModeState.component1()
+                balanceViewMode = balanceViewModel.balanceViewMode().value
             )
         }
 
         composable(BalanceNav.Filters.name) {
+            val balanceViewModel = balanceViewModel(it.rememberParentEntry(
+                navController
+            ))
+
+            val coroutineScope = rememberCoroutineScope()
+
             BalanceSortAndFilterScreen(
-                balanceViewModeState = balanceViewModeState
+                balanceViewMode = balanceViewModel.balanceViewMode().value,
+                onChangeBalanceViewMode = {
+                    coroutineScope.launch {
+                        balanceViewModel.balanceViewMode(it)
+                    }
+                }
             )
         }
     }
