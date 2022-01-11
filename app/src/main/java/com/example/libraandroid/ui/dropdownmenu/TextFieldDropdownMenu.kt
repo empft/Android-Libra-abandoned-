@@ -15,8 +15,8 @@ import androidx.compose.ui.platform.LocalDensity
 @Composable
 fun OutlinedTextFieldDropDown(
     values: List<String>,
-    selectedText: String,
-    onSelectText: (String) -> Unit,
+    selected: Int,
+    onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
     label: @Composable () -> Unit,
 ) {
@@ -33,12 +33,12 @@ fun OutlinedTextFieldDropDown(
         sourceState = source,
         dropDownWidth = dropDownWidth,
         values = values,
-        onSelectText = onSelectText,
+        onSelect = onSelect,
         modifier = modifier
     ) {
         OutlinedTextField(
-            value = selectedText,
-            onValueChange = onSelectText,
+            value = values[selected],
+            onValueChange = {},
             readOnly = true,
             modifier = Modifier.onSizeChanged {
                 dropDownWidth = it.width
@@ -60,8 +60,8 @@ fun OutlinedTextFieldDropDown(
 @Composable
 fun TextFieldDropDown(
     values: List<String>,
-    selectedText: String,
-    onSelectText: (String) -> Unit,
+    selected: Int,
+    onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
     label: @Composable () -> Unit,
 ) {
@@ -78,12 +78,12 @@ fun TextFieldDropDown(
         sourceState = source,
         dropDownWidth = dropDownWidth,
         values = values,
-        onSelectText = onSelectText,
+        onSelect = onSelect,
         modifier = modifier
     ) {
         TextField(
-            value = selectedText,
-            onValueChange = onSelectText,
+            value = values[selected],
+            onValueChange = {},
             readOnly = true,
             modifier = Modifier.onSizeChanged {
                 dropDownWidth = it.width
@@ -108,7 +108,7 @@ private fun TextFieldDropDownComponent(
     sourceState: MutableInteractionSource,
     dropDownWidth: Int,
     values: List<String>,
-    onSelectText: (String) -> Unit,
+    onSelect: (Int) -> Unit,
     modifier: Modifier,
     textField: @Composable () -> Unit
 ) {
@@ -125,12 +125,12 @@ private fun TextFieldDropDownComponent(
                 dropDownWidth.toDp()
             })
         ) {
-            values.forEach {
+            values.forEachIndexed { index, value ->
                 DropdownMenuItem(onClick = {
-                    onSelectText(it)
+                    onSelect(index)
                     expandedState.value = false
                 }) {
-                    Text(it)
+                    Text(value)
                 }
             }
         }
