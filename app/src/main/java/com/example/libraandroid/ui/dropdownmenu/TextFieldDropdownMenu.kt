@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalDensity
 @Composable
 fun OutlinedTextFieldDropDown(
     values: List<String>,
-    selected: Int,
+    selected: Int?,
     onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
     label: @Composable () -> Unit,
@@ -37,7 +37,7 @@ fun OutlinedTextFieldDropDown(
         modifier = modifier
     ) {
         OutlinedTextField(
-            value = values[selected],
+            value = if (selected != null) values[selected] else "",
             onValueChange = {},
             readOnly = true,
             modifier = Modifier.onSizeChanged {
@@ -60,7 +60,7 @@ fun OutlinedTextFieldDropDown(
 @Composable
 fun TextFieldDropDown(
     values: List<String>,
-    selected: Int,
+    selected: Int?,
     onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
     label: @Composable () -> Unit,
@@ -82,7 +82,7 @@ fun TextFieldDropDown(
         modifier = modifier
     ) {
         TextField(
-            value = values[selected],
+            value = if (selected != null) values[selected] else "",
             onValueChange = {},
             readOnly = true,
             modifier = Modifier.onSizeChanged {
