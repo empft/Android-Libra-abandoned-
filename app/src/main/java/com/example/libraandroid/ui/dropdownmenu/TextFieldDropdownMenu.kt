@@ -17,10 +17,11 @@ fun OutlinedTextFieldDropDown(
     values: List<String>,
     selected: Int?,
     onSelect: (Int) -> Unit,
-    modifier: Modifier = Modifier,
     label: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    dropdownContent: @Composable (Int) -> Unit = { Text(values[it]) },
 ) {
-    var dropDownWidth by remember { mutableStateOf(0) }
+    var dropdownWidth by remember { mutableStateOf(0) }
     val expandedState = remember { mutableStateOf(false) }
     val rotation: Float by animateFloatAsState(if (expandedState.value) 180f else 0f)
 
@@ -31,29 +32,32 @@ fun OutlinedTextFieldDropDown(
     TextFieldDropDownComponent(
         expandedState = expandedState,
         sourceState = source,
-        dropDownWidth = dropDownWidth,
-        values = values,
+        dropdownWidth = dropdownWidth,
+        listLength = values.count(),
         onSelect = onSelect,
-        modifier = modifier
+        modifier = modifier,
+        textField = {
+            OutlinedTextField(
+                value = if (selected != null) values[selected] else "",
+                onValueChange = {},
+                readOnly = true,
+                modifier = Modifier.onSizeChanged {
+                    dropdownWidth = it.width
+                },
+                interactionSource = source,
+                label = label,
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowDropDown,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .rotate(rotation)
+                    )
+                }
+            )
+        }
     ) {
-        OutlinedTextField(
-            value = if (selected != null) values[selected] else "",
-            onValueChange = {},
-            readOnly = true,
-            modifier = Modifier.onSizeChanged {
-                dropDownWidth = it.width
-            },
-            interactionSource = source,
-            label = label,
-            trailingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.ArrowDropDown,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .rotate(rotation)
-                )
-            }
-        )
+        dropdownContent(it)
     }
 }
 
@@ -62,10 +66,11 @@ fun TextFieldDropDown(
     values: List<String>,
     selected: Int?,
     onSelect: (Int) -> Unit,
-    modifier: Modifier = Modifier,
     label: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    dropdownContent: @Composable (Int) -> Unit = { Text(values[it]) },
 ) {
-    var dropDownWidth by remember { mutableStateOf(0) }
+    var dropdownWidth by remember { mutableStateOf(0) }
     val expandedState = remember { mutableStateOf(false) }
     val rotation: Float by animateFloatAsState(if (expandedState.value) 180f else 0f)
 
@@ -76,29 +81,32 @@ fun TextFieldDropDown(
     TextFieldDropDownComponent(
         expandedState = expandedState,
         sourceState = source,
-        dropDownWidth = dropDownWidth,
-        values = values,
+        dropdownWidth = dropdownWidth,
+        listLength = values.count(),
         onSelect = onSelect,
-        modifier = modifier
+        modifier = modifier,
+        textField = {
+            TextField(
+                value = if (selected != null) values[selected] else "",
+                onValueChange = {},
+                readOnly = true,
+                modifier = Modifier.onSizeChanged {
+                    dropdownWidth = it.width
+                },
+                interactionSource = source,
+                label = label,
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowDropDown,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .rotate(rotation)
+                    )
+                }
+            )
+        }
     ) {
-        TextField(
-            value = if (selected != null) values[selected] else "",
-            onValueChange = {},
-            readOnly = true,
-            modifier = Modifier.onSizeChanged {
-                dropDownWidth = it.width
-            },
-            interactionSource = source,
-            label = label,
-            trailingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.ArrowDropDown,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .rotate(rotation)
-                )
-            }
-        )
+        dropdownContent(it)
     }
 }
 
@@ -106,11 +114,12 @@ fun TextFieldDropDown(
 private fun TextFieldDropDownComponent(
     expandedState: MutableState<Boolean>,
     sourceState: MutableInteractionSource,
-    dropDownWidth: Int,
-    values: List<String>,
+    dropdownWidth: Int,
+    listLength: Int,
     onSelect: (Int) -> Unit,
     modifier: Modifier,
-    textField: @Composable () -> Unit
+    textField: @Composable () -> Unit,
+    dropDownMenuItemContent: @Composable (Int) -> Unit
 ) {
     if (sourceState.collectIsPressedAsState().value) {
         expandedState.value = !expandedState.value
@@ -122,15 +131,15 @@ private fun TextFieldDropDownComponent(
             expanded = expandedState.value,
             onDismissRequest = { expandedState.value = false },
             modifier = Modifier.width(with(LocalDensity.current) {
-                dropDownWidth.toDp()
+                dropdownWidth.toDp()
             })
         ) {
-            values.forEachIndexed { index, value ->
+            for (index in 0 until listLength) {
                 DropdownMenuItem(onClick = {
                     onSelect(index)
                     expandedState.value = false
                 }) {
-                    Text(value)
+                    dropDownMenuItemContent(index)
                 }
             }
         }
