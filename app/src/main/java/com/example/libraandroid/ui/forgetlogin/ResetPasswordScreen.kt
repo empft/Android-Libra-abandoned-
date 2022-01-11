@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.libraandroid.R
+import com.example.libraandroid.ui.textfield.PasteIconButton
 import com.example.libraandroid.ui.theme.VanillaTheme
 
 @Composable
@@ -33,7 +34,6 @@ fun ResetPasswordScreen(
     val buttonEnabled = token.isNotEmpty() && password.isNotEmpty()
 
     val focusManager = LocalFocusManager.current
-    val clipboardManager = LocalClipboardManager.current
     Column(modifier = modifier
         .fillMaxHeight()
         .pointerInput(Unit) {
@@ -47,16 +47,7 @@ fun ResetPasswordScreen(
         OutlinedTextField(value = token, onValueChange = setToken, singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             trailingIcon = {
-                IconButton(onClick = {
-                    clipboardManager.getText()?.let {
-                        setToken(it.text)
-                    }
-                }) {
-                    Icon(
-                        imageVector  = Icons.Filled.ContentPaste,
-                        stringResource(R.string.g__icon__paste)
-                    )
-                }
+                PasteIconButton(onPaste = setToken)
             },
             label = {
                 Text(
