@@ -9,6 +9,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.libraandroid.R
+import com.example.libraandroid.ui.currency.Currency
 import com.example.libraandroid.ui.currency.formatAmount
 import com.example.libraandroid.ui.wallet.Chain
 import com.example.libraandroid.ui.wallet.Wallet
@@ -49,18 +50,18 @@ fun BalanceByCurrency(
                     itemsIndexed(currencyGrouped) { index, balance ->
                         if (index == 0) {
                             BalanceByCurrencyAmountTotalRow(
-                                currency = currency, amount = formatAmount(
+                                currency = currency.code, amount = formatAmount(
                                     value = currencyGrouped.sumOf {
                                         it.amount
                                     },
-                                    decimalPlaces = balance.decimalPlaces
+                                    decimalPlaces = currency.decimalPlaces
                                 )
                             )
                         }
 
                         BalanceByCurrencyAmountWalletRow(
                             walletName = balance.wallet.walletContext?.name ?: balance.wallet.address,
-                            amount = formatAmount(value = balance.amount, decimalPlaces = balance.decimalPlaces)
+                            amount = formatAmount(value = balance.amount, decimalPlaces = balance.currency.decimalPlaces)
                         )
 
                         if (index == currencyGrouped.lastIndex) {
@@ -79,7 +80,9 @@ fun PreviewBalanceByCurrency() {
     BalanceByCurrency(balances = listOf(
         Balance.Diem(
             amount = BigInteger(10000UL.toString()),
-            currency = "DUSD",
+            currency = Currency.Diem(
+                code = "DUSD"
+            ),
             wallet = Wallet.Diem(
                 chain = Chain.Diem(
                     id = 10
@@ -92,8 +95,12 @@ fun PreviewBalanceByCurrency() {
         ),
         Balance.Celo(
             amount = BigInteger.TEN,
-            currency = "CEUR",
-            decimalPlaces = 18,
+            currency = Currency.Celo(
+                tokenAddress = "1d2f",
+                tokenName = "Full Name",
+                code = "CUSD",
+                decimalPlaces = 18
+            ),
             wallet = Wallet.Celo(
                 chain = Chain.Celo(
                     id = 20
@@ -103,8 +110,12 @@ fun PreviewBalanceByCurrency() {
         ),
         Balance.Celo(
             amount = BigInteger.TEN,
-            currency = "CEUR",
-            decimalPlaces = 18,
+            currency = Currency.Celo(
+                tokenAddress = "1234fe",
+                tokenName = "Name",
+                code = "CEUR",
+                decimalPlaces = 18
+            ),
             wallet = Wallet.Celo(
                 chain = Chain.Celo(
                     id = 20
@@ -114,8 +125,12 @@ fun PreviewBalanceByCurrency() {
         ),
         Balance.Celo(
             amount = BigInteger.TEN,
-            currency = "CEUR",
-            decimalPlaces = 18,
+            currency = Currency.Celo(
+                tokenAddress = "2e",
+                tokenName = "Name",
+                code = "CGBP",
+                decimalPlaces = 18
+            ),
             wallet = Wallet.Celo(
                 chain = Chain.Celo(
                     id = 20
