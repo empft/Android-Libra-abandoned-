@@ -1,17 +1,12 @@
 package com.example.libraandroid.ui.balance
 
-import android.content.Context
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.libraandroid.ui.navigation.rememberParentEntry
 import kotlinx.coroutines.launch
@@ -43,11 +38,8 @@ fun NavGraphBuilder.balanceNav(
                 navController
             ))
 
-            BalanceScreen(
+            BalanceOverview(
                 balances = balanceViewModel.balances,
-                onSortAndFilter = {
-                    navController.navigate(BalanceNav.Filters.name)
-                },
                 balanceViewMode = balanceViewModel.balanceViewMode().value
             )
         }

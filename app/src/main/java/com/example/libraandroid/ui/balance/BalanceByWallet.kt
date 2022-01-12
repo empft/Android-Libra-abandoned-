@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import com.example.libraandroid.R
+import com.example.libraandroid.ui.currency.Currency
 import com.example.libraandroid.ui.currency.formatAmount
 import com.example.libraandroid.ui.wallet.Chain
 import com.example.libraandroid.ui.wallet.Wallet
@@ -55,9 +56,9 @@ fun BalanceByWallet(
                     }
 
                     BalanceByWalletRow(
-                        currency = balance.currency, amount = formatAmount(
+                        currency = balance.currency.code, amount = formatAmount(
                             value = balance.amount,
-                            decimalPlaces = balance.decimalPlaces
+                            decimalPlaces = balance.currency.decimalPlaces
                         )
                     )
 
@@ -74,7 +75,9 @@ fun PreviewBalanceByWallet() {
     BalanceByWallet(balances = listOf(
         Balance.Diem(
             amount = BigInteger(10000UL.toString()),
-            currency = "DIEM USD",
+            currency = Currency.Diem(
+                code = "DIEM USD"
+            ),
             wallet = Wallet.Diem(
                 chain = Chain.Diem(
                     id = 10
@@ -87,8 +90,12 @@ fun PreviewBalanceByWallet() {
         ),
         Balance.Celo(
             amount = BigInteger.TEN,
-            currency = "CELO",
-            decimalPlaces = 18,
+            currency = Currency.Celo(
+                tokenName = "Name",
+                tokenAddress = "Address",
+                decimalPlaces = 18,
+                code = "CELO USD"
+            ),
             wallet = Wallet.Celo(
                 chain = Chain.Celo(
                     id = 20
