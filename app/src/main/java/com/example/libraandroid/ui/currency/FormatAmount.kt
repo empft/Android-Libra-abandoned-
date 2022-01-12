@@ -8,6 +8,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.MathContext
 import java.math.RoundingMode
+import java.text.ParseException
 import java.util.*
 import kotlin.math.absoluteValue
 
@@ -17,6 +18,7 @@ private fun numberToString(
     currencyCode: String,
     sign: String,
     numberOfDigits: Int?,
+    alwaysShowDecimalAtEnd: Boolean,
     locale: Locale
 ): String {
     val number = value
@@ -38,6 +40,7 @@ private fun numberToString(
         if ((precision - scale).absoluteValue > numberOfDigits) {
             (DecimalFormat.getScientificInstance(locale) as DecimalFormat).apply {
                 maximumSignificantDigits = numberOfDigits
+                isDecimalSeparatorAlwaysShown = alwaysShowDecimalAtEnd
             }
         } else {
             (DecimalFormat.getInstance(locale) as DecimalFormat).apply {
@@ -47,12 +50,14 @@ private fun numberToString(
                 } else {
                     maximumSignificantDigits = numberOfDigits
                 }
+                isDecimalSeparatorAlwaysShown = alwaysShowDecimalAtEnd
             }
         }
     } else {
-        DecimalFormat.getInstance(locale).apply {
+        (DecimalFormat.getInstance(locale) as DecimalFormat).apply {
             maximumFractionDigits = scale
             minimumFractionDigits = scale
+            isDecimalSeparatorAlwaysShown = alwaysShowDecimalAtEnd
         }
     }
 
@@ -71,13 +76,16 @@ fun formatAmount(
     currencyCode: String = "",
     sign: String = "",
     //number of digits shown (excluding zero integer for 0<|x|<1)
+    //will try to format as exponential if too long
     numberOfDigits: Int? = null,
+    // show decimal point at the end of integer
+    alwaysShowDecimalAtEnd: Boolean = false,
     locale: Locale = LocalContext.current.resources.configuration.locales[0]
 ): String {
     return numberToString(
         value = value, decimalPlaces = decimalPlaces,
         currencyCode = currencyCode, sign = sign, numberOfDigits = numberOfDigits,
-        locale = locale
+        locale = locale, alwaysShowDecimalAtEnd = alwaysShowDecimalAtEnd
     )
 }
 
@@ -87,13 +95,32 @@ fun formatAmount(
     decimalPlaces: Int,
     currencyCode: String = "",
     sign: String = "",
-    //number of digits shown (excluding zero integer for 0<|x|<1)
+    //number of digits shown (excluding zero integer for 0<|x|<1),
+    //will try to format as exponential if too long
     numberOfDigits: Int? = null,
+    // show decimal point at the end of integer
+    alwaysShowDecimalAtEnd: Boolean = false,
     locale: Locale = LocalContext.current.resources.configuration.locales[0]
 ): String {
     return numberToString(
         value = BigInteger(value.toString()), decimalPlaces = decimalPlaces,
         currencyCode = currencyCode, sign = sign, numberOfDigits = numberOfDigits,
-        locale = locale
+        locale = locale, alwaysShowDecimalAtEnd = alwaysShowDecimalAtEnd
     )
+}
+
+fun parseAmount(
+    amount: String, decimalPlaces: Int,
+    locale: Locale
+): BigInteger? {
+    val formatter = (DecimalFormat.getInstance(locale) as DecimalFormat).apply {
+        isParseBigDecimal = true
+    }
+
+    return try {
+        val decimal = formatter.parse(amount) as BigDecimal
+        decimal.scaleByPowerOfTen(decimalPlaces).toBigInteger()
+    } catch (e: ParseException) {
+        null
+    }
 }
