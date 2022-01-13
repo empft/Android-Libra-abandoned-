@@ -72,4 +72,11 @@
     <string name="scr_balance__text__view_mode_currency">Currency</string>
     <string name="scr_balance__text__view_mode_wallet">Wallet</string>
     <string name="scr_payment__text__wallet_manager">Wallet</string>
+    <string name="scr_payprocess__textfield__wallet">Wallet</string>
+    <string name="scr_payprocess__textfield__currency">Currency</string>
+    <string name="scr_payprocess__textfield__recipient">Recipient</string>
+    <string name="scr_payprocess__textfield__gateway_recipient">Gateway Recipient</string>
+    <string name="scr_payprocess__textfield__gateway_currency">Gateway Currency</string>
+    <string name="scr_payprocess__textfield__gateway_fee">Gateway fee</string>
+    <string name="scr_payprocess__text__payment_confirmation">Payment Confirmation</string>
 </resources>

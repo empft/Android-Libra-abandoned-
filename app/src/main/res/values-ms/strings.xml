@@ -68,4 +68,11 @@
     <string name="scr_balance__text__view_mode_currency">Mata Wang</string>
     <string name="scr_balance__text__view_mode_wallet">Dompet</string>
     <string name="scr_payment__text__wallet_manager">Dompet</string>
+    <string name="scr_payprocess__textfield__wallet">Dompet</string>
+    <string name="scr_payprocess__textfield__currency">Mata Wang</string>
+    <string name="scr_payprocess__textfield__recipient">Penerima</string>
+    <string name="scr_payprocess__textfield__gateway_recipient">Alamat Tol</string>
+    <string name="scr_payprocess__textfield__gateway_currency">Mata Wang Tol</string>
+    <string name="scr_payprocess__textfield__gateway_fee">Kadar Tol</string>
+    <string name="scr_payprocess__text__payment_confirmation">Pengesahan Pembayaran</string>
 </resources>

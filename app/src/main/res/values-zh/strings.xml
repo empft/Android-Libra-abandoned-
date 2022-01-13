@@ -68,4 +68,11 @@
     <string name="scr_balance__text__view_mode_wallet">钱包</string>
     <string name="scr_balance__text__view_mode_currency">货币</string>
     <string name="scr_payment__text__wallet_manager">钱包管理</string>
+    <string name="scr_payprocess__textfield__wallet">钱包</string>
+    <string name="scr_payprocess__textfield__currency">货币</string>
+    <string name="scr_payprocess__textfield__recipient">接受方</string>
+    <string name="scr_payprocess__textfield__gateway_recipient">通行地址</string>
+    <string name="scr_payprocess__textfield__gateway_currency">通行货币</string>
+    <string name="scr_payprocess__textfield__gateway_fee">通行费用</string>
+    <string name="scr_payprocess__text__payment_confirmation">付款确认</string>
 </resources>

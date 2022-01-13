@@ -2,10 +2,12 @@ package com.example.libraandroid.ui.payment
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 
 enum class PaymentNav {
     Home,
@@ -15,14 +17,11 @@ enum class PaymentNav {
     Pay
 }
 
-@Composable
-fun PaymentNavHost(
-    modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+fun NavGraphBuilder.paymentNav(
+    route: String,
+    navController: NavHostController
 ) {
-    NavHost(
-        navController = navController, startDestination = PaymentNav.Home.name, modifier = modifier
-    ) {
+    navigation(startDestination = PaymentNav.Home.name, route = route) {
         composable(PaymentNav.Home.name) {
 
         }
@@ -30,5 +29,7 @@ fun PaymentNavHost(
         composable(PaymentNav.Balance.name) {
 
         }
+
+
     }
 }
