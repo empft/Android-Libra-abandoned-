@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
@@ -18,7 +19,7 @@ import com.example.libraandroid.ui.login.loginNavGraph
 import com.example.libraandroid.ui.theme.VanillaTheme
 import timber.log.Timber
 
-class LaunchActivity: ComponentActivity() {
+class LaunchActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
