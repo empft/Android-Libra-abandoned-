@@ -1,6 +1,6 @@
 package com.example.libraandroid
 
-import com.example.libraandroid.service.session.SessionToken
+import com.example.libraandroid.domain.session.SessionToken
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement

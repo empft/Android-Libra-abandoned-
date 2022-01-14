@@ -3,10 +3,6 @@ package com.example.libraandroid.ui.balance
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
-import com.example.libraandroid.service.session.AccountSessionLoginManager
-import com.example.libraandroid.ui.login.LoginViewModel
-import kotlinx.coroutines.flow.collect
 
 class BalanceViewModel(
     private val settings: BalanceSettings

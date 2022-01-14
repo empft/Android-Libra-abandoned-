@@ -1,22 +1,18 @@
 package com.example.libraandroid.ui.login
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.libraandroid.service.network.StatelessClient
-import com.example.libraandroid.service.session.AccountSessionLoginManager
-import com.example.libraandroid.service.session.AccountSessionRepository
+import com.example.libraandroid.network.StatelessClient
+import com.example.libraandroid.domain.session.AccountSessionLoginManager
+import com.example.libraandroid.domain.session.AccountSessionRepository
 import com.example.libraandroid.ui.forgetlogin.*
-import com.example.libraandroid.ui.register.RegisterViewModelFactory
 import com.example.libraandroid.ui.register.registerInvitationNav
 
 enum class LoginNav {
@@ -36,10 +32,12 @@ fun NavGraphBuilder.loginNavGraph(
         composable(LoginNav.Login.name) {
             val context = LocalContext.current
             val loginViewModel: LoginViewModel = viewModel(
-                factory =  LoginViewModelFactory(AccountSessionLoginManager(
+                factory =  LoginViewModelFactory(
+                    AccountSessionLoginManager(
                     repo = AccountSessionRepository(context),
                     network = StatelessClient.loginService
-                ))
+                )
+                )
             )
 
             LoginScreen(

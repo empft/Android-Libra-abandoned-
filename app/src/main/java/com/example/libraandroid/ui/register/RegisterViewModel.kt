@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.libraandroid.R
-import com.example.libraandroid.service.network.AccountRegistrationService
-import com.example.libraandroid.service.network.NamedError
+import com.example.libraandroid.domain.account.AccountRegistrationService
+import com.example.libraandroid.network.NamedError
 import com.example.libraandroid.ui.time.formatMillis
 import com.example.libraandroid.ui.misc.DelayedCall
 import kotlinx.coroutines.CoroutineDispatcher

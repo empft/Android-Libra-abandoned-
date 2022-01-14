@@ -1,7 +1,6 @@
 package com.example.libraandroid.ui
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -9,12 +8,10 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.viewbinding.BuildConfig
-import com.example.libraandroid.service.session.AccountSessionRepository
+import com.example.libraandroid.domain.session.AccountSessionRepository
 import com.example.libraandroid.ui.login.loginNavGraph
 import com.example.libraandroid.ui.theme.VanillaTheme
 import timber.log.Timber

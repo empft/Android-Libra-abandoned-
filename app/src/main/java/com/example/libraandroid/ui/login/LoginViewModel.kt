@@ -1,17 +1,12 @@
 package com.example.libraandroid.ui.login
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.libraandroid.R
-import com.example.libraandroid.service.network.ResponseException
-import com.example.libraandroid.service.session.AccountSessionLoginManager
+import com.example.libraandroid.network.ResponseException
+import com.example.libraandroid.domain.session.AccountSessionLoginManager
 import com.example.libraandroid.ui.misc.DelayedCall
-import com.example.libraandroid.ui.misc.UiConstant
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
 

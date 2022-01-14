@@ -1,6 +1,6 @@
-package com.example.libraandroid.service.session
+package com.example.libraandroid.domain.session
 
-import com.example.libraandroid.service.network.NetworkConstant
+import com.example.libraandroid.network.NetworkConstant
 import retrofit2.Response
 import java.net.HttpCookie
 
