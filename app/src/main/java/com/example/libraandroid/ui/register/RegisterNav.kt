@@ -2,14 +2,12 @@ package com.example.libraandroid.ui.register
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
@@ -19,7 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.libraandroid.R
-import com.example.libraandroid.service.network.StatelessClient
+import com.example.libraandroid.network.StatelessClient
 import com.example.libraandroid.ui.navigation.rememberParentEntry
 import com.example.libraandroid.ui.register.form.*
 import com.example.libraandroid.ui.stringresource.stringResourceNull
@@ -60,9 +58,8 @@ fun NavGraphBuilder.registerNav(
         composable(RegisterNav.Names.name) { navBackStackEntry ->
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
             val scaffoldState = rememberScaffoldState()
-            val coroutineScope = rememberCoroutineScope()
 
-            coroutineScope.launch {
+            LaunchedEffect(scaffoldState.snackbarHostState) {
                 registerViewModel.userError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
@@ -95,9 +92,8 @@ fun NavGraphBuilder.registerNav(
         composable(RegisterNav.Password.name) { navBackStackEntry ->
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
             val scaffoldState = rememberScaffoldState()
-            val coroutineScope = rememberCoroutineScope()
 
-            coroutineScope.launch {
+            LaunchedEffect(scaffoldState.snackbarHostState) {
                 registerViewModel.userError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
@@ -128,9 +124,8 @@ fun NavGraphBuilder.registerNav(
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
             val scaffoldState = rememberScaffoldState()
-            val coroutineScope = rememberCoroutineScope()
 
-            coroutineScope.launch {
+            LaunchedEffect(scaffoldState.snackbarHostState) {
                 registerViewModel.userError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
@@ -159,9 +154,8 @@ fun NavGraphBuilder.registerNav(
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
             val scaffoldState = rememberScaffoldState()
-            val coroutineScope = rememberCoroutineScope()
 
-            coroutineScope.launch {
+            LaunchedEffect(scaffoldState.snackbarHostState) {
                 registerViewModel.userError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
@@ -169,7 +163,7 @@ fun NavGraphBuilder.registerNav(
                 }
             }
 
-            coroutineScope.launch {
+            LaunchedEffect(Unit) {
                 registerViewModel.registerResult.collect {
                     if (it) {
                         onRegisterSuccess()
@@ -236,9 +230,8 @@ fun NavGraphBuilder.registerInvitationNav(
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
             val scaffoldState = rememberScaffoldState()
-            val coroutineScope = rememberCoroutineScope()
 
-            coroutineScope.launch {
+            LaunchedEffect(scaffoldState.snackbarHostState) {
                 registerViewModel.userError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
@@ -274,9 +267,8 @@ fun NavGraphBuilder.registerInvitationNav(
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
             val scaffoldState = rememberScaffoldState()
-            val coroutineScope = rememberCoroutineScope()
 
-            coroutineScope.launch {
+            LaunchedEffect(scaffoldState.snackbarHostState) {
                 registerViewModel.userError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
@@ -308,9 +300,7 @@ fun NavGraphBuilder.registerInvitationNav(
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
             val scaffoldState = rememberScaffoldState()
-            val coroutineScope = rememberCoroutineScope()
-
-            coroutineScope.launch {
+            LaunchedEffect(scaffoldState.snackbarHostState) {
                 registerViewModel.userError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
@@ -341,9 +331,7 @@ fun NavGraphBuilder.registerInvitationNav(
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
             val scaffoldState = rememberScaffoldState()
-            val coroutineScope = rememberCoroutineScope()
-
-            coroutineScope.launch {
+            LaunchedEffect(scaffoldState.snackbarHostState) {
                 registerViewModel.userError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
@@ -372,9 +360,7 @@ fun NavGraphBuilder.registerInvitationNav(
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
             val scaffoldState = rememberScaffoldState()
-            val coroutineScope = rememberCoroutineScope()
-
-            coroutineScope.launch {
+            LaunchedEffect(scaffoldState.snackbarHostState) {
                 registerViewModel.userError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
@@ -382,7 +368,7 @@ fun NavGraphBuilder.registerInvitationNav(
                 }
             }
 
-            coroutineScope.launch {
+            LaunchedEffect(Unit) {
                 registerViewModel.registerResult.collect {
                     if (it) {
                         onRegisterSuccess()
@@ -437,9 +423,7 @@ fun PreviewRegisterInvitationNavHost() {
     NavHost(navController = navController, startDestination = "start") {
         registerInvitationNav(
             "start",
-            navController,
-            {}
-        )
+            navController) {}
     }
 }
 
@@ -450,8 +434,8 @@ fun PreviewRegisterNavHost() {
     NavHost(navController = navController, startDestination = "start") {
         registerNav(
             "start",
-            navController,
-            {}
-        )
+            navController) {
+
+        }
     }
 }
