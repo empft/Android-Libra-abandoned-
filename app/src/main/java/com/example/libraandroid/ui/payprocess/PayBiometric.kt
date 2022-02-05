@@ -1,6 +1,5 @@
 package com.example.libraandroid.ui.payprocess
 
-import android.content.Intent
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL

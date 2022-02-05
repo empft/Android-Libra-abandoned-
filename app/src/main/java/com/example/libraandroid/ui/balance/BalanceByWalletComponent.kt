@@ -1,6 +1,5 @@
 package com.example.libraandroid.ui.balance
 
-import com.example.libraandroid.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -11,6 +10,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.libraandroid.R
 
 @Composable
 fun BalanceByWalletNameRow(walletName: String, chainName: String, address: String) {

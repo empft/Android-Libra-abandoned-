@@ -16,7 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.libraandroid.R
 import com.example.libraandroid.ui.account.AppAccount
-import com.example.libraandroid.ui.currency.*
+import com.example.libraandroid.ui.currency.TransferAmountUi
+import com.example.libraandroid.ui.currency.formatAmount
 import com.example.libraandroid.ui.wallet.Chain
 import com.example.libraandroid.ui.wallet.Wallet
 import com.example.libraandroid.ui.wallet.WalletContext

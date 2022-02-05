@@ -22,7 +22,6 @@ import com.example.libraandroid.R
 import com.example.libraandroid.ui.TextFieldError
 import com.example.libraandroid.ui.register.PasswordResult
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
@@ -39,8 +38,6 @@ fun RegisterPasswordScreen(
 
     val nextEnabled = passwordState.value.isNotEmpty() && !isLoading
     val focusManager = LocalFocusManager.current
-
-    val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = modifier
         .fillMaxHeight()
@@ -83,7 +80,7 @@ fun RegisterPasswordScreen(
             TextFieldError(message = passwordError)
         }
 
-        coroutineScope.launch {
+        LaunchedEffect(Unit) {
             passwordResult.collect {
                 when(it) {
                     PasswordResult.Loading -> setLoading(true)
