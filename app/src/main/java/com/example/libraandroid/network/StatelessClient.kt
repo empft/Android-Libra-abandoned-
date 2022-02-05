@@ -1,8 +1,8 @@
 package com.example.libraandroid.network
 
-import com.example.libraandroid.domain.account.AccountLoginService
-import com.example.libraandroid.domain.account.AccountRecoveryService
-import com.example.libraandroid.domain.account.AccountRegistrationService
+import com.example.libraandroid.domain.account.login.AccountLoginRequest
+import com.example.libraandroid.domain.account.recovery.AccountRecoveryRequest
+import com.example.libraandroid.domain.account.registration.AccountRegistrationRequest
 import retrofit2.Retrofit
 
 object StatelessClient {
@@ -12,15 +12,15 @@ object StatelessClient {
             .build()
     }
 
-    val recoveryService: AccountRecoveryService by lazy {
-        retrofit.create(AccountRecoveryService::class.java)
+    val recovery: AccountRecoveryRequest by lazy {
+        retrofit.create(AccountRecoveryRequest::class.java)
     }
 
-    val loginService: AccountLoginService by lazy {
-        retrofit.create(AccountLoginService::class.java)
+    val login: AccountLoginRequest by lazy {
+        retrofit.create(AccountLoginRequest::class.java)
     }
 
-    val registrationService: AccountRegistrationService by lazy {
-        retrofit.create(AccountRegistrationService::class.java)
+    val registration: AccountRegistrationRequest by lazy {
+        retrofit.create(AccountRegistrationRequest::class.java)
     }
 }

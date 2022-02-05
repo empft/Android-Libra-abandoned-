@@ -94,11 +94,6 @@ dependencies {
     // optional - helpers for implementing LifecycleOwner in a Service
     implementation("androidx.lifecycle:lifecycle-service:2.4.0")
 
-    // optional - ProcessLifecycleOwner provides a lifecycle for the whole application process
-    implementation("androidx.lifecycle:lifecycle-process:2.4.0")
-    // optional - ReactiveStreams support for LiveData
-    implementation("androidx.lifecycle:lifecycle-reactivestreams-ktx:2.4.0")
-
     // optional - Test helpers for LiveData
     testImplementation("androidx.arch.core:core-testing:2.1.0")
 
@@ -128,4 +123,7 @@ dependencies {
 
     // Biometrics
     implementation("androidx.biometric:biometric:1.2.0-alpha04")
+
+    // coroutine
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
 }

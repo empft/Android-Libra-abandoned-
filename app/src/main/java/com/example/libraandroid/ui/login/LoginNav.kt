@@ -9,9 +9,11 @@ import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.libraandroid.domain.account.login.LoginInteractor
+import com.example.libraandroid.domain.applicationsession.SessionManager
+import com.example.libraandroid.domain.applicationsession.SessionRepository
+import com.example.libraandroid.domain.applicationsession.UserLoginInteractor
 import com.example.libraandroid.network.StatelessClient
-import com.example.libraandroid.domain.session.AccountSessionLoginManager
-import com.example.libraandroid.domain.session.AccountSessionRepository
 import com.example.libraandroid.ui.forgetlogin.*
 import com.example.libraandroid.ui.register.registerInvitationNav
 
@@ -23,8 +25,7 @@ enum class LoginNav {
 
 fun NavGraphBuilder.loginNavGraph(
     route: String,
-    navController: NavHostController,
-    onEnterSuccess: () -> Unit
+    navController: NavHostController
 ) {
     val usernameState = mutableStateOf("")
 
@@ -33,33 +34,29 @@ fun NavGraphBuilder.loginNavGraph(
             val context = LocalContext.current
             val loginViewModel: LoginViewModel = viewModel(
                 factory =  LoginViewModelFactory(
-                    AccountSessionLoginManager(
-                    repo = AccountSessionRepository(context),
-                    network = StatelessClient.loginService
-                )
+                    UserLoginInteractor(
+                        SessionManager(SessionRepository(context)),
+                        LoginInteractor(StatelessClient.login)
+                    )
                 )
             )
 
             LoginScreen(
                 usernameState = usernameState,
-                loginState = loginViewModel.loginResult,
+                loginState = loginViewModel.loginFailure,
                 onClickForget = {
                     navController.navigate(LoginNav.ForgetLogin.name)
                 },
                 onClickRegister = {
                     navController.navigate(LoginNav.Registration.name)
                 },
-                onClickLogin = loginViewModel::login,
-                onLoginSuccess = {
-                    onEnterSuccess()
-                }
+                onClickLogin = loginViewModel::login
             )
         }
 
         registerInvitationNav(
             route = LoginNav.Registration.name,
-            navController = navController,
-            onRegisterSuccess = onEnterSuccess
+            navController = navController
         )
         // May switch to this in the future
         /*
@@ -87,8 +84,7 @@ fun PreviewLoginNav() {
     NavHost(navController = navController, startDestination = "start") {
         loginNavGraph(
             route = "start",
-            navController = navController,
-            onEnterSuccess = {}
+            navController = navController
         )
     }
 }

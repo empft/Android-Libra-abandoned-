@@ -1,18 +1,19 @@
 package com.example.libraandroid.ui
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.libraandroid.domain.applicationsession.SessionManager
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-class LaunchViewModel: ViewModel() {
-    var isLoggedIn = mutableStateOf(LaunchState.Loading)
-        private set
-
-    fun logout() {
-        isLoggedIn.value = LaunchState.LoggedOut
-    }
-
-    fun login() {
-        isLoggedIn.value = LaunchState.LoggedIn
+class LaunchViewModel(
+    sessionManager: SessionManager
+): ViewModel() {
+    val isLoggedIn: Flow<LaunchState> = sessionManager.currentSession.map {
+        if (it != null) {
+            LaunchState.LoggedIn
+        } else {
+            LaunchState.LoggedOut
+        }
     }
 }
 

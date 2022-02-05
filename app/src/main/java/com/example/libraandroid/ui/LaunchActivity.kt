@@ -5,13 +5,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.viewbinding.BuildConfig
-import com.example.libraandroid.domain.session.AccountSessionRepository
 import com.example.libraandroid.ui.login.loginNavGraph
 import com.example.libraandroid.ui.theme.VanillaTheme
 import timber.log.Timber
@@ -28,23 +27,16 @@ class LaunchActivity: AppCompatActivity() {
 
         setContent {
             VanillaTheme {
-                val session = AccountSessionRepository(LocalContext.current)
+                val loginState = launchViewModel.isLoggedIn.collectAsState(
+                    initial = LaunchState.Loading
+                )
 
-                LaunchedEffect(true) {
-                    if (session.exist()) {
-                        launchViewModel.login()
-                    } else {
-                        launchViewModel.logout()
-                    }
-                }
                 Surface {
                     LaunchScreen(
-                        showLoggedIn = launchViewModel.isLoggedIn.value,
+                        showLoggedIn = loginState.value,
                         splashScreen = {},
                         loginScreen = {
-                            LoginNavHost {
-                                launchViewModel.login()
-                            }
+                            LoginNavHost()
                         },
                         mainScreen = {}
                     )
@@ -55,16 +47,13 @@ class LaunchActivity: AppCompatActivity() {
 }
 
 @Composable
-private fun LoginNavHost(
-    onEnterSuccess: () -> Unit
-) {
+private fun LoginNavHost() {
     val navController = rememberNavController()
     val route = "Start"
     NavHost(navController = navController, startDestination = route) {
         loginNavGraph(
             route,
-            navController,
-            onEnterSuccess
+            navController
         )
     }
 }
@@ -89,9 +78,7 @@ private fun LaunchScreenForPreview(showLoggedIn: LaunchState) {
         showLoggedIn = showLoggedIn,
         splashScreen = {},
         loginScreen = {
-            LoginNavHost {
-
-            }
+            LoginNavHost()
         },
         mainScreen = {}
     )

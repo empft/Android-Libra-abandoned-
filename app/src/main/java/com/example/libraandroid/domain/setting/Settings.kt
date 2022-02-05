@@ -20,13 +20,11 @@ class Settings(
     }
 
     inner class Developer() {
-        fun showRawTransaction(): Flow<Boolean> {
-            val key = booleanPreferencesKey(Field.RawTransaction.toString())
-
-            return context.dataStore.data.map {
+        val showRawTransaction: Flow<Boolean>
+            get() = context.dataStore.data.map {
+                val key = booleanPreferencesKey(Field.RawTransaction.toString())
                 it[key] ?: false
             }
-        }
 
         suspend fun showRawTransaction(value: Boolean) {
             val key = booleanPreferencesKey(Field.RawTransaction.toString())
@@ -35,7 +33,5 @@ class Settings(
                 it[key] = value
             }
         }
-
-
     }
 }

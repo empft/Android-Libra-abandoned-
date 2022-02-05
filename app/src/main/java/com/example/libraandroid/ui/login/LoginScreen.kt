@@ -2,7 +2,10 @@ package com.example.libraandroid.ui.login
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,24 +15,21 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.libraandroid.ui.theme.VanillaTheme
 import com.example.libraandroid.R
+import com.example.libraandroid.ui.theme.VanillaTheme
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
-    usernameState: MutableState<String> = remember { mutableStateOf("") } ,
+    usernameState: MutableState<String> = remember { mutableStateOf("") },
     passwordState: MutableState<String> = remember { mutableStateOf("") },
-    loginState: Flow<LoginResult>,
+    loginState: Flow<LoginFailure>,
     onClickForget: () -> Unit,
     onClickRegister: () -> Unit,
-    onClickLogin: (username: String, password: String) -> Unit,
-    onLoginSuccess: () -> Unit
+    onClickLogin: (username: String, password: String) -> Unit
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -41,9 +41,10 @@ fun LoginScreen(
             detectTapGestures(onTap = {
                 focusManager.clearFocus()
             })
-        }.padding(
-        horizontal = dimensionResource(R.dimen.g__form__horizontal_margin)
-    ),
+        }
+        .padding(
+            horizontal = dimensionResource(R.dimen.g__form__horizontal_margin)
+        ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LoginForm(
@@ -71,21 +72,18 @@ fun LoginScreen(
             }
         }
 
-        coroutineScope.launch {
+        LaunchedEffect(scaffoldState.snackbarHostState) {
             loginState.collect {
                 when(it) {
-                    is LoginResult.Failure -> {
+                    is LoginFailure.Text -> {
                         scaffoldState.snackbarHostState.showSnackbar(
                             message = it.message
                         )
                     }
-                    is LoginResult.FailureId -> {
+                    is LoginFailure.Id -> {
                         scaffoldState.snackbarHostState.showSnackbar(
                             message = context.getString(it.id)
                         )
-                    }
-                    LoginResult.Success -> {
-                        onLoginSuccess()
                     }
                 }
             }
@@ -107,8 +105,7 @@ fun PreviewLoginScreen() {
             },
             onClickForget = {},
             onClickRegister = {},
-            onClickLogin = {_, _ ->},
-            onLoginSuccess = {}
+            onClickLogin = {_, _ ->}
         )
     }
 }

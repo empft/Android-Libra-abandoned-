@@ -1,7 +1,13 @@
 package com.example.libraandroid.ui.misc
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
+/**
+ * Starts coroutine with throttle or debounce
+ */
 class DelayedCall (
     private val timeMillis: Long = UiConstant.DefaultDelay,
     private val coroutineScope: CoroutineScope

@@ -5,10 +5,9 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 
-fun getEncryptedSharedPreference(context: Context): SharedPreferences {
-    val sharedPrefsFile: String = EncryptedSharedPrefConst.FileSecretSharedPreferences
+fun getDefaultEncryptedSharedPreference(context: Context, file: String): SharedPreferences {
     return EncryptedSharedPreferences.create(
-        sharedPrefsFile,
+        file,
         MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
         context,
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,

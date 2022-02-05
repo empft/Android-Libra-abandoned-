@@ -3,7 +3,10 @@ package com.example.libraandroid.ui.register
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -20,9 +23,6 @@ import com.example.libraandroid.R
 import com.example.libraandroid.network.StatelessClient
 import com.example.libraandroid.ui.navigation.rememberParentEntry
 import com.example.libraandroid.ui.register.form.*
-import com.example.libraandroid.ui.stringresource.stringResourceNull
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 enum class RegisterNav {
     Invitation,
@@ -34,8 +34,7 @@ enum class RegisterNav {
 
 fun NavGraphBuilder.registerNav(
     route: String,
-    navController: NavHostController,
-    onRegisterSuccess: () -> Unit,
+    navController: NavHostController
 ) {
     @Composable
     fun formModifier(): Modifier {
@@ -49,7 +48,7 @@ fun NavGraphBuilder.registerNav(
         return viewModel(
             viewModelStoreOwner = navBackStackEntry.rememberParentEntry(navController),
             factory =  RegisterViewModelFactory(
-                StatelessClient.registrationService
+                StatelessClient.registration
             )
         )
     }
@@ -58,9 +57,10 @@ fun NavGraphBuilder.registerNav(
         composable(RegisterNav.Names.name) { navBackStackEntry ->
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
             val scaffoldState = rememberScaffoldState()
+            val context = LocalContext.current
 
             LaunchedEffect(scaffoldState.snackbarHostState) {
-                registerViewModel.userError.collect {
+                registerViewModel.reqCodeError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
                     )
@@ -78,13 +78,13 @@ fun NavGraphBuilder.registerNav(
                         registerViewModel.registrationForm.displayName
                     ) },
                     onClick = { username, displayName ->
-                        if (registerViewModel.checkAndSetName(username, displayName)) {
+                        if (registerViewModel.checkAndSetName(context, username, displayName)) {
                             navController.navigate(RegisterNav.Password.name)
                         }
                     },
                     modifier = formModifier(),
-                    usernameError = stringResourceNull(registerViewModel.usernameError.value),
-                    displayNameError = stringResourceNull(registerViewModel.displayNameError.value)
+                    usernameError = registerViewModel.usernameError.value,
+                    displayNameError = registerViewModel.displayNameError.value
                 )
             }
         }
@@ -94,7 +94,7 @@ fun NavGraphBuilder.registerNav(
             val scaffoldState = rememberScaffoldState()
 
             LaunchedEffect(scaffoldState.snackbarHostState) {
-                registerViewModel.userError.collect {
+                registerViewModel.reqCodeError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
                     )
@@ -115,7 +115,7 @@ fun NavGraphBuilder.registerNav(
                         navController.navigate(RegisterNav.Email.name)
                     },
                     modifier = formModifier(),
-                    passwordError = stringResourceNull(registerViewModel.passwordError.value)
+                    passwordError = registerViewModel.passwordError.value
                 )
             }
         }
@@ -124,9 +124,10 @@ fun NavGraphBuilder.registerNav(
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
             val scaffoldState = rememberScaffoldState()
+            val context = LocalContext.current
 
             LaunchedEffect(scaffoldState.snackbarHostState) {
-                registerViewModel.userError.collect {
+                registerViewModel.reqCodeError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
                     )
@@ -139,13 +140,13 @@ fun NavGraphBuilder.registerNav(
                         registerViewModel.registrationForm.email
                     ) },
                     onClick = {
-                        if (registerViewModel.checkAndSetEmail(it)) {
+                        if (registerViewModel.checkAndSetEmail(context, it)) {
                             registerViewModel.submitForm()
                             navController.navigate(RegisterNav.Loading.name)
                         }
                     },
                     modifier = formModifier(),
-                    emailError = stringResourceNull(registerViewModel.emailError.value)
+                    emailError = registerViewModel.emailError.value
                 )
             }
         }
@@ -154,9 +155,10 @@ fun NavGraphBuilder.registerNav(
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
             val scaffoldState = rememberScaffoldState()
+            val context = LocalContext.current
 
             LaunchedEffect(scaffoldState.snackbarHostState) {
-                registerViewModel.userError.collect {
+                registerViewModel.reqCodeError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
                     )
@@ -164,32 +166,37 @@ fun NavGraphBuilder.registerNav(
             }
 
             LaunchedEffect(Unit) {
-                registerViewModel.registerResult.collect {
-                    if (it) {
-                        onRegisterSuccess()
-                    } else {
-                        if (
-                            registerViewModel.usernameError.value != null ||
-                            registerViewModel.displayNameError.value != null
-                        ) {
-                            navController.popBackStack(
-                                route = RegisterNav.Names.name,
-                                inclusive = false
-                            )
-                        } else if (registerViewModel.passwordError.value != null) {
-                            navController.popBackStack(
-                                route = RegisterNav.Password.name,
-                                inclusive = false
-                            )
-                        } else if (registerViewModel.emailError.value != null) {
-                            navController.popBackStack(
-                                route = RegisterNav.Email.name,
-                                inclusive = false
-                            )
-                        } else {
-                            navController.popBackStack(
-                                route = RegisterNav.Names.name,
-                                inclusive = false
+                registerViewModel.registerFailure.collect {
+                    when(it) {
+                        RegisterFailure.Form -> {
+                            if (
+                                registerViewModel.usernameError.value != null ||
+                                registerViewModel.displayNameError.value != null
+                            ) {
+                                navController.popBackStack(
+                                    route = RegisterNav.Names.name,
+                                    inclusive = false
+                                )
+                            } else if (registerViewModel.passwordError.value != null) {
+                                navController.popBackStack(
+                                    route = RegisterNav.Password.name,
+                                    inclusive = false
+                                )
+                            } else if (registerViewModel.emailError.value != null) {
+                                navController.popBackStack(
+                                    route = RegisterNav.Email.name,
+                                    inclusive = false
+                                )
+                            } else {
+                                navController.popBackStack(
+                                    route = RegisterNav.Names.name,
+                                    inclusive = false
+                                )
+                            }
+                        }
+                        is RegisterFailure.Id -> {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = context.resources.getString(it.id)
                             )
                         }
                     }
@@ -205,8 +212,7 @@ fun NavGraphBuilder.registerNav(
 
 fun NavGraphBuilder.registerInvitationNav(
     route: String,
-    navController: NavHostController,
-    onRegisterSuccess: () -> Unit,
+    navController: NavHostController
 ) {
     @Composable
     fun formModifier(): Modifier {
@@ -220,7 +226,7 @@ fun NavGraphBuilder.registerInvitationNav(
         return viewModel(
             viewModelStoreOwner = navBackStackEntry.rememberParentEntry(navController),
             factory =  RegisterViewModelFactory(
-                StatelessClient.registrationService
+                StatelessClient.registration
             )
         )
     }
@@ -230,9 +236,10 @@ fun NavGraphBuilder.registerInvitationNav(
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
             val scaffoldState = rememberScaffoldState()
+            val context = LocalContext.current
 
             LaunchedEffect(scaffoldState.snackbarHostState) {
-                registerViewModel.userError.collect {
+                registerViewModel.reqCodeError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
                     )
@@ -249,16 +256,16 @@ fun NavGraphBuilder.registerInvitationNav(
                     ) },
                     countdown = registerViewModel.countdown,
                     onClickRequestCode = {
-                        registerViewModel.requestInvitationCode(it)
+                        registerViewModel.requestInvitationCode(context, it)
                     },
                     onClick = { email, code ->
-                        if (registerViewModel.checkAndSetInvitation(email, code)) {
+                        if (registerViewModel.checkAndSetInvitation(context, email, code)) {
                             navController.navigate(RegisterNav.Names.name)
                         }
                     },
                     modifier = formModifier(),
-                    invitationEmailError = stringResourceNull(registerViewModel.invitationEmailError.value),
-                    invitationCodeError = stringResourceNull(registerViewModel.invitationCodeError.value)
+                    invitationEmailError = registerViewModel.invitationEmailError.value,
+                    invitationCodeError = registerViewModel.invitationCodeError.value
                 )
             }
         }
@@ -267,9 +274,10 @@ fun NavGraphBuilder.registerInvitationNav(
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
             val scaffoldState = rememberScaffoldState()
+            val context = LocalContext.current
 
             LaunchedEffect(scaffoldState.snackbarHostState) {
-                registerViewModel.userError.collect {
+                registerViewModel.reqCodeError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
                     )
@@ -285,13 +293,13 @@ fun NavGraphBuilder.registerInvitationNav(
                         registerViewModel.registrationFormWithInvitation.displayName
                     ) },
                     onClick = { username, displayName ->
-                        if (registerViewModel.checkAndSetName(username, displayName)) {
+                        if (registerViewModel.checkAndSetName(context, username, displayName)) {
                             navController.navigate(RegisterNav.Password.name)
                         }
                     },
                     modifier = formModifier(),
-                    usernameError = stringResourceNull(registerViewModel.usernameError.value),
-                    displayNameError = stringResourceNull(registerViewModel.displayNameError.value)
+                    usernameError = registerViewModel.usernameError.value,
+                    displayNameError = registerViewModel.displayNameError.value
                 )
             }
         }
@@ -300,15 +308,16 @@ fun NavGraphBuilder.registerInvitationNav(
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
             val scaffoldState = rememberScaffoldState()
+            val context = LocalContext.current
+
             LaunchedEffect(scaffoldState.snackbarHostState) {
-                registerViewModel.userError.collect {
+                registerViewModel.reqCodeError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
                     )
                 }
             }
 
-            val context = LocalContext.current
             Scaffold(scaffoldState = scaffoldState) {
                 RegisterPasswordScreen(
                     passwordState = remember { mutableStateOf(
@@ -322,7 +331,7 @@ fun NavGraphBuilder.registerInvitationNav(
                         navController.navigate(RegisterNav.Email.name)
                     },
                     modifier = formModifier(),
-                    passwordError = stringResourceNull(registerViewModel.passwordError.value)
+                    passwordError = registerViewModel.passwordError.value
                 )
             }
         }
@@ -330,9 +339,10 @@ fun NavGraphBuilder.registerInvitationNav(
         composable(RegisterNav.Email.name) { navBackStackEntry ->
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
+            val context = LocalContext.current
             val scaffoldState = rememberScaffoldState()
             LaunchedEffect(scaffoldState.snackbarHostState) {
-                registerViewModel.userError.collect {
+                registerViewModel.reqCodeError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
                     )
@@ -345,13 +355,13 @@ fun NavGraphBuilder.registerInvitationNav(
                         registerViewModel.registrationFormWithInvitation.email
                     ) },
                     onClick = {
-                        if (registerViewModel.checkAndSetEmail(it)) {
+                        if (registerViewModel.checkAndSetEmail(context, it)) {
                             registerViewModel.submitFormWithInvitation()
                             navController.navigate(RegisterNav.Loading.name)
                         }
                     },
                     modifier = formModifier(),
-                    emailError = stringResourceNull(registerViewModel.emailError.value)
+                    emailError = registerViewModel.emailError.value
                 )
             }
         }
@@ -359,9 +369,10 @@ fun NavGraphBuilder.registerInvitationNav(
         composable(RegisterNav.Loading.name) { navBackStackEntry ->
             val registerViewModel: RegisterViewModel = registerViewModel(navBackStackEntry)
 
+            val context = LocalContext.current
             val scaffoldState = rememberScaffoldState()
             LaunchedEffect(scaffoldState.snackbarHostState) {
-                registerViewModel.userError.collect {
+                registerViewModel.reqCodeError.collect {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = it
                     )
@@ -369,40 +380,45 @@ fun NavGraphBuilder.registerInvitationNav(
             }
 
             LaunchedEffect(Unit) {
-                registerViewModel.registerResult.collect {
-                    if (it) {
-                        onRegisterSuccess()
-                    } else {
-                        if (
-                            registerViewModel.invitationEmailError.value != null ||
-                            registerViewModel.invitationCodeError.value != null
-                        ) {
-                            navController.popBackStack(
-                                route = RegisterNav.Invitation.name,
-                                inclusive = false
-                            )
-                        } else if (
-                            registerViewModel.usernameError.value != null ||
-                            registerViewModel.displayNameError.value != null
-                        ) {
-                            navController.popBackStack(
-                                route = RegisterNav.Names.name,
-                                inclusive = false
-                            )
-                        } else if (registerViewModel.passwordError.value != null) {
-                            navController.popBackStack(
-                                route = RegisterNav.Password.name,
-                                inclusive = false
-                            )
-                        } else if (registerViewModel.emailError.value != null) {
-                            navController.popBackStack(
-                                route = RegisterNav.Email.name,
-                                inclusive = false
-                            )
-                        } else {
-                            navController.popBackStack(
-                                route = RegisterNav.Invitation.name,
-                                inclusive = false
+                registerViewModel.registerFailure.collect {
+                    when(it) {
+                        RegisterFailure.Form -> {
+                            if (
+                                registerViewModel.invitationEmailError.value != null ||
+                                registerViewModel.invitationCodeError.value != null
+                            ) {
+                                navController.popBackStack(
+                                    route = RegisterNav.Invitation.name,
+                                    inclusive = false
+                                )
+                            } else if (
+                                registerViewModel.usernameError.value != null ||
+                                registerViewModel.displayNameError.value != null
+                            ) {
+                                navController.popBackStack(
+                                    route = RegisterNav.Names.name,
+                                    inclusive = false
+                                )
+                            } else if (registerViewModel.passwordError.value != null) {
+                                navController.popBackStack(
+                                    route = RegisterNav.Password.name,
+                                    inclusive = false
+                                )
+                            } else if (registerViewModel.emailError.value != null) {
+                                navController.popBackStack(
+                                    route = RegisterNav.Email.name,
+                                    inclusive = false
+                                )
+                            } else {
+                                navController.popBackStack(
+                                    route = RegisterNav.Invitation.name,
+                                    inclusive = false
+                                )
+                            }
+                        }
+                        is RegisterFailure.Id -> {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = context.resources.getString(it.id)
                             )
                         }
                     }
@@ -423,7 +439,7 @@ fun PreviewRegisterInvitationNavHost() {
     NavHost(navController = navController, startDestination = "start") {
         registerInvitationNav(
             "start",
-            navController) {}
+            navController)
     }
 }
 
@@ -434,8 +450,6 @@ fun PreviewRegisterNavHost() {
     NavHost(navController = navController, startDestination = "start") {
         registerNav(
             "start",
-            navController) {
-
-        }
+            navController)
     }
 }

@@ -7,42 +7,40 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.libraandroid.R
-import com.example.libraandroid.domain.account.AccountRegistrationService
-import com.example.libraandroid.network.NamedError
-import com.example.libraandroid.ui.time.formatMillis
+import com.example.libraandroid.domain.account.registration.AccountRegistrationInteractor
+import com.example.libraandroid.miscellaneous.Either
 import com.example.libraandroid.ui.misc.DelayedCall
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import com.example.libraandroid.ui.time.formatMillis
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.HttpException
+import timber.log.Timber
+import java.io.IOException
 
 private const val waitTime: Long = 60000
 private const val intervalTime: Long = 700
 
 class RegisterViewModel(
-    private val api: AccountRegistrationService
+    private val service: AccountRegistrationInteractor
 ): ViewModel() {
-    var invitationEmailError = mutableStateOf<Int?>(null)
+    var invitationEmailError = mutableStateOf<String?>(null)
         private set
-    var invitationCodeError = mutableStateOf<Int?>(null)
+    var invitationCodeError = mutableStateOf<String?>(null)
         private set
-    var usernameError = mutableStateOf<Int?>(null)
+    var usernameError = mutableStateOf<String?>(null)
         private set
-    var displayNameError = mutableStateOf<Int?>(null)
+    var displayNameError = mutableStateOf<String?>(null)
         private set
-    var passwordError = mutableStateOf<Int?>(null)
+    var passwordError = mutableStateOf<String?>(null)
         private set
-    var emailError = mutableStateOf<Int?>(null)
+    var emailError = mutableStateOf<String?>(null)
         private set
 
-    private val _userError = MutableSharedFlow<String>()
-    val userError: SharedFlow<String> = _userError
+    private val _reqCodeError = MutableSharedFlow<String>()
+    val reqCodeError: SharedFlow<String> = _reqCodeError
 
-    private val _registerResult = MutableSharedFlow<Boolean>()
-    val registerResult: SharedFlow<Boolean> = _registerResult
+    private val _registerFailure = MutableSharedFlow<RegisterFailure>()
+    val registerFailure: SharedFlow<RegisterFailure> = _registerFailure
 
     private val _passwordResult = MutableSharedFlow<PasswordResult>()
     val passwordResult: SharedFlow<PasswordResult> = _passwordResult
@@ -63,18 +61,32 @@ class RegisterViewModel(
     fun submitFormWithInvitation() {
         submitWithInvitationCall.throttleFirst {
             try {
-                api.registerWithInvitation(
+                when(val result = service.registerWithInvitation(
                     registrationFormWithInvitation.username,
                     registrationFormWithInvitation.displayName,
                     registrationFormWithInvitation.password,
                     registrationFormWithInvitation.email,
                     registrationFormWithInvitation.invitationEmail,
                     registrationFormWithInvitation.invitationCode
-                )
-                _registerResult.emit(true)
-            } catch (e: HttpException) {
+                )) {
+                    is Either.Failure -> {
+                        usernameError.value = result.value.username
+                        displayNameError.value = result.value.displayName
+                        passwordError.value = result.value.password
+                        emailError.value = result.value.email
+                        invitationEmailError.value = result.value.invitationEmail
+                        invitationCodeError.value = result.value.invitationCode
 
-                _registerResult.emit(false)
+                        _registerFailure.emit(RegisterFailure.Form)
+                    }
+                    is Either.Success -> {
+                        // Success!
+                        // Changes handled by flow in business logic
+                    }
+                }
+            } catch (e: IOException) {
+                Timber.e(e)
+                _registerFailure.emit(RegisterFailure.Id(R.string.g__text__connection_error))
             }
         }
     }
@@ -82,19 +94,36 @@ class RegisterViewModel(
     private var submitCall = DelayedCall(coroutineScope = viewModelScope)
     fun submitForm() {
         submitCall.throttleFirst {
-            api.register(
-                registrationForm.username,
-                registrationForm.displayName,
-                registrationForm.password,
-                registrationForm.email
-            )
-            _registerResult.emit(true)
+            try {
+                when(val result = service.register(
+                    registrationForm.username,
+                    registrationForm.displayName,
+                    registrationForm.password,
+                    registrationForm.email
+                )) {
+                    is Either.Failure -> {
+                        usernameError.value = result.value.username
+                        displayNameError.value = result.value.displayName
+                        passwordError.value = result.value.password
+                        emailError.value = result.value.email
+
+                        _registerFailure.emit(RegisterFailure.Form)
+                    }
+                    is Either.Success -> {
+                        // Success!
+                        // Changes handled by flow in business logic
+                    }
+                }
+            } catch (e: IOException) {
+                Timber.e(e)
+                _registerFailure.emit(RegisterFailure.Id(R.string.g__text__connection_error))
+            }
         }
     }
 
-    fun checkAndSetInvitation(email: String, code: String): Boolean {
+    fun checkAndSetInvitation(context: Context, email: String, code: String): Boolean {
         if (!email.contains('@')) {
-            invitationEmailError.value = R.string.g__error__invalid_email
+            invitationEmailError.value = context.resources.getString(R.string.g__error__invalid_email)
             return false
         }
 
@@ -105,10 +134,10 @@ class RegisterViewModel(
         return true
     }
 
-    fun checkAndSetName(username: String, displayName: String): Boolean {
+    fun checkAndSetName(context: Context, username: String, displayName: String): Boolean {
         if (username == displayName) {
-            usernameError.value = R.string.scr_regform__error__user_same_as_display_name
-            displayNameError.value = R.string.scr_regform__error__display_same_as_user_name
+            usernameError.value = context.resources.getString(R.string.scr_regform__error__user_same_as_display_name)
+            displayNameError.value = context.resources.getString(R.string.scr_regform__error__display_same_as_user_name)
             return false
         }
 
@@ -129,12 +158,12 @@ class RegisterViewModel(
 
             when {
                 password.length < 8 -> {
-                    passwordError.value = R.string.scr_regform__error__short_password
+                    passwordError.value = context.resources.getString(R.string.scr_regform__error__short_password)
                     _passwordResult.emit(PasswordResult.Empty)
 
                 }
                 matchCommonCaseInsensitive(context, password) -> {
-                    passwordError.value = R.string.scr_regform__error__common_password
+                    passwordError.value = context.resources.getString(R.string.scr_regform__error__common_password)
                     _passwordResult.emit(PasswordResult.Empty)
                 }
                 else -> {
@@ -149,9 +178,9 @@ class RegisterViewModel(
         }
     }
 
-    fun checkAndSetEmail(email: String): Boolean {
+    fun checkAndSetEmail(context: Context, email: String): Boolean {
         if (!email.contains('@')) {
-            emailError.value = R.string.g__error__invalid_email
+            emailError.value = context.resources.getString(R.string.g__error__invalid_email)
             return false
         }
 
@@ -181,21 +210,24 @@ class RegisterViewModel(
     }
 
     private var reqCodeCall = DelayedCall(coroutineScope = viewModelScope)
-    fun requestInvitationCode(email: String, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+    fun requestInvitationCode(context: Context, email: String) {
         reqCodeCall.throttleFirst {
             try {
-                api.createInvitation(email)
                 this.startCountdown(waitTime)
-            } catch(e: HttpException) {
-                e.response()?.errorBody()?.let {
-                    val error = NamedError.from(it.charStream().readText())
-                    _userError.emit(error.message)
-
-                    withContext(dispatcher) {
-                        it.close()
+                when(val result = service.createInvitation(email)) {
+                    is Either.Failure -> {
+                        cancelCountdown()
+                        _reqCodeError.emit(result.value)
+                    }
+                    is Either.Success -> {
+                        // Do nothing on success since it is out of band?
+                        // Maybe show email successfully sent message
                     }
                 }
+            } catch (e: IOException) {
                 cancelCountdown()
+                Timber.e(e)
+                _reqCodeError.emit(context.resources.getString(R.string.g__text__connection_error))
             }
         }
     }
@@ -212,7 +244,7 @@ class RegisterViewModel(
     }
 }
 
-class RegisterViewModelFactory(private val api: AccountRegistrationService): ViewModelProvider.Factory {
+class RegisterViewModelFactory(private val api: AccountRegistrationInteractor): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
         return RegisterViewModel(api) as T

@@ -13,7 +13,7 @@ internal class StatelessClientTest {
 
     @Test
     fun login() {
-        val credentialError = NamedError(code = 400, message = "Invalid username or password")
+        val credentialError = SimpleError(code = 400, message = "Invalid username or password")
         val unnamedError = "Unexpected error"
 
         val mockSuccess = Response.success(Unit)
@@ -33,7 +33,7 @@ internal class StatelessClientTest {
         Assertions.assertEquals(200, mockSuccess.code(), "Invalid success response code")
         Assertions.assertEquals(Unit, mockSuccess.body(), "Cannot parse empty response body")
         Assertions.assertEquals(400, mockFailure.code(), "Invalid 400 failure response code")
-        Assertions.assertEquals(credentialError, Json.decodeFromJsonElement<NamedError>(Json.parseToJsonElement(mockFailure.errorBody()!!.string())))
+        Assertions.assertEquals(credentialError, Json.decodeFromJsonElement<SimpleError>(Json.parseToJsonElement(mockFailure.errorBody()!!.string())))
         Assertions.assertEquals(500, mockUnnamedFailure.code(), "Invalid 500 failure response code")
         Assertions.assertEquals(unnamedError, Json.decodeFromJsonElement<String>(Json.parseToJsonElement(mockUnnamedFailure.errorBody()!!.string())))
     }

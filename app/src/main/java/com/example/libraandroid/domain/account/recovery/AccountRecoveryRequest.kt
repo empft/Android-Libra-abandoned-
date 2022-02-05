@@ -1,10 +1,10 @@
-package com.example.libraandroid.domain.account
+package com.example.libraandroid.domain.account.recovery
 
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
-interface AccountRecoveryService {
+interface AccountRecoveryRequest {
     @FormUrlEncoded
     @POST("users/forget-username")
     suspend fun forgetUsername(@Field("email") email: String)
