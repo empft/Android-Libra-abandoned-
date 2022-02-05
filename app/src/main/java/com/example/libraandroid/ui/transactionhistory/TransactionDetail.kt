@@ -21,6 +21,7 @@ import com.example.libraandroid.ui.currency.formatAmount
 import com.example.libraandroid.ui.wallet.Chain
 import com.example.libraandroid.ui.wallet.Wallet
 import com.example.libraandroid.ui.wallet.WalletContext
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import java.math.BigInteger
@@ -179,9 +180,8 @@ fun formatTimestamp(timestamp: Instant): String {
 }
 
 private fun printJsonCelo(tx: Transaction.Celo): String {
-    //TODO: Convert to pretty print, ie: change it to encodeToString after experimental ends
     val format = Json { prettyPrint = true }
-    return format.encodeToJsonElement(RawCelo.from(tx)).toString()
+    return format.encodeToString(RawCelo.from(tx))
 }
 
 @Composable
@@ -350,9 +350,8 @@ private fun CeloTransactionDetail(
 }
 
 private fun printJsonDiem(tx: Transaction.Diem): String {
-    //TODO: Convert to pretty print, ie: change it to encodeToString after experimental ends
     val format = Json { prettyPrint = true }
-    return format.encodeToJsonElement(RawDiem.from(tx)).toString()
+    return format.encodeToString(RawDiem.from(tx))
 }
 
 @Composable
