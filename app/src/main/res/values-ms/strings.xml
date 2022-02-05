@@ -75,4 +75,5 @@
     <string name="scr_payprocess__textfield__gateway_currency">Mata Wang Tol</string>
     <string name="scr_payprocess__textfield__gateway_fee">Kadar Tol</string>
     <string name="scr_payprocess__text__payment_confirmation">Pengesahan Pembayaran</string>
+    <string name="g__btn__guest_sign_in">Log masuk sebagai tetamu</string>
 </resources>

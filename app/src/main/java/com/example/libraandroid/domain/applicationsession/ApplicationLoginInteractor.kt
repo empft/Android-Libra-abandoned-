@@ -4,7 +4,7 @@ import com.example.libraandroid.domain.account.login.LoginError
 import com.example.libraandroid.domain.account.login.LoginInteractor
 import com.example.libraandroid.miscellaneous.Either
 
-class UserLoginInteractor(
+class ApplicationLoginInteractor(
     private val sessionManager: SessionManager,
     private val accountLoginInteractor: LoginInteractor
 ) {
@@ -25,5 +25,9 @@ class UserLoginInteractor(
                 Either.Success(Unit)
             }
         }
+    }
+
+    suspend fun guestLogin() {
+        sessionManager.initGuestSession()
     }
 }

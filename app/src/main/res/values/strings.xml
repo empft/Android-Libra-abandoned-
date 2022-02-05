@@ -79,4 +79,5 @@
     <string name="scr_payprocess__textfield__gateway_currency">Gateway Currency</string>
     <string name="scr_payprocess__textfield__gateway_fee">Gateway fee</string>
     <string name="scr_payprocess__text__payment_confirmation">Payment Confirmation</string>
+    <string name="g__btn__guest_sign_in">Sign in as a Guest</string>
 </resources>

@@ -75,4 +75,5 @@
     <string name="scr_payprocess__textfield__gateway_currency">通行货币</string>
     <string name="scr_payprocess__textfield__gateway_fee">通行费用</string>
     <string name="scr_payprocess__text__payment_confirmation">付款确认</string>
+    <string name="g__btn__guest_sign_in">以访客身份登录</string>
 </resources>

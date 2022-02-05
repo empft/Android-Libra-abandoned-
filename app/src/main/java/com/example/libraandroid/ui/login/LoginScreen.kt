@@ -2,10 +2,7 @@ package com.example.libraandroid.ui.login
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +12,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.libraandroid.R
 import com.example.libraandroid.ui.theme.VanillaTheme
 import kotlinx.coroutines.flow.Flow
@@ -29,10 +27,10 @@ fun LoginScreen(
     loginState: Flow<LoginFailure>,
     onClickForget: () -> Unit,
     onClickRegister: () -> Unit,
-    onClickLogin: (username: String, password: String) -> Unit
+    onClickLogin: (username: String, password: String) -> Unit,
+    onClickGuestLogin: () -> Unit
 ) {
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
 
     val focusManager = LocalFocusManager.current
     Column(modifier = modifier
@@ -43,7 +41,8 @@ fun LoginScreen(
             })
         }
         .padding(
-            horizontal = dimensionResource(R.dimen.g__form__horizontal_margin)
+            horizontal = dimensionResource(R.dimen.g__form__horizontal_margin),
+            vertical = 8.dp
         ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -56,19 +55,30 @@ fun LoginScreen(
             onClickLogin(username, password)
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxHeight()
         ) {
-            TextButton(onClick = onClickForget) {
-                Text(
-                    text = stringResource(R.string.scr_login__btn__forget_credentials)
-                )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                TextButton(onClick = onClickForget) {
+                    Text(
+                        text = stringResource(R.string.scr_login__btn__forget_credentials)
+                    )
+                }
+                TextButton(onClick = onClickRegister) {
+                    Text(
+                        text = stringResource(R.string.g__btn__sign_up)
+                    )
+                }
             }
-            TextButton(onClick = onClickRegister) {
-                Text(
-                    text = stringResource(R.string.g__btn__sign_up)
-                )
+
+            OutlinedButton(onClick = onClickGuestLogin, modifier = Modifier
+                .fillMaxWidth()
+            ) {
+                Text(stringResource(R.string.g__btn__guest_sign_in))
             }
         }
 
@@ -96,7 +106,6 @@ fun LoginScreen(
 )
 @Composable
 fun PreviewLoginScreen() {
-    val context = LocalContext.current
 
     VanillaTheme {
         LoginScreen(
@@ -105,7 +114,8 @@ fun PreviewLoginScreen() {
             },
             onClickForget = {},
             onClickRegister = {},
-            onClickLogin = {_, _ ->}
+            onClickLogin = {_, _ ->},
+            onClickGuestLogin = {}
         )
     }
 }

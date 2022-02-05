@@ -12,7 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.libraandroid.domain.account.login.LoginInteractor
 import com.example.libraandroid.domain.applicationsession.SessionManager
 import com.example.libraandroid.domain.applicationsession.SessionRepository
-import com.example.libraandroid.domain.applicationsession.UserLoginInteractor
+import com.example.libraandroid.domain.applicationsession.ApplicationLoginInteractor
 import com.example.libraandroid.network.StatelessClient
 import com.example.libraandroid.ui.forgetlogin.*
 import com.example.libraandroid.ui.register.registerInvitationNav
@@ -32,10 +32,11 @@ fun NavGraphBuilder.loginNavGraph(
     navigation(startDestination = LoginNav.Login.name, route = route) {
         composable(LoginNav.Login.name) {
             val context = LocalContext.current
+            val sessionManager = SessionManager(SessionRepository(context))
             val loginViewModel: LoginViewModel = viewModel(
                 factory =  LoginViewModelFactory(
-                    UserLoginInteractor(
-                        SessionManager(SessionRepository(context)),
+                    ApplicationLoginInteractor(
+                        sessionManager,
                         LoginInteractor(StatelessClient.login)
                     )
                 )
@@ -50,7 +51,8 @@ fun NavGraphBuilder.loginNavGraph(
                 onClickRegister = {
                     navController.navigate(LoginNav.Registration.name)
                 },
-                onClickLogin = loginViewModel::login
+                onClickLogin = loginViewModel::login,
+                onClickGuestLogin = loginViewModel::guestLogin
             )
         }
 

@@ -4,16 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.libraandroid.R
-import com.example.libraandroid.domain.applicationsession.UserLoginInteractor
+import com.example.libraandroid.domain.applicationsession.ApplicationLoginInteractor
 import com.example.libraandroid.miscellaneous.Either
 import com.example.libraandroid.ui.misc.DelayedCall
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
 
 class LoginViewModel(
-    private val service: UserLoginInteractor
+    private val service: ApplicationLoginInteractor
 ): ViewModel() {
 
     private val _loginFailure = MutableSharedFlow<LoginFailure>()
@@ -38,9 +39,17 @@ class LoginViewModel(
             }
         }
     }
+
+    fun guestLogin() {
+        call.throttleFirst {
+            service.guestLogin()
+        }
+    }
 }
 
-class LoginViewModelFactory(private val service: UserLoginInteractor): ViewModelProvider.Factory {
+class LoginViewModelFactory(
+    private val service: ApplicationLoginInteractor
+): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
         return LoginViewModel(service) as T

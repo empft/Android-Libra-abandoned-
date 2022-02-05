@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.libraandroid.R
+import com.example.libraandroid.domain.account.registration.AccountRegistrationInteractor
 import com.example.libraandroid.network.StatelessClient
 import com.example.libraandroid.ui.navigation.rememberParentEntry
 import com.example.libraandroid.ui.register.form.*
@@ -48,7 +49,9 @@ fun NavGraphBuilder.registerNav(
         return viewModel(
             viewModelStoreOwner = navBackStackEntry.rememberParentEntry(navController),
             factory =  RegisterViewModelFactory(
-                StatelessClient.registration
+                AccountRegistrationInteractor(
+                    StatelessClient.registration
+                )
             )
         )
     }
@@ -226,7 +229,9 @@ fun NavGraphBuilder.registerInvitationNav(
         return viewModel(
             viewModelStoreOwner = navBackStackEntry.rememberParentEntry(navController),
             factory =  RegisterViewModelFactory(
-                StatelessClient.registration
+                AccountRegistrationInteractor(
+                    StatelessClient.registration
+                )
             )
         )
     }
