@@ -11,6 +11,7 @@ import com.example.libraandroid.ui.transactionhistory.Transaction
 
 @Composable
 fun PaymentScreen(
+    focusedBalances: List<String>,
     transactions: List<Transaction>,
     onAddConvert: () -> Unit,
     onExpandBalance: () -> Unit,
@@ -58,6 +59,7 @@ fun PaymentScreen(
 @Composable
 fun PreviewPaymentScreen() {
     PaymentScreen(
+        focusedBalances = listOf(),
         transactions = listOf(),
         onAddConvert = {},
         onExpandBalance = {},

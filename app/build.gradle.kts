@@ -126,4 +126,13 @@ dependencies {
 
     // coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+
+    // Celo
+    implementation("com.github.stevealexrs:celo-sdk-java:master-SNAPSHOT")
+
+    // Diem
+    implementation("com.diem:client-sdk-java:1.0.5")
+
+    // protobuf
+    implementation("com.google.protobuf:protobuf-java:4.0.0-rc-2")
 }

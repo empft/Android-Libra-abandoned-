@@ -13,12 +13,20 @@ class BalanceViewModel(
     var balances = mutableStateListOf<Balance>()
         private set
 
+    var focusedBalances = mutableStateListOf<Balance>()
+        private set
+
     @Composable
     fun balanceViewMode(): State<BalanceViewMode> {
         return settings.balanceViewMode().collectAsState(initial = BalanceViewMode.Currency)
     }
     suspend fun balanceViewMode(mode: BalanceViewMode) {
         settings.balanceViewMode(mode)
+    }
+
+    suspend fun refreshFocusedBalances() {
+
+        focusedBalances
     }
 }
 
