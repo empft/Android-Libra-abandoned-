@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.devtools.ksp") version "1.5.31-1.0.0"
     kotlin("android")
     kotlin("plugin.serialization") version "1.5.31"
 }
@@ -45,11 +46,11 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
     implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.4.0")
-    implementation("com.google.android.material:material:1.4.0")
+    implementation("androidx.appcompat:appcompat:1.4.1")
+    implementation("com.google.android.material:material:1.5.0")
     implementation("androidx.annotation:annotation:1.3.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
@@ -57,42 +58,41 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
     // Jetpack Compose
-
-    implementation("androidx.compose.ui:ui:1.0.5")
-    implementation("androidx.compose.foundation:foundation:1.0.5")
+    implementation("androidx.compose.ui:ui:1.1.0")
+    implementation("androidx.compose.foundation:foundation:1.1.0")
     // Integration with activities
     implementation("androidx.activity:activity-compose:1.4.0")
     // Compose Material Design
-    implementation("androidx.compose.material:material:1.1.0-rc01")
+    implementation("androidx.compose.material:material:1.2.0-alpha03")
     // Animations
-    implementation("androidx.compose.animation:animation:1.0.5")
+    implementation("androidx.compose.animation:animation:1.1.0")
     // Tooling support (Previews, etc.)
-    implementation("androidx.compose.ui:ui-tooling:1.0.5")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.0.5")
+    implementation("androidx.compose.ui:ui-tooling:1.1.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.1.0")
     // Icons
-    implementation("androidx.compose.material:material-icons-extended:1.0.5")
+    implementation("androidx.compose.material:material-icons-extended:1.1.0")
     // Integration with ViewModels
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
     // UI Tests
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.5")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.1.0")
 
     // Navigation Jetpack Compose Integration
-    implementation("androidx.navigation:navigation-compose:2.4.0-rc01")
+    implementation("androidx.navigation:navigation-compose:2.5.0-alpha02")
 
     // Lifecycle
 
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
     // LiveData
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
     // Lifecycles only (without ViewModel or LiveData)
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
 
     // Saved state module for ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.1")
 
     // optional - helpers for implementing LifecycleOwner in a Service
-    implementation("androidx.lifecycle:lifecycle-service:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-service:2.4.1")
 
     // optional - Test helpers for LiveData
     testImplementation("androidx.arch.core:core-testing:2.1.0")
@@ -135,4 +135,16 @@ dependencies {
 
     // protobuf
     implementation("com.google.protobuf:protobuf-java:4.0.0-rc-2")
+
+    // room
+    implementation("androidx.room:room-runtime:2.4.1")
+    annotationProcessor("androidx.room:room-compiler:2.4.1")
+    // To use Kotlin Symbolic Processing (KSP)
+    ksp("androidx.room:room-compiler:2.4.1")
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:2.4.1")
+
+    // Integrate with java completable future
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$1.6.0")
+
 }

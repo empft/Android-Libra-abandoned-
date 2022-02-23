@@ -11,3 +11,12 @@ sealed interface Chain {
 
     val id: Int
 }
+enum class ChainName {
+    Celo,
+    Diem,
+}
+
+enum class ChainMainNet(val id: Int) {
+    Celo(42220),
+    Diem(1),
+}
